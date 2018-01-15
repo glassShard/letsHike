@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {EventService} from '../../shared/event.service';
 import {EventModel} from '../../shared/event-model';
 import {ActivatedRoute, Router} from '@angular/router';
+import {CategoryService} from '../../shared/category.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -10,11 +11,14 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class EventDetailComponent implements OnInit {
   public event: EventModel;
+  public eventCategories;
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,
-              private _router: Router) { }
+              private _router: Router,
+              private _categoryService: CategoryService) { }
 
   ngOnInit() {
+    this.eventCategories = this._categoryService.getEventCategories();
     const evId = +this._route.snapshot.params['id'];
     // console.log('id=', typeof(evId), ':', evId);
     // if (evId) {

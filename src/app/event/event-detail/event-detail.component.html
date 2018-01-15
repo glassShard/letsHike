@@ -48,79 +48,19 @@
     <div class="form-group" id="categories">
       <dl class="mydl">Válassz kategóriát:</dl>
       <div class="row">
-        <div class="col-6 col-md-3 col-lg-2">
+
+        <div class="col-6 col-md-3 col-lg-2" *ngFor="let ev of eventCategories">
           <div class="card categories category-input text-center">
-            <img class="card-img-top" src="../assets/vector/mapcb.svg"
+            <img class="card-img-top" [src]="ev.picUrl"
                  alt="Card image cap">
             <div class="card-body">
-              <p>Via Ferrata túra<br />
-                <input class="" type="radio" name="category"
-                       id="cat-via-ferrata"
-                       value="Via Ferrata túra" [(ngModel)]="event.category"></p>
+              <p>{{ev.category}}<br />
+                <input type="radio" name="category"
+                       value="{{ev.category}}" [(ngModel)]="event.category"></p>
             </div>
           </div>
         </div>
 
-        <div class="col-6 col-md-3 col-lg-2">
-          <div class="card categories category-input text-center">
-            <img class="card-img-top" src="../assets/vector/mapcb.svg"
-                 alt="Card image cap">
-            <div class="card-body">
-              <p>Hótalpas túra<br />
-                <input class="" type="radio" name="category" id="cat-snowshoe"
-                       value="Hótalpas túra" [(ngModel)]="event.category"></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-6 col-md-3 col-lg-2">
-          <div class="card categories category-input text-center">
-            <img class="card-img-top" src="../assets/vector/mapcb.svg"
-                 alt="Card image cap">
-            <div class="card-body">
-              <p>Magashegyi túra<br />
-                <input class="" type="radio" name="category"
-                       id="cat-mountaineering"
-                       value="Magashegyi túra" [(ngModel)]="event.category"></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-6 col-md-3 col-lg-2">
-          <div class="card categories category-input text-center">
-            <img class="card-img-top" src="../assets/vector/mapcb.svg"
-                 alt="Card image cap">
-            <div class="card-body">
-              <p>Gyalogtúra<br />
-                <input class="" type="radio" name="category" id="cat-hiking"
-                       value="Gyalogtúra" [(ngModel)]="event.category"></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-6 col-md-3 col-lg-2">
-          <div class="card categories category-input text-center">
-            <img class="card-img-top" src="../assets/vector/mapcb.svg"
-                 alt="Card image cap">
-            <div class="card-body">
-              <p>Sítúra<br />
-                <input class="" type="radio" name="category" id="cat-skiing"
-                       value="Sítúra" [(ngModel)]="event.category"></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-6 col-md-3 col-lg-2">
-          <div class="card categories category-input text-center">
-            <img class="card-img-top" src="../assets/vector/mapcb.svg"
-                 alt="Card image cap">
-            <div class="card-body">
-              <p>Kerékpártúra<br />
-                <input class="" type="radio" name="category" id="cat-cycling"
-                       value="Kerékpártúra" [(ngModel)]="event.category"></p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
     <div class="form-group text-right">

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from '../../shared/user.service';
+import {CategoryService} from "../../shared/category.service";
 
 @Component({
   selector: 'app-navbar',
@@ -7,20 +8,15 @@ import {UserService} from '../../shared/user.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  isCollapsed = true;
-  categories: string[] = [
-    'Táborozás',
-    'Mászófelszerelés',
-    'Védőfelszerelés',
-    'Térkép, könyv',
-    'Étkezés',
-    'Lábbeli',
-    'Műszer',
-    'Téli felszerelés'
-  ];
-  constructor(public userService: UserService) { }
+  public itemCategories;
+  public eventCategories;
+
+  constructor(public userService: UserService,
+              private _categoryService: CategoryService) { }
 
   ngOnInit() {
+    this.itemCategories = this._categoryService.getItemCategories();
+    this.eventCategories = this._categoryService.getEventCategories();
   }
 
   logout() {

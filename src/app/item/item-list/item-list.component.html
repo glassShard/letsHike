@@ -20,77 +20,16 @@
 
 <div [collapse]="isCollapsed" class="container collapse" id="categories">
   <div class="row">
-    <div class="col-sm-6 col-md-3 col-lg-2">
+    <div class="col-sm-6 col-md-3 col-lg-2" *ngFor="let it of itemCategories">
       <div class="card categories text-center">
-        <img class="card-img-top" src="../assets/vector/mapcb.svg" alt="Card image cap">
+        <img class="card-img-top" [src]="it.picUrl"
+             alt="Card image cap">
         <div class="card-body">
-          <p>Térkép, könyv</p>
+          <p>{{it.category}}</p>
         </div>
       </div>
     </div>
-
-    <div class="col-sm-6 col-md-3 col-lg-2">
-      <div class="card categories text-center">
-        <img class="card-img-top" src="../assets/vector/caracb.svg" alt="Card image cap">
-        <div class="card-body">
-          <p>Mászófelszerelés</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-6 col-md-3 col-lg-2">
-      <div class="card categories text-center">
-        <img class="card-img-top" src="../assets/vector/tentcb.svg" alt="Card image cap">
-        <div class="card-body">
-          <p>Táborozás</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-6 col-md-3 col-lg-2">
-      <div class="card categories text-center">
-        <img class="card-img-top" src="../assets/vector/knifecb.svg" alt="Card image cap">
-        <div class="card-body">
-          <p>Étkezés</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-6 col-md-3 col-lg-2">
-      <div class="card categories text-center">
-        <img class="card-img-top" src="../assets/vector/bootcb.svg" alt="Card image cap">
-        <div class="card-body">
-          <p>Lábbeli</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-6 col-md-3 col-lg-2">
-      <div class="card categories text-center">
-        <img class="card-img-top" src="../assets/vector/compasscb.svg" alt="Card image cap">
-        <div class="card-body">
-          <p>Műszer</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-6 col-md-3 col-lg-2">
-      <div class="card categories text-center">
-        <img class="card-img-top" src="../assets/vector/caracb.svg" alt="Card image cap">
-        <div class="card-body">
-          <p>Védőfelszerelés</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-6 col-md-3 col-lg-2">
-      <div class="card categories text-center">
-        <img class="card-img-top" src="../assets/vector/axecb.svg" alt="Card image cap">
-        <div class="card-body">
-          <p>Téli felszerelés</p>
-        </div>
-      </div>
-    </div>
+    
   </div>
 </div>
 
@@ -107,41 +46,4 @@
     </div>
   </div>
 
-
-  <!--<div class="row">-->
-  <!--<div class="col-lg-6 card-deck-container">-->
-  <!--<div class="card-deck card-deck-item-list">-->
-
-  <!--<app-item-card class="card"></app-item-card>-->
-  <!--<app-item-card class="card"></app-item-card>-->
-
-  <!--</div>-->
-  <!--</div>-->
-  <!--<div class="col-lg-6 card-deck-container">-->
-  <!--<div class="card-deck card-deck-item-list">-->
-
-  <!--<app-item-card class="card"></app-item-card>-->
-  <!--<app-item-card class="card"></app-item-card>-->
-
-  <!--</div>-->
-  <!--</div>-->
-  <!--</div>-->
-  <!--<div class="row">-->
-  <!--<div class="col-lg-6 card-deck-container">-->
-  <!--<div class="card-deck card-deck-item-list">-->
-
-  <!--<app-item-card class="card"></app-item-card>-->
-  <!--<app-item-card class="card"></app-item-card>-->
-
-  <!--</div>-->
-  <!--</div>-->
-  <!--<div class="col-lg-6 card-deck-container">-->
-  <!--<div class="card-deck card-deck-item-list">-->
-
-  <!--<app-item-card class="card"></app-item-card>-->
-  <!--<app-item-card class="card"></app-item-card>-->
-
-  <!--</div>-->
-  <!--</div>-->
-  <!--</div>-->
 </div>

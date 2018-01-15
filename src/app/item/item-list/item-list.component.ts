@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ItemModel} from '../../shared/item-model';
 import {ItemService} from '../../shared/item.service';
+import {CategoryService} from '../../shared/category.service';
 
 @Component({
   selector: 'app-item-list',
@@ -10,10 +11,13 @@ import {ItemService} from '../../shared/item.service';
 export class ItemListComponent implements OnInit {
   isCollapsed = true;
   public itemsGrouppedBy2: ItemModel[];
+  public itemCategories;
 
-  constructor(private _itemService: ItemService) { }
+  constructor(private _itemService: ItemService,
+              private _categoryService: CategoryService) { }
 
   ngOnInit() {
+    this.itemCategories = this._categoryService.getItemCategories();
     this.itemsGrouppedBy2 = this._itemService.getAllItems()
       .reduce((acc, curr: ItemModel, ind: number) => {
         if (ind % 2 === 0) {

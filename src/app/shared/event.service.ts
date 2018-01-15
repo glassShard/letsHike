@@ -41,7 +41,7 @@ export class EventService {
         ' túracipő, és egy védőkesztyű sem árt. Ez a ferrata állandóan' +
         ' zsúfolt, ezért csak türelmes emberek jelentkezését várjuk.',
         picUrl: '../assets/haidsteig.jpg',
-        category: 'Via Ferrata túra',
+        category: 'Via Ferrata',
         creatorId: 1,
         guestsIds: [2, 3]
       },
@@ -94,7 +94,7 @@ export class EventService {
         ' túracipő, és egy védőkesztyű sem árt. Ez a ferrata állandóan' +
         ' zsúfolt, ezért csak türelmes emberek jelentkezését várjuk.',
         picUrl: 'assets/haidsteig.jpg',
-        category: 'Via Ferrata túra',
+        category: 'Via Ferrata',
         creatorId: 1,
         guestsIds: [2, 3]
       },
@@ -148,7 +148,7 @@ export class EventService {
         ' túracipő, és egy védőkesztyű sem árt. Ez a ferrata állandóan' +
         ' zsúfolt, ezért csak türelmes emberek jelentkezését várjuk.',
         picUrl: 'assets/haidsteig.jpg',
-        category: 'Via Ferrata túra',
+        category: 'Via Ferrata',
         creatorId: 1,
         guestsIds: [2, 3]
       },
@@ -201,7 +201,7 @@ export class EventService {
         ' túracipő, és egy védőkesztyű sem árt. Ez a ferrata állandóan' +
         ' zsúfolt, ezért csak türelmes emberek jelentkezését várjuk.',
         picUrl: 'assets/haidsteig.jpg',
-        category: 'Via Ferrata túra',
+        category: 'Via Ferrata',
         creatorId: 1,
         guestsIds: [2, 3]
       },
@@ -255,7 +255,7 @@ export class EventService {
         ' túracipő, és egy védőkesztyű sem árt. Ez a ferrata állandóan' +
         ' zsúfolt, ezért csak türelmes emberek jelentkezését várjuk.',
         picUrl: 'assets/haidsteig.jpg',
-        category: 'Via Ferrata túra',
+        category: 'Via Ferrata',
         creatorId: 1,
         guestsIds: [2, 3]
       },
@@ -308,7 +308,7 @@ export class EventService {
         ' túracipő, és egy védőkesztyű sem árt. Ez a ferrata állandóan' +
         ' zsúfolt, ezért csak türelmes emberek jelentkezését várjuk.',
         picUrl: 'assets/haidsteig.jpg',
-        category: 'Via Ferrata túra',
+        category: 'Via Ferrata',
         creatorId: 1,
         guestsIds: [2, 3]
       },
@@ -362,7 +362,7 @@ export class EventService {
         ' túracipő, és egy védőkesztyű sem árt. Ez a ferrata állandóan' +
         ' zsúfolt, ezért csak türelmes emberek jelentkezését várjuk.',
         picUrl: 'assets/haidsteig.jpg',
-        category: 'Via Ferrata túra',
+        category: 'Via Ferrata',
         creatorId: 1,
         guestsIds: [2, 3]
       },
@@ -415,7 +415,7 @@ export class EventService {
         ' túracipő, és egy védőkesztyű sem árt. Ez a ferrata állandóan' +
         ' zsúfolt, ezért csak türelmes emberek jelentkezését várjuk.',
         picUrl: 'assets/haidsteig.jpg',
-        category: 'Via Ferrata túra',
+        category: 'Via Ferrata',
         creatorId: 1,
         guestsIds: [2, 3]
       },
