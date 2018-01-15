@@ -1,0 +1,93 @@
+<div class="container title-and-search">
+  <h1 class="display-4">Túrák</h1>
+  <div class="row ">
+    <div class="col-sm-3">
+      <button class="btn btn-primary btn-block mt-2" type="button" (click)="isCollapsed = !isCollapsed" data-toggle="collapse" data-target="#categories" aria-expanded="false" aria-controls="categories" >Kategóriák</button>
+    </div>
+    <div class="col-sm-6">
+      <div class="input-group mt-2">
+        <input type="text" class="form-control" placeholder="Keress itt..." aria-label="Kereső" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <button class="btn btn-outline-primary" type="button">Keresés</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <a routerLink="../new" class="btn btn-success btn-block mt-2">Új túra</a>
+    </div>
+  </div>
+</div>
+
+<div [collapse]="isCollapsed" class="container collapse" id="categories">
+  <div class="row">
+    <div class="col-sm-6 col-md-3 col-lg-2">
+      <div class="card categories text-center">
+        <img class="card-img-top" src="../assets/vector/mapcb.svg" alt="Card image cap">
+        <div class="card-body">
+          <p>Gyalogtúra</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-3 col-lg-2">
+      <div class="card categories text-center">
+        <img class="card-img-top" src="../assets/vector/caracb.svg" alt="Card image cap">
+        <div class="card-body">
+          <p>Via Ferrata</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-3 col-lg-2">
+      <div class="card categories text-center">
+        <img class="card-img-top" src="../assets/vector/tentcb.svg" alt="Card image cap">
+        <div class="card-body">
+          <p>Kerékpár</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-3 col-lg-2">
+      <div class="card categories text-center">
+        <img class="card-img-top" src="../assets/vector/knifecb.svg" alt="Card image cap">
+        <div class="card-body">
+          <p>Magashegyi túra</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-3 col-lg-2">
+      <div class="card categories text-center">
+        <img class="card-img-top" src="../assets/vector/bootcb.svg" alt="Card image cap">
+        <div class="card-body">
+          <p>Sítúra</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-3 col-lg-2">
+      <div class="card categories text-center">
+        <img class="card-img-top" src="../assets/vector/compasscb.svg" alt="Card image cap">
+        <div class="card-body">
+          <p>Hótalpas túra</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+
+  <div class="row"
+       *ngFor="let evg of eventsGrouppedBy2">
+    <div class="col-lg-6 card-deck-container" *ngFor="let ev of evg">
+      <div class="card-deck card-deck-item-list">
+        <app-event-card class="card"
+                        *ngFor="let e of ev"
+                        [tura]="e"></app-event-card>
+      </div>
+    </div>
+  </div>
+</div>
+

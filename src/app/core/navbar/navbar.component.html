@@ -1,0 +1,63 @@
+<div class="container">
+  <a class="navbar-brand" href="#"></a>
+  <button class="navbar-toggler" type="button"
+          (click)="isCollapsed = !isCollapsed" data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div [collapse]="isCollapsed" class="collapse navbar-collapse"
+       id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/kezdolap" routerLinkActive="active">Kezdőlap
+          <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <div class="btn-group">
+          <a class="nav-link" routerLink="/cuccok/list"
+             routerLinkActive="active">Cuccok</a>
+          <span dropdown>
+            <a href dropdownToggle (click)="false" routerLinkActive="active"
+               class="nav-link dropdown-toggle dropdown-toggle-split"
+               data-toggle="dropdown" aria-haspopup="true"
+               aria-expanded="false">
+              <span class="sr-only">Toggle Dropdown</span>
+            </a>
+            <span *dropdownMenu class="dropdown-menu">
+              <a *ngFor="let choice of categories" class="dropdown-item"
+                 href="#">{{choice}}</a>
+            </span>
+          </span>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/turak/list" routerLinkActive="active">Túrák</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/tobbiek" routerLinkActive="active">Többiek</a>
+      </li>
+      <ng-container *ngIf="!userService.isLoggedIn; else loggedInBlock">
+        <li class="nav-item">
+          <!--<a class="nav-link" routerLink="/user/login" routerLinkActive="active"-->
+          <!--data-toggle="modal" data-target="#loginModal">Belépés</a>-->
+          <a class="nav-link" routerLink="/user/login"
+             routerLinkActive="active">Belépés</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/user/registration" routerLinkActive="active"
+             class="btn ml-lg-2 nav-button btn-success">Regisztráció</a>
+        </li>
+      </ng-container>
+      <ng-template #loggedInBlock>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/user/login"
+             routerLinkActive="active" (click)="logout()">Kilépés</a>
+        </li>
+      </ng-template>
+
+    </ul>
+  </div>
+</div>

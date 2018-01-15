@@ -1,0 +1,131 @@
+<div class="container title-and-search">
+  <h1 class="display-4" *ngIf="!event.id; else modify">Új túra</h1>
+  <ng-template #modify>
+    <h1 class="display-4">"{{event.title}}" módosítása</h1>
+  </ng-template>
+</div>
+
+<div class="container">
+  <form #eventForm="ngForm" (ngSubmit)="onSubmit(eventForm.value)">
+    <div class="row">
+      <div class="form-group col-sm-8">
+        <label for="title">Cím:</label>
+        <input type="text" class="form-control" id="title"
+               placeholder="A túra címe, max. 25 karakter..." maxlength="25"
+               [(ngModel)]="event.title" name="title">
+      </div>
+      <div class="form-group col-sm-4">
+        <label for="days">Időtartam:</label>
+        <input type="number" class="form-control" id="days"
+               placeholder="Napok száma..." [(ngModel)]="event.days"
+               name="days">
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6 col-lg-4">
+        <label for="country">Ország:</label>
+        <input type="text" class="form-control" id="country"
+               placeholder="Melyik országban lesz? max. 25 karakter..."
+               maxlength="25" [(ngModel)]="event.country" name="country">
+        <small class="form-text text-muted">Ha nem fér ki a felsorolás, írj pl. "Több ország"-ot.</small>
+      </div>
+      <div class="form-group col-md-6 col-lg-4">
+        <label for="region">Közelebbi helyszín:</label>
+        <input type="text" class="form-control" id="region"
+               placeholder="Régió v. hegység? max. 25 karakter..."
+               maxlength="25" [(ngModel)]="event.region" name="region">
+      </div>
+      <div class="form-group col-md-6 col-lg-4">
+        <label for="date">Túra kezdete:</label>
+        <input type="date" class="form-control" id="date"
+               [(ngModel)]="event.date" name="date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="description">Leírás:</label>
+      <textarea type="text" class="form-control" id="description" placeholder="Itt add meg a túra részleteit..."></textarea>
+    </div>
+    <div class="form-group" id="categories">
+      <dl class="mydl">Válassz kategóriát:</dl>
+      <div class="row">
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="card categories category-input text-center">
+            <img class="card-img-top" src="../assets/vector/mapcb.svg"
+                 alt="Card image cap">
+            <div class="card-body">
+              <p>Via Ferrata túra<br />
+                <input class="" type="radio" name="category"
+                       id="cat-via-ferrata"
+                       value="Via Ferrata túra" [(ngModel)]="event.category"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="card categories category-input text-center">
+            <img class="card-img-top" src="../assets/vector/mapcb.svg"
+                 alt="Card image cap">
+            <div class="card-body">
+              <p>Hótalpas túra<br />
+                <input class="" type="radio" name="category" id="cat-snowshoe"
+                       value="Hótalpas túra" [(ngModel)]="event.category"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="card categories category-input text-center">
+            <img class="card-img-top" src="../assets/vector/mapcb.svg"
+                 alt="Card image cap">
+            <div class="card-body">
+              <p>Magashegyi túra<br />
+                <input class="" type="radio" name="category"
+                       id="cat-mountaineering"
+                       value="Magashegyi túra" [(ngModel)]="event.category"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="card categories category-input text-center">
+            <img class="card-img-top" src="../assets/vector/mapcb.svg"
+                 alt="Card image cap">
+            <div class="card-body">
+              <p>Gyalogtúra<br />
+                <input class="" type="radio" name="category" id="cat-hiking"
+                       value="Gyalogtúra" [(ngModel)]="event.category"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="card categories category-input text-center">
+            <img class="card-img-top" src="../assets/vector/mapcb.svg"
+                 alt="Card image cap">
+            <div class="card-body">
+              <p>Sítúra<br />
+                <input class="" type="radio" name="category" id="cat-skiing"
+                       value="Sítúra" [(ngModel)]="event.category"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="card categories category-input text-center">
+            <img class="card-img-top" src="../assets/vector/mapcb.svg"
+                 alt="Card image cap">
+            <div class="card-body">
+              <p>Kerékpártúra<br />
+                <input class="" type="radio" name="category" id="cat-cycling"
+                       value="Kerékpártúra" [(ngModel)]="event.category"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group text-right">
+      <button type="submit" class="btn btn-primary">Túra mentése</button>
+    </div>
+  </form>
+</div>
+

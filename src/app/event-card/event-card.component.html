@@ -1,0 +1,15 @@
+<img class="card-img-top bg-mylight" [src]="tura.picUrl"
+     alt="Card image cap">
+<div class="card-body">
+  <h5 class="card-title">{{tura.title}}</h5>
+  <p class="mb-0">{{tura.country}}</p>
+  <p class="card-text">{{tura.region}}</p>
+  <h5 class="card-title">{{tura.days}} nap</h5>
+  <p class="mb-1">Túra indul:</p>
+  <h6 class="card-title mb-3">{{tura.date}}</h6>
+  <h6 class="card-title mb-3">Feltöltötte: {{tura.creator.nick}}</h6>
+  <!--<p class="mb-0">Jelentkeztek:</p>-->
+  <!--<p class="mb-1" *ngFor="let guest of tura.guests">{{guest.nick}}</p>-->
+  <a [routerLink]="['../', tura.id]" class="btn btn-lg btn-primary">Részletek
+  </a>
+</div>

@@ -1,0 +1,63 @@
+<div class="container title-and-search">
+  <h1 class="display-4" *ngIf="!item.id; else modify">Új hirdetés</h1>
+  <ng-template #modify>
+    <h1 class="display-4">"{{item.title}}" módosítása</h1>
+  </ng-template>
+</div>
+
+<div class="container">
+  <form #itemForm="ngForm" (ngSubmit)="onSubmit(itemForm.value)">
+    <div class="row">
+      <div class="form-group col-sm-8">
+        <label for="title">Név:</label>
+        <input type="text" class="form-control" id="title"
+               placeholder="Cucc megnevezése, max. 25 karakter..."
+               maxlength="25" name="title" [(ngModel)]="item.title">
+      </div>
+      <div class="form-group col-sm-4">
+        <label for="price">Ár:</label>
+        <input type="number" class="form-control" id="price"
+               placeholder="Ár Ft-ban..." name="price"
+               [(ngModel)]="item.price">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="shortDescription">Rövid leírás:</label>
+      <input type="text" class="form-control" id="shortDescription"
+             placeholder="Rövid leírás, max. 80 karakter..." maxlength="80"
+             [(ngModel)]="item.shortDescription" name="shortDescription">
+      <small id="emailHelp" class="form-text text-muted">Ez a szöveg fog
+        megjelenni a lista nézetekben az egyes kártyákon.
+      </small>
+    </div>
+    <div class="form-group">
+      <label for="description">Leírás:</label>
+      <textarea type="text" class="form-control" id="description"
+                placeholder="Ide hosszabb szöveget is írhatsz, mely a terméklapon a rövid leírás folytatásaként jelenik majd meg..."
+                [(ngModel)]="item.description" name="description"></textarea>
+    </div>
+    <div class="form-group" id="categories">
+      <dl class="mydl">Válassz kategóriát:</dl>
+      <div class="row">
+        <div class="col-6 col-md-3 col-lg-2" *ngFor="let cat of itemCategories">
+          <div class="card categories category-input text-center">
+            <img class="card-img-top" [src]="cat.picUrl"
+                 alt="Card image cap">
+            <div class="card-body">
+              <p>{{cat.category}}<br/>
+                <input class="" type="radio" name="category"
+                       value="{{cat.category}}" [(ngModel)]="item.category">
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group text-right">
+      <button type="submit" class="btn btn-primary">
+        Hirdetés feladása
+      </button>
+    </div>
+  </form>
+</div>
+

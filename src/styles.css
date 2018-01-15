@@ -1,1 +1,266 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  font-size: 1.1em;
+}
+
+.lead {
+  font-size: 1.5em;
+}
+
+.img-bg {
+  background-image: url('assets/kovek.jpg');
+  background-size: cover;
+  background-position: center center;
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.card-img-home {
+  margin-top: 1.5rem;
+}
+
+.card-button {
+  margin-bottom: 1.5rem;
+}
+
+.card-deck-item-list {
+  height: 100%;
+  align-items: stretch;
+}
+
+.my-jumbotron {
+  background-color: transparent;
+  margin-bottom: 0;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.navbar-home {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  border-bottom: 1px solid rgba(256, 256, 256, 0.2);
+}
+
+.bg-mylight {
+  background-color: rgb(230, 252, 192)
+}
+
+.nav-button {
+  display: block;
+  padding: .5rem 1rem;
+}
+
+footer {
+  margin-top: 2rem;
+}
+
+.title-and-search {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.categories {
+  margin-left: -10px;
+  margin-right: -10px;
+  margin-bottom: 10px;
+}
+
+.categories .card-body {
+  padding: 5px;
+}
+
+#categories .row {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 20px;
+
+}
+
+.dropdown-item:focus,
+.dropdown-item:hover {
+  background-color: rgb(230, 252, 192);
+}
+
+
+.profile-header {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 20px;
+  padding: 20px 0;
+}
+
+.profile-avatar {
+  height: 160px;
+  width: 160px;
+  margin: auto;
+  border-radius: 50%;
+  overflow: hidden;
+  background: white;
+}
+
+.profile-avatar img {
+  height: 100%;
+  width: auto;
+}
+
+.form-bordered {
+  padding: 15px 15px 0 15px;
+  border: 1px solid #b3b9be;
+}
+
+@media (min-width: 576px) {
+  .negative-margin {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+
+  .card-deck-container {
+    margin-bottom: 30px;
+  }
+}
+
+.text-primary {
+  color: rgb(19, 68, 204);
+}
+
+a:hover {
+  color: rgb(14, 50, 151);
+}
+
+.btn-primary {
+  background-color: rgb(19, 68, 204);
+  border-color: rgb(19, 68, 204);
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: rgb(14, 50, 151);
+  border-color: rgb(14, 50, 151);
+}
+
+.btn-primary.focus,
+.btn-primary:focus {
+  box-shadow: 0 0 0 .2rem rgb(137, 166, 247)
+}
+
+.btn-primary.disabled,
+.btn-primary:disabled {
+  background-color: rgb(137, 166, 247);
+  border-color: rgb(137, 166, 247)
+}
+
+.btn-primary:not([disabled]):not(.disabled).active,
+.btn-primary:not([disabled]):not(.disabled):active,
+.show > .btn-primary.dropdown-toggle {
+  background-color: rgb(137, 166, 247);
+  border-color: rgb(137, 166, 247)
+}
+
+.btn-primary:not([disabled]):not(.disabled).active:focus,
+.btn-primary:not([disabled]):not(.disabled):active:focus,
+.show > .btn-primary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 .2rem rgb(137, 166, 247)
+}
+
+.btn-outline-primary {
+  color: rgb(19, 68, 204);
+  border-color: rgb(19, 68, 204);
+}
+
+.btn-outline-primary:hover {
+  color: #fff;
+  background-color: rgb(14, 50, 151);
+  border-color: rgb(14, 50, 151);
+}
+
+.btn-outline-primary.focus,
+.btn-outline-primary:focus {
+  box-shadow: 0 0 0 .2rem rgb(137, 166, 247);
+}
+
+.btn-outline-primary.disabled,
+.btn-outline-primary:disabled {
+  color: rgb(137, 166, 247);
+  background-color: transparent
+}
+
+.btn-outline-primary:not([disabled]):not(.disabled).active,
+.btn-outline-primary:not([disabled]):not(.disabled):active,
+.show > .btn-outline-primary.dropdown-toggle {
+  background-color: rgb(137, 166, 247);
+  border-color: rgb(137, 166, 247);
+  box-shadow: 0 0 0 .2rem rgb(137, 166, 247);
+}
+
+.btn-success {
+  background-color: rgba(150, 222, 42, 1);
+  border-color: rgba(150, 222, 42, 1);
+}
+
+.btn-success:hover {
+  background-color: rgba(120, 181, 42, 1);
+  border-color: rgba(120, 181, 42, 1)
+}
+
+.btn-success.focus,
+.btn-success:focus {
+  box-shadow: 0 0 0 .2rem rgba(197, 253, 114, 1)
+}
+
+.btn-success.disabled,
+.btn-success:disabled {
+  background-color: rgba(197, 253, 114, 1);
+  border-color: rgba(197, 253, 114, 1)
+}
+
+.btn-success:not([disabled]):not(.disabled).active,
+.btn-success:not([disabled]):not(.disabled):active,
+.show > .btn-success.dropdown-toggle {
+  background-color: rgba(197, 253, 114, 1);
+  border-color: rgba(197, 253, 114, 1);
+}
+
+.btn-success:not([disabled]):not(.disabled).active:focus,
+.btn-success:not([disabled]):not(.disabled):active:focus,
+.show > .btn-success.dropdown-toggle:focus {
+  box-shadow: 0 0 0 .2rem rgba(197, 253, 114, 1)
+}
+
+.btn-outline-success {
+  color: rgba(150, 222, 42, 1);
+  border-color: rgba(150, 222, 42, 1);
+}
+
+.btn-outline-success:hover {
+  color: #fff;
+  background-color: rgba(120, 181, 42, 1);;
+  border-color: rgba(120, 181, 42, 1);
+}
+
+.btn-outline-success.focus,
+.btn-outline-success:focus {
+  box-shadow: 0 0 0 .2rem rgba(197, 253, 114, 1)
+}
+
+.btn-outline-success.disabled,
+.btn-outline-success:disabled {
+  color: rgba(197, 253, 114, 1);
+  background-color: transparent
+}
+
+.btn-outline-success:not([disabled]):not(.disabled).active,
+.btn-outline-success:not([disabled]):not(.disabled):active,
+.show > .btn-outline-success.dropdown-toggle {
+  color: #212529;
+  background-color: rgba(150, 222, 42, 1);
+  border-color: rgba(150, 222, 42, 1);
+  box-shadow: 0 0 0 .2rem rgba(197, 253, 114, 1)
+}
+
+.text-success {
+  color: rgba(150, 222, 42, 1);
+}
+
+.input-group>.input-group-append>.btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0
+}
