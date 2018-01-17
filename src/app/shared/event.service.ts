@@ -452,7 +452,7 @@ export class EventService {
   }
 
   getEventById(id: number) {
-    const event = this._events.filter(ev => ev.id === id);
+    const event = this._events.filter(ev => ev.id === + id);
     return event.length > 0 ? event[0] : new EventModel(EventModel.emptyEvent);
   }
 

@@ -12,13 +12,21 @@
         <label for="title">Cím:</label>
         <input type="text" class="form-control" id="title"
                placeholder="A túra címe, max. 25 karakter..." maxlength="25"
-               [(ngModel)]="event.title" name="title">
+               [(ngModel)]="event.title" name="title" required #title="ngModel">
+        <alert type="warning"
+               *ngIf="title.touched && title.pristine">Kötelezően kitöltendő
+          mező!
+        </alert>
       </div>
       <div class="form-group col-sm-4">
         <label for="days">Időtartam:</label>
         <input type="number" class="form-control" id="days"
                placeholder="Napok száma..." [(ngModel)]="event.days"
-               name="days">
+               name="days" required #days="ngModel">
+        <alert type="warning"
+               *ngIf="days.touched && days.pristine">Kötelezően kitöltendő
+          mező!
+        </alert>
       </div>
     </div>
     <div class="row">
@@ -26,7 +34,12 @@
         <label for="country">Ország:</label>
         <input type="text" class="form-control" id="country"
                placeholder="Melyik országban lesz? max. 25 karakter..."
-               maxlength="25" [(ngModel)]="event.country" name="country">
+               maxlength="25" [(ngModel)]="event.country"
+               name="country" required #country="ngModel">
+        <alert type="warning"
+               *ngIf="country.touched && country.pristine">Kötelezően kitöltendő
+          mező!
+        </alert>
         <small class="form-text text-muted">Ha nem fér ki a felsorolás, írj pl. "Több ország"-ot.</small>
       </div>
       <div class="form-group col-md-6 col-lg-4">
@@ -38,12 +51,24 @@
       <div class="form-group col-md-6 col-lg-4">
         <label for="date">Túra kezdete:</label>
         <input type="date" class="form-control" id="date"
-               [(ngModel)]="event.date" name="date">
+               [(ngModel)]="event.date" name="date" required #date="ngModel">
+        <alert type="warning"
+               *ngIf="date.touched && date.pristine">Kötelezően kitöltendő
+          mező!
+        </alert>
       </div>
     </div>
     <div class="form-group">
       <label for="description">Leírás:</label>
-      <textarea type="text" class="form-control" id="description" placeholder="Itt add meg a túra részleteit..."></textarea>
+      <textarea type="text" class="form-control" id="description"
+                name="description"
+                placeholder="Itt add meg a túra részleteit..."
+                required #description="ngModel"
+                [(ngModel)]="event.description"></textarea>
+      <alert type="warning"
+             *ngIf="description.touched && description.pristine">Kötelezően kitöltendő
+        mező!
+      </alert>
     </div>
     <div class="form-group" id="categories">
       <dl class="mydl">Válassz kategóriát:</dl>

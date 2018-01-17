@@ -132,7 +132,7 @@ export class ItemService {
   }
 
   getItemById(id: number) {
-    const item = this._items.filter(it => it.id === id);
+    const item = this._items.filter(it => it.id === + id);
     return item.length > 0 ? item[0] : new ItemModel(ItemModel.emptyItem);
   }
 

@@ -3,6 +3,8 @@ import {EventService} from '../../shared/event.service';
 import {EventModel} from '../../shared/event-model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CategoryService} from '../../shared/category.service';
+import {Location} from '@angular/common';
+import {UserService} from '../../shared/user.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -15,7 +17,9 @@ export class EventDetailComponent implements OnInit {
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,
               private _router: Router,
-              private _categoryService: CategoryService) { }
+              private _categoryService: CategoryService,
+              private _location: Location,
+              private _userService: UserService) { }
 
   ngOnInit() {
     this.eventCategories = this._categoryService.getEventCategories();
@@ -35,10 +39,11 @@ export class EventDetailComponent implements OnInit {
       this._eventService.update(this.event);
     } else {
       console.log('new agban vagyunk');
+      this.event.creatorId = this._userService.getCurrentUser().id;
       this._eventService.create(this.event);
     }
     console.log(form);
-    this._router.navigate(['/turak/list']);
+    this._location.back();
   }
 
 }

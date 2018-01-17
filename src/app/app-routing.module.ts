@@ -18,13 +18,13 @@ import {LoggedInGuard} from './shared/logged-in.guard';
 const routes: Routes = [
   {path: 'kezdolap', component: HomeComponent},
   {path: 'cuccok', component: ItemComponent, children: [
-      {path: 'list', component: ItemListComponent},
-      {path: 'new', component: ItemDetailsComponent},
+      {path: '', component: ItemListComponent},
+      {path: 'new', component: ItemDetailsComponent, canActivate: [LoggedInGuard]},
       {path: ':id', component: ItemDetailsComponent}
     ]},
   {path: 'turak', component: EventComponent, children: [
-      {path: 'list', component: EventListComponent},
-      {path: 'new', component: EventDetailComponent},
+      {path: '', component: EventListComponent},
+      {path: 'new', component: EventDetailComponent, canActivate: [LoggedInGuard]},
       {path: ':id', component: EventDetailComponent}
     ]},
   {path: 'tobbiek', component: UsersComponent},

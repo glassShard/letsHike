@@ -19,6 +19,7 @@ import {AlertModule} from 'ngx-bootstrap';
 import {LoggedInGuard} from './shared/logged-in.guard';
 import {FormsModule} from '@angular/forms';
 import {CategoryService} from './shared/category.service';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,6 @@ import {CategoryService} from './shared/category.service';
     ...AppRoutingModule.routableComponents,
     LoginModalComponent,
     PointReplacerPipe,
-
   ],
   imports: [
     BsDropdownModule.forRoot(),
@@ -39,7 +39,8 @@ import {CategoryService} from './shared/category.service';
     AlertModule.forRoot(),
     BrowserModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [
     EventService,

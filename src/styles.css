@@ -62,6 +62,7 @@ footer {
   margin-left: -10px;
   margin-right: -10px;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .categories .card-body {
@@ -72,14 +73,13 @@ footer {
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 20px;
-
 }
 
 .dropdown-item:focus,
-.dropdown-item:hover {
+.dropdown-item:hover,
+.categories:hover {
   background-color: rgb(230, 252, 192);
 }
-
 
 .profile-header {
   width: 100%;
