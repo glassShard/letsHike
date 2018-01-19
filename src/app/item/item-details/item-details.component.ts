@@ -20,8 +20,8 @@ export class ItemDetailsComponent implements OnInit {
               private _userService: UserService) { }
 
   ngOnInit() {
-    const itId = +this._route.snapshot.params['id'];
-    this.item = this._itemService.getItemById(itId);
+    const itId = this._route.snapshot.params['id'];
+    this._itemService.getItemById(itId).subscribe(it => this.item = it);
     this.itemCategories = this._categoryService.getItemCategories();
   }
 
@@ -29,7 +29,7 @@ export class ItemDetailsComponent implements OnInit {
     if (this.item.id) {
       this._itemService.update(this.item);
     } else {
-      this.item.creatorId = this._userService.getCurrentUser().id;
+      this._userService.getCurrentUser().subscribe(user => this.item.creatorId = user.id);
       this._itemService.create(this.item);
     }
     this._router.navigate(['/cuccok']);

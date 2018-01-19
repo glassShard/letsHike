@@ -4,7 +4,7 @@
   <h5 class="card-title">{{cucc.title}}</h5>
   <h3 class="card-title">{{cucc.price | number | pointReplacer}} Ft</h3>
   <p class="card-text">{{cucc.shortDescription}}</p>
-  <h6 class="card-title mb-3">Feltöltötte: {{cucc.creator.nick}}</h6>
+  <h6 class="card-title mb-3">Feltöltötte: {{cucc.creator.nick}} </h6>
   <a [routerLink]="['./', cucc.id]" class="btn btn-lg btn-primary">Részletek</a>
 </div>
 

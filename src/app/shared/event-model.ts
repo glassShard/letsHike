@@ -1,7 +1,7 @@
 import {UserModel} from './user-model';
 
 export class EventModel {
-  id?: number;
+  id?: string;
   title: string;
   days: number;
   country: string;
@@ -10,7 +10,7 @@ export class EventModel {
   description: string;
   picUrl: string;
   category: string;
-  creatorId: number;
+  creatorId: string;
   creator?: UserModel;
   guestsIds?: number[];
   guests?: UserModel[];
@@ -31,7 +31,7 @@ export class EventModel {
       description: '',
       picUrl: '',
       category: '',
-      creatorId: 0,
+      creatorId: '',
     };
   }
 }

@@ -23,14 +23,18 @@ export class EventDetailComponent implements OnInit {
 
   ngOnInit() {
     this.eventCategories = this._categoryService.getEventCategories();
-    const evId = +this._route.snapshot.params['id'];
+    const evId = this._route.snapshot.params['id'];
+    this.event = new EventModel(EventModel.emptyEvent);
     // console.log('id=', typeof(evId), ':', evId);
-    // if (evId) {
-    this.event = this._eventService.getEventById(evId);
+    if (evId) {
+      this._eventService.getEventById(evId)
+        .subscribe(evm => this.event = evm);
+      console.log(this.event);
+    }
     // } else {
     //   this.event = new EventModel(EventModel.emptyEvent);
     // }
-    console.log(this.event);
+
   }
 
   onSubmit(form) {
@@ -39,7 +43,8 @@ export class EventDetailComponent implements OnInit {
       this._eventService.update(this.event);
     } else {
       console.log('new agban vagyunk');
-      this.event.creatorId = this._userService.getCurrentUser().id;
+      this._userService.getCurrentUser()
+        .subscribe(user => this.event.creatorId = user.id);
       this._eventService.create(this.event);
     }
     console.log(form);

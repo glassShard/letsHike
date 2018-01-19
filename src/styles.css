@@ -107,6 +107,10 @@ footer {
   border: 1px solid #b3b9be;
 }
 
+.ng-dirty:not(form) {
+  border-left: 5px solid rgba(150, 222, 42, 1);
+}
+
 @media (min-width: 576px) {
   .negative-margin {
     margin-left: -15px;

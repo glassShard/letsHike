@@ -36,7 +36,7 @@
 <div class="container">
 
   <div class="row"
-       *ngFor="let itg of itemsGrouppedBy2">
+       *ngFor="let itg of itemsGrouppedBy2$ | async">
     <div class="col-lg-6 card-deck-container" *ngFor="let it of itg">
       <div class="card-deck card-deck-item-list">
         <app-item-card class="card"

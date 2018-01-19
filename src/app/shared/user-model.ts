@@ -1,5 +1,5 @@
 export class UserModel {
-  id: number;
+  id: string;
   email: string;
   nick: string;
   dateOfBirth?: string;
@@ -12,7 +12,7 @@ export class UserModel {
   }
   static get exampleUser(): UserModel {
     return {
-      id: 0,
+      id: '',
       email: 'info@uvegszilank.hu',
       nick: 'Eva',
       dateOfBirth: '1966-05-18',
@@ -22,7 +22,7 @@ export class UserModel {
 
   static get emptyUser(): UserModel {
     return {
-      id: 0,
+      id: '',
       email: '',
       nick: '',
       dateOfBirth: '',

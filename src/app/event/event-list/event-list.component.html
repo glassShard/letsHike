@@ -38,7 +38,7 @@
 <div class="container">
 
   <div class="row"
-       *ngFor="let evg of eventsGrouppedBy2">
+       *ngFor="let evg of eventsGrouppedBy2$ | async">
     <div class="col-lg-6 card-deck-container" *ngFor="let ev of evg">
       <div class="card-deck card-deck-item-list">
         <app-event-card class="card"

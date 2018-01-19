@@ -5,40 +5,68 @@
 </div>
 
 <div class="container">
-  <form>
+  <form #registrationForm="ngForm"
+        (ngSubmit)="register(registrationForm.value)">
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="nick">Felhasználónév:</label>
-        <input type="text" class="form-control" id="nick" placeholder="Ezen a néven látnak majd a többiek...">
+        <input type="text" class="form-control" id="nick" name="nick"
+               placeholder="Ezen a néven látnak majd a többiek..."
+               [(ngModel)]="user.nick" required #nick="ngModel">
+        <alert type="warning" *ngIf="nick.invalid && nick.touched">
+          Kötelező mező!
+        </alert>
       </div>
       <div class="form-group col-md-4">
         <label for="password">Jelszó:</label>
-        <input type="password" class="form-control" id="password" placeholder="Jelszó...">
+        <input type="password" class="form-control" id="password"
+               name="password" placeholder="Jelszó..." ngModel
+               #password="ngModel" required>
+        <alert type="warning" *ngIf="password.invalid && password.touched">
+          Kötelező mező!
+        </alert>
       </div>
       <div class="form-group col-md-4">
         <label for="passwordAgain">Jelszó újra:</label>
-        <input type="password" class="form-control" id="passwordAgain" placeholder="Jelszó újra...">
+        <input type="password" class="form-control" id="passwordAgain"
+               name="passwordAgain" placeholder="Jelszó újra..." ngModel
+               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}"
+               required #passwordAgain="ngModel">
+        <alert type="warning" *ngIf="passwordAgain.invalid && passwordAgain.touched">
+          Kötelező mező!
+        </alert>
+        <alert type="warning"
+               *ngIf="!password.invalid && !passwordAgain.invalid && password !== passwordAgain">
+          A két jelszó nem egyezik!
+        </alert>
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="email">Email:</label>
-        <input type="email" class="form-control" id="email" placeholder="Email...">
+        <input type="email" class="form-control" id="email" name="email"
+               name="email" placeholder="Email..." [(ngModel)]="user.email"
+               #email="ngModel">
         <small class="form-text text-muted">Kérjük, hogy valós email címet adj meg, erre küldjük a megerősítő linket, az értesítéseket (ha kéred), és a tagok neked szóló üzeneteit. Email címed a tagok számára sem lesz publikus.</small>
+        <alert type="warning" *ngIf="email.invalid && email.touched">
+          Kötelező mező!
+        </alert>
       </div>
       <div class="form-group col-md-4">
         <label for="dateOfBirth">Születési dátum:</label>
-        <input type="date" class="form-control" id="dateOfBirth">
+        <input type="date" class="form-control" id="dateOfBirth"
+               name="dateOfBirth" [(ngModel)]="dateOfBirth">
         <small class="form-text text-muted">Ha kitöltöd, adatlapodon megjelenítjük életkorodat (az adatlap csak a tagok számára látható).</small>
       </div>
       <div class="form-group col-md-4">
         <label for="tel">Telefonszám:</label>
-        <input type="text" class="form-control" id="tel" placeholder="Telefonszámod...">
+        <input type="text" class="form-control" id="tel"
+               name="tel" placeholder="Telefonszámod..." [(ngModel)]="tel">
         <small class="form-text text-muted">Ha kitöltöd, adatlapodon, valamint hirdetés feladása esetén a termék oldalán kattintás után láthatóvá tesszük. Ha nem adod meg, de hirdetést adsz fel, csak a tagok fognak tudni veled kapcsolatba lépni, ezért javasoljuk, hogy hirdetés-feladás esetén mindenképpen töltsd ki!</small>
       </div>
     </div>
     <div class="form-group text-right">
-      <button class="btn btn-primary" (click)="register()">Adatok
+      <button class="btn btn-primary" type="submit">Adatok
         mentése</button>
     </div>
   </form>

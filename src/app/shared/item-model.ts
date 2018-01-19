@@ -1,14 +1,14 @@
 import {UserModel} from './user-model';
 
 export class ItemModel {
-  id: number;
+  id?: string;
   title: string;
   price: number;
   shortDescription: string;
   description: string;
   picUrl: string;
   category: string;
-  creatorId: number;
+  creatorId: string;
   creator?: UserModel;
   seen: number;
 
@@ -20,14 +20,14 @@ export class ItemModel {
 
   static get emptyItem(): ItemModel {
     return {
-      id: 0,
+      id: '',
       title: '',
       price: 0,
       shortDescription: '',
       description: '',
       picUrl: '',
       category: '',
-      creatorId: 0,
+      creatorId: '',
       seen: 0,
     };
   }

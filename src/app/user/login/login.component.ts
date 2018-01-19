@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from '../../shared/user.service';
+import {UserModel} from '../../shared/user-model';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,16 +11,23 @@ import {UserService} from '../../shared/user.service';
 export class LoginComponent implements OnInit {
   public error: string;
 
-  constructor(private _userService: UserService) { }
+  constructor(private _userService: UserService,
+              private _router: Router) { }
 
   ngOnInit() {
   }
 
   login(email: string, password: string) {
     console.log(email, password);
-    if (!this._userService.login(email, password)) {
-      this.error = 'Hiba a belépési adatokban';
-    }
+    this._userService.login(email, password).subscribe(
+      (user: UserModel) => {
+        this._router.navigate(['/user']);
+      },
+      err => {
+        console.warn('hibara futottunk a logincmp-ben', err);
+        this.error = 'Hiba a bejelentkezési adatokban. Próbáld újra.';
+      }
+    );
   }
 
   clearError() {
