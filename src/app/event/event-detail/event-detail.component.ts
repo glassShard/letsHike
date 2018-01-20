@@ -39,10 +39,8 @@ export class EventDetailComponent implements OnInit {
 
   onSubmit(form) {
     if (this.event.id) {
-      console.log('modosit agban vagyunk');
       this._eventService.update(this.event);
     } else {
-      console.log('new agban vagyunk');
       this._userService.getCurrentUser()
         .subscribe(user => this.event.creatorId = user.id);
       this._eventService.create(this.event);

@@ -460,9 +460,6 @@ export class EventService {
   getEventById(id: number) {
     return this._http
       .get<EventModel>(`${environment.firebase.baseUrl}/events/${id}.json`);
-
-    // const event = this._events.filter(ev => ev.id === + id);
-    // return event.length > 0 ? event[0] : new EventModel(EventModel.emptyEvent);
   }
 
   update(ev: EventModel) {

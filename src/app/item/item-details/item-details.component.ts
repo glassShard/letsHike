@@ -21,18 +21,16 @@ export class ItemDetailsComponent implements OnInit {
 
   ngOnInit() {
     const itId = this._route.snapshot.params['id'];
-    this._itemService.getItemById(itId).subscribe(it => this.item = it);
+    if (itId) {
+      this._itemService.getItemById(itId).subscribe(it => this.item = it);
+    } else {
+      this.item = ItemModel.emptyItem;
+    }
     this.itemCategories = this._categoryService.getItemCategories();
   }
 
   onSubmit(form) {
-    if (this.item.id) {
-      this._itemService.update(this.item);
-    } else {
-      this._userService.getCurrentUser().subscribe(user => this.item.creatorId = user.id);
-      this._itemService.create(this.item);
-    }
-    this._router.navigate(['/cuccok']);
+    this._itemService.save(this.item);
+    // this._router.navigate(['/cuccok']);
   }
-
 }

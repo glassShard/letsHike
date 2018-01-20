@@ -30,7 +30,7 @@ import {HttpClientModule} from '@angular/common/http';
     EventCardComponent,
     ...AppRoutingModule.routableComponents,
     LoginModalComponent,
-    PointReplacerPipe,
+    PointReplacerPipe
   ],
   imports: [
     BsDropdownModule.forRoot(),

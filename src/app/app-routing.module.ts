@@ -14,13 +14,15 @@ import {RegistrationComponent} from './user/registration/registration.component'
 import {EventListComponent} from './event/event-list/event-list.component';
 import {EventDetailComponent} from './event/event-detail/event-detail.component';
 import {LoggedInGuard} from './shared/logged-in.guard';
+import {ItemViewComponent} from './item/item-view/item-view.component';
 
 const routes: Routes = [
   {path: 'kezdolap', component: HomeComponent},
   {path: 'cuccok', component: ItemComponent, children: [
       {path: '', component: ItemListComponent},
       {path: 'new', component: ItemDetailsComponent, canActivate: [LoggedInGuard]},
-      {path: ':id', component: ItemDetailsComponent}
+      {path: ':id', component: ItemDetailsComponent, canActivate: [LoggedInGuard]},
+      {path: 'view/:id', component: ItemViewComponent}
     ]},
   {path: 'turak', component: EventComponent, children: [
       {path: '', component: EventListComponent},
@@ -49,6 +51,7 @@ export class AppRoutingModule {
     ItemComponent,
     ItemListComponent,
     ItemDetailsComponent,
+    ItemViewComponent,
     EventComponent,
     EventListComponent,
     EventDetailComponent,

@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ItemModel} from '../shared/item-model';
+import {UserModel} from "../shared/user-model";
 
 @Component({
   selector: 'app-item-card',
@@ -8,6 +9,7 @@ import {ItemModel} from '../shared/item-model';
 })
 export class ItemCardComponent implements OnInit {
   @Input() cucc: ItemModel;
+  @Input() currentUser: UserModel;
   constructor() { }
 
   ngOnInit() {

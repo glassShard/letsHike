@@ -9,7 +9,7 @@ export class CategoryService {
     this._itemCategories = [
       {
         category: 'Mászófelszerelés',
-        picUrl: '../assets/vector/axecb.svg'
+        picUrl: '../assets/vector/friendcb.svg'
       },
       {
         category: 'Védőfelszerelés',
@@ -17,7 +17,7 @@ export class CategoryService {
       },
       {
         category: 'Műszer',
-        picUrl: '../assets/vector/axecb.svg'
+        picUrl: '../assets/vector/gpscb.svg'
       },
       {
         category: 'Térkép, könyv',
@@ -34,6 +34,18 @@ export class CategoryService {
       {
         category: 'Táborozás',
         picUrl: '../assets/vector/tentcb.svg'
+      },
+      {
+        category: 'Hátizsák, táska',
+        picUrl: '../assets/vector/backpackcb.svg'
+      },
+      {
+        category: 'Téli felszerelés',
+        picUrl: '../assets/vector/axecb.svg'
+      },
+      {
+        category: 'Ruházat',
+        picUrl: '../assets/vector/jacketcb.svg'
       }
     ];
     this._eventCategories = [

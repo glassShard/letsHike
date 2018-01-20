@@ -4,6 +4,8 @@ import {ItemService} from '../../shared/item.service';
 import {CategoryService} from '../../shared/category.service';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/reduce';
+import {UserService} from "../../shared/user.service";
+import {UserModel} from "../../shared/user-model";
 
 
 @Component({
@@ -15,9 +17,17 @@ export class ItemListComponent implements OnInit {
   isCollapsed = true;
   public itemsGrouppedBy2$: Observable<ItemModel[]>;
   public itemCategories;
+  public currentUser: UserModel;
 
   constructor(private _itemService: ItemService,
-              private _categoryService: CategoryService) { }
+              private _categoryService: CategoryService,
+              private _userService: UserService) {
+    if (this._userService.isLoggedIn) {
+      this._userService.getCurrentUser().subscribe(user => {
+        this.currentUser = user;
+      });
+    }
+  }
 
   ngOnInit() {
     this.itemCategories = this._categoryService.getItemCategories();
@@ -38,8 +48,6 @@ export class ItemListComponent implements OnInit {
           return acc;
         }, []);
       });
-
-    console.log(this.itemsGrouppedBy2$);
   }
 }
 

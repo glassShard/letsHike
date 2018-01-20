@@ -9,6 +9,7 @@ import {UserModel} from './user-model';
 import 'rxjs/add/observable/zip';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/forkJoin';
+import {FirebaseRegistrationModel} from './firebase-registration-model';
 
 
 @Injectable()
@@ -148,24 +149,27 @@ export class ItemService {
       .switchMap(zipStreamArray => Observable.forkJoin(zipStreamArray));
   }
 
-  // getAllItems() {
-  //   return this._items.map(it => {
-  //     return {
-  //       ...it,
-  //       creator: this._userService.getUserById(it.creatorId),
-  //     };
-  //   });
-  // }
-
   getItemById(id: string) {
     return this._http
       .get<ItemModel>(`${environment.firebase.baseUrl}/items/${id}.json`);
   }
 
-  // getItemById(id: number); {
-  //   const item = this._items.filter(it => it.id === + id);
-  //   return item.length > 0 ? item[0] : new ItemModel(ItemModel.emptyItem);
-  // }
+  save(param: ItemModel) {
+    this._userService.getCurrentUser().subscribe(currentUser => {
+      param.creatorId = currentUser.id;
+      delete param.creator;
+      if (param.id) { // udpate ag
+        this._http.put(`${environment.firebase.baseUrl}/items/${param.id}.json`, param).subscribe();
+      } else { // create ag
+        this._http.post(`${environment.firebase.baseUrl}/items.json`, param)
+          .map((fbPostReturn: { name: string }) => fbPostReturn.name)
+          .switchMap(fbId => this._http.patch(
+            `${environment.firebase.baseUrl}/events/${fbId}.json`,
+            {id: fbId}
+          )).subscribe(data => data, error => console.log(error));
+      }
+    });
+  }
 
   // update(it: ItemModel); {
     // this._items.map(item => {
