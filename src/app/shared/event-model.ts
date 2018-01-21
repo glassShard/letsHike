@@ -6,7 +6,7 @@ export class EventModel {
   days: number;
   country: string;
   region: string;
-  date: string;
+  date: number;
   description: string;
   picUrl: string;
   category: string;
@@ -14,6 +14,7 @@ export class EventModel {
   creator?: UserModel;
   guestsIds?: number[];
   guests?: UserModel[];
+  dateOfPublish: number;
 
   constructor(param?: EventModel) {
     if (param) {
@@ -27,11 +28,13 @@ export class EventModel {
       days: 0,
       country: '',
       region: '',
-      date: '',
+      date: 0,
       description: '',
       picUrl: '',
       category: '',
       creatorId: '',
+      dateOfPublish: 0
     };
   }
 }
+

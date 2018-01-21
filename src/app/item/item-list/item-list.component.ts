@@ -4,8 +4,8 @@ import {ItemService} from '../../shared/item.service';
 import {CategoryService} from '../../shared/category.service';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/reduce';
-import {UserService} from "../../shared/user.service";
-import {UserModel} from "../../shared/user-model";
+import {UserService} from '../../shared/user.service';
+import {UserModel} from '../../shared/user-model';
 
 
 @Component({

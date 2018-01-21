@@ -17,6 +17,7 @@ export class UserService {
   private _user: UserModel;
   private _allUsers: UserModel[];
   private _fbAuthData: FirebaseLoginModel | FirebaseRegistrationModel | undefined;
+  public currentUserId: string;
 
   constructor(private _router: Router,
               private _http: HttpClient) {
@@ -72,6 +73,7 @@ export class UserService {
       .switchMap(fbLogin => this.getUserById(fbLogin.localId))
       .do(user => this.isLoggedIn = true)
       .do(user => this._user = user)
+      .do(user => this.currentUserId = user.id)
       .do(user => console.log('sikeres login ezzel a userrel: ', user));
   }
 

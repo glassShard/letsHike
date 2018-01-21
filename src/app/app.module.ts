@@ -20,6 +20,9 @@ import {LoggedInGuard} from './shared/logged-in.guard';
 import {FormsModule} from '@angular/forms';
 import {CategoryService} from './shared/category.service';
 import {HttpClientModule} from '@angular/common/http';
+import {MomentModule} from 'angular2-moment';
+import 'moment/locale/hu';
+import { LoadingSpinnerComponent } from './core/loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,8 @@ import {HttpClientModule} from '@angular/common/http';
     EventCardComponent,
     ...AppRoutingModule.routableComponents,
     LoginModalComponent,
-    PointReplacerPipe
+    PointReplacerPipe,
+    LoadingSpinnerComponent
   ],
   imports: [
     BsDropdownModule.forRoot(),
@@ -40,7 +44,8 @@ import {HttpClientModule} from '@angular/common/http';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    MomentModule
   ],
   providers: [
     EventService,
@@ -48,7 +53,7 @@ import {HttpClientModule} from '@angular/common/http';
     PointReplacerPipe,
     UserService,
     CategoryService,
-    LoggedInGuard
+    LoggedInGuard,
   ],
   bootstrap: [AppComponent]
 })

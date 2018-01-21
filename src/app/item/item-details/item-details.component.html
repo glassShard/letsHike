@@ -1,14 +1,12 @@
-<div class="container title-and-search">
-  <ng-container *ngIf="item">
+<ng-container *ngIf="item">
+  <div class="container title-and-search">
     <h1 class="display-4" *ngIf="!item.id; else modify">Új hirdetés</h1>
     <ng-template #modify>
       <h1 class="display-4">"{{item.title}}" módosítása</h1>
     </ng-template>
-  </ng-container>
-</div>
+  </div>
 
-<div class="container">
-  <ng-container *ngIf="item">
+  <div class="container">
     <form #itemForm="ngForm" (ngSubmit)="onSubmit(itemForm.value)">
       <div class="row">
         <div class="form-group col-sm-8">
@@ -57,11 +55,28 @@
         </div>
       </div>
       <div class="form-group text-right">
-        <button type="submit" class="btn btn-primary">
-          Hirdetés feladása
-        </button>
+        <alert type="warning" class="mt-3 mb-2" *ngIf="item.id && showAlert">
+          <strong>Biztosan törlöd?</strong>
+          Gondold át mégegyszer...
+          <a class="btn btn-danger"
+                  [routerLink]="['./cuccok']"
+                  (click)="onDelete(item.id)">Törlöm!</a>
+          <button type="button" class="btn btn-success"
+                  (click)="showAlert = false">Inkább nem...
+          </button>
+        </alert>
+        <div class="mt-2 " *ngIf="!showAlert">
+          <button type="submit" class="btn btn-success">
+            <i class="icon-database"></i> Hirdetés mentése
+          </button>
+          <button type="button" class="btn btn-danger"
+             (click)="showAlert = true" *ngIf="item.id"
+             title="Hirdetés törlése...">
+            <i class="icon-trash"></i> Hirdetés törlése
+          </button>
+        </div>
       </div>
     </form>
-  </ng-container>
-</div>
 
+  </div>
+</ng-container>

@@ -11,6 +11,7 @@ export class ItemModel {
   creatorId: string;
   creator?: UserModel;
   seen: number;
+  dateOfPublish: number;
 
   constructor(param?: ItemModel) {
     if (param) {
@@ -29,6 +30,7 @@ export class ItemModel {
       category: '',
       creatorId: '',
       seen: 0,
+      dateOfPublish: 1516549965
     };
   }
 }

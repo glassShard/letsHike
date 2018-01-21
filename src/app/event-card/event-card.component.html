@@ -6,7 +6,8 @@
   <p class="card-text">{{tura.region}}</p>
   <h5 class="card-title">{{tura.days}} nap</h5>
   <p class="mb-1">Túra indul:</p>
-  <h6 class="card-title mb-3">{{tura.date}}</h6>
+  <h6 class="card-title mb-3">{{tura.date | amFromUnix | amDateFormat:
+    'LL'}} ({{tura.date | amFromUnix | amTimeAgo}})</h6>
   <h6 class="card-title mb-3">Feltöltötte: valaki</h6>
   <!--<h6 class="card-title mb-3">Feltöltötte: {{tura.creator.nick}}</h6>-->
   <!--<p class="mb-0">Jelentkeztek:</p>-->

@@ -1,4 +1,4 @@
-<div class="container title-and-search">
+ <div class="container title-and-search">
   <h1 class="display-4">Cuccok</h1>
   <div class="row ">
     <div class="col-sm-3">
@@ -33,17 +33,21 @@
   </div>
 </div>
 
-<div class="container">
-
-  <div class="row"
-       *ngFor="let itg of itemsGrouppedBy2$ | async">
-    <div class="col-lg-6 card-deck-container" *ngFor="let it of itg">
-      <div class="card-deck card-deck-item-list">
-        <app-item-card class="card"
-                       *ngFor="let i of it"
-                       [cucc]="i" [currentUser]="currentUser"></app-item-card>
+<ng-container *ngIf="(itemsGrouppedBy2$ | async)?.length; else loading">
+  <div class="container">
+    <div class="row"
+         *ngFor="let itg of itemsGrouppedBy2$ | async">
+      <div class="col-lg-6 card-deck-container" *ngFor="let it of itg">
+        <div class="card-deck card-deck-item-list">
+          <app-item-card class="card"
+                         *ngFor="let i of it"
+                         [cucc]="i" [currentUser]="currentUser"></app-item-card>
+        </div>
       </div>
     </div>
   </div>
+</ng-container>
 
-</div>
+<ng-template #loading>
+  <app-loading-spinner></app-loading-spinner>
+</ng-template>
