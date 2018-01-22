@@ -30,7 +30,7 @@ export class ItemModel {
       category: '',
       creatorId: '',
       seen: 0,
-      dateOfPublish: 1516549965
+      dateOfPublish: null
     };
   }
 }

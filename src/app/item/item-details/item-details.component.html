@@ -7,60 +7,99 @@
   </div>
 
   <div class="container">
-    <form #itemForm="ngForm" (ngSubmit)="onSubmit(itemForm.value)">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="row">
+
         <div class="form-group col-sm-8">
           <label for="title">Név:</label>
-          <input type="text" class="form-control" id="title"
+          <input type="text"
+                 formControlName="title"
+                 class="form-control"
+                 id="title"
                  placeholder="Cucc megnevezése, max. 25 karakter..."
-                 maxlength="25" name="title" [(ngModel)]="item.title">
+                 maxlength="25"
+                 [ngClass]="{'is-invalid': submitted && form.get('title').invalid}">
+          <div class="invalid-feedback"
+               *ngIf="form.get('title').hasError('required')">
+            A név kitöltése kötelező
+          </div>
         </div>
+
         <div class="form-group col-sm-4">
-          <label for="price">Ár:</label>
-          <input type="number" class="form-control" id="price"
-                 placeholder="Ár Ft-ban..." name="price"
-                 [(ngModel)]="item.price">
+          <label for="price">Ár forintban:</label>
+          <input type="number"
+                 formControlName="price"
+                 class="form-control"
+                 id="price"
+                 placeholder="Ár Ft-ban..."
+                 [ngClass]="{'is-invalid': submitted && form.get('price').invalid}">
+          <div class="invalid-feedback"
+               *ngIf="form.get('price').hasError('required')">
+            Az ár kitöltése kötelező
+          </div>
+          <div class="invalid-feedback"
+               *ngIf="form.get('price').hasError('priceValidator')">
+            Negatív árat nem adhatsz meg
+          </div>
         </div>
       </div>
+
       <div class="form-group">
         <label for="shortDescription">Rövid leírás:</label>
-        <input type="text" class="form-control" id="shortDescription"
-               placeholder="Rövid leírás, max. 80 karakter..." maxlength="80"
-               [(ngModel)]="item.shortDescription" name="shortDescription">
+        <input type="text"
+               formControlName="shortDescription"
+               class="form-control"
+               id="shortDescription"
+               placeholder="Rövid leírás, max. 80 karakter..."
+               maxlength="80">
         <small id="emailHelp" class="form-text text-muted">Ez a szöveg fog
           megjelenni a lista nézetekben az egyes kártyákon.
         </small>
       </div>
+
       <div class="form-group">
         <label for="description">Leírás:</label>
-        <textarea type="text" class="form-control" id="description"
-                  placeholder="Ide hosszabb szöveget is írhatsz, mely a terméklapon a rövid leírás folytatásaként jelenik majd meg..."
-                  [(ngModel)]="item.description" name="description"></textarea>
+        <textarea type="text"
+                  formControlName="description"
+                  class="form-control"
+                  id="description"
+                  placeholder="Ide hosszabb szöveget is írhatsz, mely a terméklapon a rövid leírás folytatásaként jelenik majd meg...">
+
+        </textarea>
       </div>
+
       <div class="form-group" id="categories">
         <dl class="mydl">Válassz kategóriát:</dl>
         <div class="row">
-          <div class="col-6 col-md-3 col-lg-2" *ngFor="let cat of itemCategories">
+          <div class="col-6 col-md-3 col-lg-2"
+               *ngFor="let cat of itemCategories">
             <div class="card categories category-input text-center">
               <img class="card-img-top" [src]="cat.picUrl"
                    alt="Card image cap">
               <div class="card-body">
                 <p>{{cat.category}}<br/>
-                  <input class="" type="radio" name="category"
-                         value="{{cat.category}}" [(ngModel)]="item.category">
+                  <input type="radio"
+                         formControlName="category"
+                         value="{{cat.category}}"
+                         [ngClass]="{'is-invalid': form.get('category').invalid}">
                 </p>
               </div>
             </div>
           </div>
         </div>
+        <div class="invalid-feedback"
+             *ngIf="form.get('category').hasError('required')">
+          A kategória kiválasztása kötelező
+        </div>
       </div>
+
       <div class="form-group text-right">
         <alert type="warning" class="mt-3 mb-2" *ngIf="item.id && showAlert">
           <strong>Biztosan törlöd?</strong>
           Gondold át mégegyszer...
           <a class="btn btn-danger"
-                  [routerLink]="['./cuccok']"
-                  (click)="onDelete(item.id)">Törlöm!</a>
+             [routerLink]="['./cuccok']"
+             (click)="onDelete()">Törlöm!</a>
           <button type="button" class="btn btn-success"
                   (click)="showAlert = false">Inkább nem...
           </button>
@@ -70,8 +109,8 @@
             <i class="icon-database"></i> Hirdetés mentése
           </button>
           <button type="button" class="btn btn-danger"
-             (click)="showAlert = true" *ngIf="item.id"
-             title="Hirdetés törlése...">
+                  (click)="showAlert = true" *ngIf="item.id"
+                  title="Hirdetés törlése...">
             <i class="icon-trash"></i> Hirdetés törlése
           </button>
         </div>
@@ -79,4 +118,10 @@
     </form>
 
   </div>
+
 </ng-container>
+<!--<pre>-->
+<!--{{form.value | json}}-->
+  <!--{{form.get('title').errors | json}}, {{form.get('price').errors | json}},-->
+  <!--{{form.get('category').errors | json}}-->
+<!--</pre>-->

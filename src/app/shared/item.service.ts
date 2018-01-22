@@ -10,6 +10,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/combineLatest';
+import {setDate} from "ngx-bootstrap/bs-moment/utils/date-setters";
 
 
 @Injectable()
@@ -54,19 +55,20 @@ export class ItemService {
       );
   }
 
-  save(param: ItemModel) {
-    param.creatorId = this._userService.currentUserId;
-    delete param.creator;
-    if (param.id) { // udpate ag
-      this._http.put(`${environment.firebase.baseUrl}/items/${param.id}.json`, param).subscribe();
+  save(item: ItemModel) {
+    item.creatorId = this._userService.currentUserId;
+    delete item.creator;
+    if (item.id) { // udpate ag
+      this._http.put(`${environment.firebase.baseUrl}/items/${item.id}.json`, item).subscribe();
     } else { // create ag
-      this._http.post(`${environment.firebase.baseUrl}/items.json`, param)
+      Object.assign(item, {dateOfPublish: Math.floor(Date.now() / 1000)});
+      this._http.post(`${environment.firebase.baseUrl}/items.json`, item)
         .map((fbPostReturn: { name: string }) => fbPostReturn.name)
         .do(fbid => console.log(fbid))
         .switchMap(fbId => this._http.patch(
           `${environment.firebase.baseUrl}/items/${fbId}.json`,
           {id: fbId}
-        )).subscribe(data => data, error => console.log(error));
+        )).subscribe(() => {}, error => console.log(error));
     }
   }
 
