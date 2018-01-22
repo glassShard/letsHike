@@ -17,15 +17,16 @@ export class ItemListComponent implements OnInit {
   isCollapsed = true;
   public itemsGrouppedBy2$: Observable<ItemModel[]>;
   public itemCategories;
-  public currentUser: UserModel;
+  public currentUserId: string;
 
   constructor(private _itemService: ItemService,
               private _categoryService: CategoryService,
               private _userService: UserService) {
     if (this._userService.isLoggedIn) {
-      this._userService.getCurrentUser().subscribe(user => {
-        this.currentUser = user;
-      });
+      this.currentUserId = this._userService.currentUserId;
+      // this._userService.getCurrentUser().subscribe(user => {
+      //   this.currentUser = user;
+      // });
     }
   }
 

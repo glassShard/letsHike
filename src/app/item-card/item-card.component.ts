@@ -9,7 +9,7 @@ import {UserModel} from "../shared/user-model";
 })
 export class ItemCardComponent implements OnInit {
   @Input() cucc: ItemModel;
-  @Input() currentUser: UserModel;
+  @Input() currentUserId: string;
   constructor() { }
 
   ngOnInit() {

@@ -15,6 +15,7 @@ import {EventListComponent} from './event/event-list/event-list.component';
 import {EventDetailComponent} from './event/event-detail/event-detail.component';
 import {LoggedInGuard} from './shared/logged-in.guard';
 import {ItemViewComponent} from './item/item-view/item-view.component';
+import {EventViewComponent} from './event/event-view/event-view.component';
 
 const routes: Routes = [
   {path: 'kezdolap', component: HomeComponent},
@@ -27,7 +28,8 @@ const routes: Routes = [
   {path: 'turak', component: EventComponent, children: [
       {path: '', component: EventListComponent},
       {path: 'new', component: EventDetailComponent, canActivate: [LoggedInGuard]},
-      {path: ':id', component: EventDetailComponent}
+      {path: ':id', component: EventDetailComponent},
+      {path: 'view/:id', component: EventViewComponent}
     ]},
   {path: 'tobbiek', component: UsersComponent},
   {path: 'user', children: [
@@ -55,6 +57,7 @@ export class AppRoutingModule {
     EventComponent,
     EventListComponent,
     EventDetailComponent,
+    EventViewComponent,
     LoginComponent,
     RegistrationComponent,
     ProfileComponent,

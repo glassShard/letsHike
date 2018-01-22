@@ -43,7 +43,8 @@
       <div class="card-deck card-deck-item-list">
         <app-event-card class="card"
                         *ngFor="let e of ev"
-                        [tura]="e"></app-event-card>
+                        [tura]="e"
+                        [currentUserId]="currentUserId"></app-event-card>
       </div>
     </div>
   </div>

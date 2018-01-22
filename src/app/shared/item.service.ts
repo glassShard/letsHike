@@ -3,13 +3,11 @@ import {ItemModel} from './item-model';
 import {UserService} from './user.service';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs/Observable';
-import {EventModel} from './event-model';
 import {HttpClient} from '@angular/common/http';
 import {UserModel} from './user-model';
 import 'rxjs/add/observable/zip';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/forkJoin';
-import {FirebaseRegistrationModel} from './firebase-registration-model';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/combineLatest';
 
@@ -20,118 +18,6 @@ export class ItemService {
 
   constructor(private _userService: UserService,
               private _http: HttpClient) {
-    // this._items = [
-    //   {
-    //     id: 1,
-    //     title: 'Hágóvas M10',
-    //     price: 40000,
-    //     shortDescription: 'Hágóvas csupaszon, reszelés után használható',
-    //     description: 'Lorem ipsum és blablabla...',
-    //     picUrl: '../assets/vector/axecb.svg',
-    //     category: 'Téli felszerelés',
-    //     creatorId: '',
-    //     seen: 10
-    //   },
-    //   {
-    //     id: 2,
-    //     title: 'Mászócipő Singing Rock',
-    //     price: 40000,
-    //     shortDescription: 'Széttaposott mászócipő, relikviának, dísznek eladó',
-    //     description: 'Lorem ipsum és blablabla...',
-    //     picUrl: '../assets/vector/bootcb.svg',
-    //     category: 'Mászófelszerelés',
-    //     creatorId: '',
-    //     seen: 1
-    //   },
-    //   {
-    //     id: 3,
-    //     title: 'Sátor Hannah',
-    //     price: 40000,
-    //     shortDescription: 'Szuperkönnyű, 2,2 kg-os kétszemélyes sátor',
-    //     description: 'Lorem ipsum és blablabla...',
-    //     picUrl: '../assets/vector/knifecb.svg',
-    //     category: 'Táborozás',
-    //     creatorId: '',
-    //     seen: 20
-    //   },
-    //   {
-    //     id: 4,
-    //     title: 'Túracipő Han Wag',
-    //     price: 40000,
-    //     shortDescription: '2-szer használt 42-es Yukon, nekem kicsi',
-    //     description: 'Lorem ipsum és blablabla...',
-    //     picUrl: '../assets/vector/bootcb.svg',
-    //     category: 'Lábbeli',
-    //     creatorId: '',
-    //     seen: 5
-    //   },
-    //   {
-    //     id: 5,
-    //     title: 'Matterhorn térkép',
-    //     price: 40000,
-    //     shortDescription: '25 ezres túratérkép, Matterhorn + Észak',
-    //     description: 'Lorem ipsum és blablabla...',
-    //     picUrl: '../assets/vector/mapcb.svg',
-    //     category: 'Térkép, könyv',
-    //     creatorId: '',
-    //     seen: 5
-    //   },
-    //   {
-    //     id: 6,
-    //     title: 'Hágóvas M10',
-    //     price: 40000,
-    //     shortDescription: 'Hágóvas csupaszon, reszelés után használható',
-    //     description: 'Lorem ipsum és blablabla...',
-    //     picUrl: '../assets/vector/axecb.svg',
-    //     category: 'Téli felszerelés',
-    //     creatorId: '',
-    //     seen: 10
-    //   },
-    //   {
-    //     id: 7,
-    //     title: 'Mászócipő Singing Rock',
-    //     price: 40000,
-    //     shortDescription: 'Széttaposott mászócipő, relikviának, dísznek eladó',
-    //     description: 'Lorem ipsum és blablabla...',
-    //     picUrl: '../assets/vector/bootcb.svg',
-    //     category: 'Mászófelszerelés',
-    //     creatorId: '',
-    //     seen: 1
-    //   },
-    //   {
-    //     id: 8,
-    //     title: 'Sátor Hannah',
-    //     price: 40000,
-    //     shortDescription: 'Szuperkönnyű, 2,2 kg-os kétszemélyes sátor',
-    //     description: 'Lorem ipsum és blablabla...',
-    //     picUrl: '../assets/vector/knifecb.svg',
-    //     category: 'Táborozás',
-    //     creatorId: '',
-    //     seen: 20
-    //   },
-    //   {
-    //     id: 9,
-    //     title: 'Túracipő Han Wag',
-    //     price: 40000,
-    //     shortDescription: '2-szer használt 42-es Yukon, nekem kicsi',
-    //     description: 'Lorem ipsum és blablabla...',
-    //     picUrl: '../assets/vector/bootcb.svg',
-    //     category: 'Lábbeli',
-    //     creatorId: '',
-    //     seen: 5
-    //   },
-    //   {
-    //     id: 10,
-    //     title: 'Matterhorn térkép',
-    //     price: 40000,
-    //     shortDescription: '25 ezres túratérkép, Matterhorn + Észak',
-    //     description: 'Lorem ipsum és blablabla...',
-    //     picUrl: '../assets/vector/mapcb.svg',
-    //     category: 'Térkép, könyv',
-    //     creatorId: '',
-    //     seen: 5
-    //   }
-    // ];
   }
 
   getAllItems(): Observable<ItemModel[]> {
@@ -169,44 +55,22 @@ export class ItemService {
   }
 
   save(param: ItemModel) {
-    this._userService.getCurrentUser().subscribe(currentUser => {
-      param.creatorId = currentUser.id;
-      delete param.creator;
-      if (param.id) { // udpate ag
-        this._http.put(`${environment.firebase.baseUrl}/items/${param.id}.json`, param).subscribe();
-      } else { // create ag
-        this._http.post(`${environment.firebase.baseUrl}/items.json`, param)
-          .map((fbPostReturn: { name: string }) => fbPostReturn.name)
-          .do(fbid => console.log(fbid))
-          .switchMap(fbId => this._http.patch(
-            `${environment.firebase.baseUrl}/items/${fbId}.json`,
-            {id: fbId}
-          )).subscribe(data => data, error => console.log(error));
-      }
-    });
+    param.creatorId = this._userService.currentUserId;
+    delete param.creator;
+    if (param.id) { // udpate ag
+      this._http.put(`${environment.firebase.baseUrl}/items/${param.id}.json`, param).subscribe();
+    } else { // create ag
+      this._http.post(`${environment.firebase.baseUrl}/items.json`, param)
+        .map((fbPostReturn: { name: string }) => fbPostReturn.name)
+        .do(fbid => console.log(fbid))
+        .switchMap(fbId => this._http.patch(
+          `${environment.firebase.baseUrl}/items/${fbId}.json`,
+          {id: fbId}
+        )).subscribe(data => data, error => console.log(error));
+    }
   }
 
   delete(item: ItemModel) {
     return this._http.delete(`${environment.firebase.baseUrl}/items/${item.id}.json`);
   }
-
-  // update(it: ItemModel); {
-    // this._items.map(item => {
-    //   if (item.id === it.id) {
-    //     return {
-    //       ...it
-    //     };
-    //   } else {
-    //     return item;
-    //   }
-    // });
-  // }
-
-  // create(item: ItemModel); {
-  //   this._items.push({
-  //     id: this._getMaxId() + 1,
-  //     ...item
-  //   });
-  // }
-
 }

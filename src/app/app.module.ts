@@ -17,7 +17,7 @@ import { PointReplacerPipe } from './shared/point-replacer.pipe';
 import {UserService} from './shared/user.service';
 import {AlertModule} from 'ngx-bootstrap';
 import {LoggedInGuard} from './shared/logged-in.guard';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CategoryService} from './shared/category.service';
 import {HttpClientModule} from '@angular/common/http';
 import {MomentModule} from 'angular2-moment';
@@ -41,6 +41,7 @@ import { LoadingSpinnerComponent } from './core/loading-spinner/loading-spinner.
     ButtonsModule.forRoot(),
     CollapseModule.forRoot(),
     AlertModule.forRoot(),
+    ReactiveFormsModule,
     BrowserModule,
     FormsModule,
     AppRoutingModule,

@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class CategoryService {
-  private _itemCategories;
-  private _eventCategories;
+  private _itemCategories: {category: string, picUrl: string}[];
+  private _eventCategories: {category: string, picUrl: string}[];
 
   constructor() {
     this._itemCategories = [

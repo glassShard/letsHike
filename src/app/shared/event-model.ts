@@ -12,7 +12,7 @@ export class EventModel {
   category: string;
   creatorId: string;
   creator?: UserModel;
-  guestsIds?: number[];
+  guestsIds: string[];
   guests?: UserModel[];
   dateOfPublish: number;
 
@@ -25,15 +25,16 @@ export class EventModel {
   static get emptyEvent(): EventModel {
     return {
       title: '',
-      days: 0,
+      days: null,
       country: '',
       region: '',
-      date: 0,
+      date: null,
       description: '',
       picUrl: '',
       category: '',
       creatorId: '',
-      dateOfPublish: 0
+      dateOfPublish: 0,
+      guestsIds: []
     };
   }
 }

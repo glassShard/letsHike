@@ -5,6 +5,7 @@ import {ItemService} from '../../shared/item.service';
 import {CategoryService} from '../../shared/category.service';
 import {UserService} from '../../shared/user.service';
 import {UserModel} from '../../shared/user-model';
+import {FormBuilder} from '@angular/forms';
 
 @Component({
   selector: 'app-item-details',
@@ -20,7 +21,8 @@ export class ItemDetailsComponent implements OnInit {
               private _itemService: ItemService,
               private _router: Router,
               private _categoryService: CategoryService,
-              private _userService: UserService) {
+              private _userService: UserService,
+              private _fb: FormBuilder) {
     if (this._userService.isLoggedIn) {
       this._userService.getCurrentUser().subscribe(user => {
         this.currentUser = user;

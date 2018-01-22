@@ -8,6 +8,7 @@ import {EventModel} from '../shared/event-model';
 })
 export class EventCardComponent implements OnInit {
   @Input() tura: EventModel;
+  @Input() currentUserId: string;
   constructor() { }
 
   ngOnInit() {

@@ -9,7 +9,7 @@
   <a [routerLink]="['./view', cucc.id]"
      class="btn btn-lg btn-primary mt-1">
     Részletek</a>
-    <a *ngIf="currentUser && cucc.creatorId === currentUser.id"
+    <a *ngIf="currentUserId && cucc.creatorId === currentUserId"
        [routerLink]="['./', cucc.id]"
        class="btn btn-lg btn-success mt-1"
        title="Módosít..."><i class="icon-pencil"></i></a>

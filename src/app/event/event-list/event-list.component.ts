@@ -3,6 +3,7 @@ import {EventModel} from '../../shared/event-model';
 import {EventService} from '../../shared/event.service';
 import {CategoryService} from '../../shared/category.service';
 import {Observable} from 'rxjs/Observable';
+import {UserService} from '../../shared/user.service';
 
 @Component({
   selector: 'app-event-list',
@@ -12,13 +13,14 @@ import {Observable} from 'rxjs/Observable';
 export class EventListComponent implements OnInit {
   isCollapsed = true;
   public eventCategories;
-  public eventsGrouppedBy2: EventModel[];
-  // public events$: Observable<EventModel[]>;
+  public currentUserId: string;
   public events: EventModel[];
-  public eventsGrouppedBy2$: Observable<EventModel[][]>
+  public eventsGrouppedBy2$: Observable<EventModel[][]>;
 
   constructor(private _eventService: EventService,
-              private _categoryService: CategoryService) {
+              private _categoryService: CategoryService,
+              private _userService: UserService) {
+    this.currentUserId = this._userService.currentUserId;
   }
 
   ngOnInit() {

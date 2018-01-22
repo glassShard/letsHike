@@ -12,6 +12,10 @@
   <!--<h6 class="card-title mb-3">Feltöltötte: {{tura.creator.nick}}</h6>-->
   <!--<p class="mb-0">Jelentkeztek:</p>-->
   <!--<p class="mb-1" *ngFor="let guest of tura.guests">{{guest.nick}}</p>-->
-  <a [routerLink]="['./', tura.id]" class="btn btn-lg btn-primary">Részletek
+  <a [routerLink]="['./view', tura.id]" class="btn btn-lg btn-primary">Részletek
   </a>
+  <a *ngIf="currentUserId && tura.creatorId === currentUserId"
+     [routerLink]="['./', tura.id]"
+     class="btn btn-lg btn-success mt-1"
+     title="Módosít..."><i class="icon-pencil"></i></a>
 </div>

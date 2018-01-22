@@ -23,7 +23,7 @@ export class ItemModel {
     return {
       id: '',
       title: '',
-      price: 0,
+      price: null,
       shortDescription: '',
       description: '',
       picUrl: '',
