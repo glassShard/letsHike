@@ -81,6 +81,10 @@ footer {
   background-color: rgb(230, 252, 192);
 }
 
+.category-checked {
+  background-color: rgb(230, 252, 192);
+}
+
 .profile-header {
   width: 100%;
   height: 200px;
@@ -107,8 +111,14 @@ footer {
   border: 1px solid #b3b9be;
 }
 
-.ng-dirty:not(form) {
-  border-left: 5px solid rgba(150, 222, 42, 1);
+.invalid-category {
+  border-color: #dc3545;
+}
+
+.feedback-invalid {
+  margin-top: .25rem;
+  font-size: .875rem;
+  color: #dc3545;
 }
 
 @media (min-width: 576px) {
@@ -225,7 +235,7 @@ a:hover {
 
 .btn-success:not([disabled]):not(.disabled).active:focus,
 .btn-success:not([disabled]):not(.disabled):active:focus,
-.show > .btn-success.dropdown-toggle:focus {
+.show > .btn-success.dropdown-toggle:focus, .category-checked {
   box-shadow: 0 0 0 .2rem rgba(197, 253, 114, 1)
 }
 

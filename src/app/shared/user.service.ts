@@ -15,49 +15,14 @@ export class UserService {
   isLoggedIn = false;
 
   private _user: UserModel;
-  private _allUsers: UserModel[];
   private _fbAuthData: FirebaseLoginModel | FirebaseRegistrationModel | undefined;
   public currentUserId: string;
 
   constructor(private _router: Router,
               private _http: HttpClient) {
-    this._allUsers = [
-      new UserModel({
-        id: '',
-        email: 'a@b.hu',
-        nick: 'valaki',
-        dateOfBirth: '2000-05-12',
-        tel: '+3629456321'
-      }),
-      new UserModel({
-        id: '',
-        email: 'c@b.hu',
-        nick: 'másvalaki',
-        dateOfBirth: '2000-07-12',
-        tel: '+3629456321'
-      }),
-      new UserModel({
-        id: '',
-        email: 'b@c.hu',
-        nick: 'mégvalaki',
-        dateOfBirth: '1995-05-12',
-        tel: '+3629456321'
-      }),
-      new UserModel({
-        id: '',
-        email: 'd@b.hu',
-        nick: 'Yoda mester',
-        dateOfBirth: '2002-05-12',
-        tel: '+3629459871'
-      }),
-      new UserModel({
-        id: '',
-        email: 'u@b.hu',
-        nick: 'Anakin',
-        dateOfBirth: '3845-05-12',
-        tel: '+3621236321'
-      })
-    ];
+    this.login('baranyieva@uvegszilank.hu', 'password').subscribe(
+      () => this._router.navigate(['/cuccok']));
+
     console.log('kezdeti bejelentkezés: ', this.isLoggedIn);
   }
 

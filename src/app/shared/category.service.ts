@@ -13,7 +13,7 @@ export class CategoryService {
       },
       {
         category: 'Védőfelszerelés',
-        picUrl: '../assets/vector/axecb.svg'
+        picUrl: '../assets/vector/helmetcb.svg'
       },
       {
         category: 'Műszer',

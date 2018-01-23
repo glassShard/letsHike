@@ -73,23 +73,24 @@
         <div class="row">
           <div class="col-6 col-md-3 col-lg-2"
                *ngFor="let cat of itemCategories">
-            <div class="card categories category-input text-center">
+            <div class="card categories category-input text-center"
+                 [ngClass]="{'invalid-category': submitted && form.get('category').invalid, 'category-checked': form.get('category').value === cat.category}"
+                 (click)="onCategoryClick($event)">
               <img class="card-img-top" [src]="cat.picUrl"
                    alt="Card image cap">
               <div class="card-body">
-                <p>{{cat.category}}<br/>
-                  <input type="radio"
-                         formControlName="category"
-                         value="{{cat.category}}"
-                         [ngClass]="{'is-invalid': form.get('category').invalid}">
-                </p>
+                <p>{{cat.category}}</p>
+                <input type="radio"
+                formControlName="category"
+                value="{{cat.category}}">
+
               </div>
             </div>
           </div>
-        </div>
-        <div class="invalid-feedback"
-             *ngIf="form.get('category').hasError('required')">
-          A kategória kiválasztása kötelező
+          <div class="feedback-invalid col-12"
+          *ngIf="submitted && form.get('category').hasError('required')">
+            A kategória kiválasztása kötelező
+          </div>
         </div>
       </div>
 

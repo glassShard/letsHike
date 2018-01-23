@@ -93,7 +93,7 @@ export class ItemDetailsComponent implements OnInit {
   //
   // }
 
-  onDelete() {
+  onDelete( ) {
     this._itemService.delete(this.item)
       .subscribe(
         () => this._router.navigate(['/cuccok']),
@@ -101,5 +101,11 @@ export class ItemDetailsComponent implements OnInit {
           console.warn(`Problémánk van a tölésnél: ${err}`);
         }
       );
+  }
+
+  onCategoryClick(event) {
+    this.form.patchValue({
+      category: event.currentTarget.getElementsByTagName('p')[0].innerHTML
+    });
   }
 }

@@ -15,13 +15,14 @@ export class LoginComponent implements OnInit {
               private _router: Router) { }
 
   ngOnInit() {
+
   }
 
   login(email: string, password: string) {
     console.log(email, password);
     this._userService.login(email, password).subscribe(
       (user: UserModel) => {
-        this._router.navigate(['/user']);
+        this._router.navigate(['/cuccok']);
       },
       err => {
         console.warn('hibara futottunk a logincmp-ben', err);

@@ -38,13 +38,13 @@ export class EventDetailComponent implements OnInit {
   }
 
   onSubmit(form) {
-    if (this.event.id) {
-      this._eventService.update(this.event);
-    } else {
-      this._userService.getCurrentUser()
-        .subscribe(user => this.event.creatorId = user.id);
-      this._eventService.create(this.event);
-    }
+    // if (this.event.id) {
+    //   this._eventService.update(this.event);
+    // } else {
+    //   this._userService.getCurrentUser()
+    //     .subscribe(user => this.event.creatorId = user.id);
+    //   this._eventService.create(this.event);
+    // }
     console.log(form);
     this._location.back();
   }
