@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ItemModel} from './item-model';
 import {UserService} from './user.service';
 import {environment} from '../../environments/environment';
@@ -10,7 +10,6 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/combineLatest';
-import {setDate} from "ngx-bootstrap/bs-moment/utils/date-setters";
 
 
 @Injectable()
@@ -25,16 +24,16 @@ export class ItemService {
     return this._http.get(`${environment.firebase.baseUrl}/items.json`)
       .map(data => Object.values(data))
       .map(itm => itm.map(im =>
-      Observable.zip(
-        Observable.of(im),
-        this._userService.getUserById(im.creatorId),
-        (i: ItemModel, u: UserModel) => {
-          return {
-            ...i,
-            creator: u
-          };
-        }
-      )))
+        Observable.zip(
+          Observable.of(im),
+          this._userService.getUserById(im.creatorId),
+          (i: ItemModel, u: UserModel) => {
+            return {
+              ...i,
+              creator: u
+            };
+          }
+        )))
       .switchMap(zipStreamArray => Observable.forkJoin(zipStreamArray));
   }
 
@@ -59,16 +58,16 @@ export class ItemService {
     item.creatorId = this._userService.currentUserId;
     delete item.creator;
     if (item.id) { // udpate ag
-      this._http.put(`${environment.firebase.baseUrl}/items/${item.id}.json`, item).subscribe();
+      return this._http.put(`${environment.firebase.baseUrl}/items/${item.id}.json`, item);
     } else { // create ag
       Object.assign(item, {dateOfPublish: Math.floor(Date.now() / 1000)});
-      this._http.post(`${environment.firebase.baseUrl}/items.json`, item)
+      return this._http.post(`${environment.firebase.baseUrl}/items.json`, item)
         .map((fbPostReturn: { name: string }) => fbPostReturn.name)
         .do(fbid => console.log(fbid))
         .switchMap(fbId => this._http.patch(
           `${environment.firebase.baseUrl}/items/${fbId}.json`,
           {id: fbId}
-        )).subscribe(() => {}, error => console.log(error));
+        ));
     }
   }
 

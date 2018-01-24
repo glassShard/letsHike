@@ -23,6 +23,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {MomentModule} from 'angular2-moment';
 import 'moment/locale/hu';
 import { LoadingSpinnerComponent } from './core/loading-spinner/loading-spinner.component';
+import { OwnerButtonsComponent } from './event/owner-buttons/owner-buttons.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { LoadingSpinnerComponent } from './core/loading-spinner/loading-spinner.
     ...AppRoutingModule.routableComponents,
     LoginModalComponent,
     PointReplacerPipe,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    OwnerButtonsComponent
   ],
   imports: [
     BsDropdownModule.forRoot(),

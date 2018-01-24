@@ -38,7 +38,6 @@ export class ItemDetailsComponent implements OnInit {
     const handle404 = () => {
       this._router.navigate(['404']);
     };
-
     this.form = this._fb.group(
       {
         title: ['', Validators.required],
@@ -83,15 +82,11 @@ export class ItemDetailsComponent implements OnInit {
     if (this.form.valid) {
       Object.assign(this.item, this.form.value);
       console.log(this.item);
-      this._itemService.save(this.item);
+      this._itemService.save(this.item).subscribe(() => {
+      }, error => console.log(error));
       this._router.navigate(['/cuccok']);
     }
   }
-
-  // onSubmit(form) {
-  //   this._itemService.save(this.item);
-  //
-  // }
 
   onDelete( ) {
     this._itemService.delete(this.item)

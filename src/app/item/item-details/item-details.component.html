@@ -79,11 +79,11 @@
               <img class="card-img-top" [src]="cat.picUrl"
                    alt="Card image cap">
               <div class="card-body">
-                <p>{{cat.category}}</p>
-                <input type="radio"
-                formControlName="category"
-                value="{{cat.category}}">
-
+                <p class="mb-1">{{cat.category}}</p>
+                  <input type="radio"
+                         class="custom-control-input"
+                         formControlName="category"
+                         value="{{cat.category}}">
               </div>
             </div>
           </div>

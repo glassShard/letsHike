@@ -1,0 +1,81 @@
+<ng-container *ngIf="event">
+  <div class="container title-and-search">
+    <h1 class="display-4">{{event.title}}</h1>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+
+        <h3>Kategória: {{event.category}}</h3>
+        <h4>Feltöltötte: {{event.creator.nick}}, telefon: {{event.creator
+          .tel}}</h4>
+        <br />
+        <h5>Túra indul: {{event.date | amFromUnix | amDateFormat:
+          'LL'}} ({{event.date | amFromUnix | amTimeAgo}})</h5>
+        <h5>Időtartam: {{event.days}} nap</h5>
+        <p><small>Közzétéve: {{event.dateOfPublish | amFromUnix | amDateFormat:
+          'LL'}}</small></p>
+        <br />
+        <h3>Leírás:</h3>
+        <hr/>
+        <p>{{event.description}}</p>
+        <p *ngIf="currentUser && event.guestsIds">Eddig ők jelentkeztek a
+          túrára: <span
+            *ngFor="let guest of event.guests let isLast = last">{{guest.nick}}{{isLast ? '' : ', '}}
+           </span></p>
+        <p>
+        <p *ngIf="!event.guestsIds">Még nincs jelentkező a
+        túrára.</p>
+        <p>
+        <p *ngIf="!currentUser && event.guestsIds">Eddig
+        {{event.guestsIds.length}} fő jelentkezett a
+          túrára.</p>
+
+        <div class="row">
+          <div class="col-12 text-right"
+               >
+          <alert type="success" *ngIf="joinSuccessAlert"
+                 dismissOnTimeout="3000">
+            Jelentkezésedet rögzítettük!
+          </alert>
+          <alert type="danger" *ngIf="dangerAlert">
+            Valami hiba törént... Próbáld újra!
+          </alert>
+          <alert type="success" *ngIf="deleteJoinSuccessAlert"
+                         dismissOnTimeout="3000">
+            Jelentkezésedet töröltük!
+          </alert>
+        </div>
+          <div class="col-12 text-right"
+               *ngIf="currentUser && currentUser.id !== event.creatorId && !isGuest">
+              <button class="btn btn-small btn-primary"
+                 (click)="onJoin(currentUser.id, event.id)"
+                 title="Jelentkezés a túrára"
+                      [disabled]="buttonDisabled">
+                <i class="icon-star"></i>Jelentkezem a túrára
+              </button>
+          </div>
+          <div class="col-12 text-right"
+               *ngIf="currentUser && currentUser.id !== event.creatorId && isGuest">
+            <button class="btn btn-small btn-danger"
+                    (click)="onDeleteJoin(currentUser.id, event.id)"
+                    title="Jelentkezés törlése"
+                    [disabled]="buttonDisabled">
+              <i class="icon-trash"></i>Törlöm a jelentkezésemet a túráról
+            </button>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="border: 1px solid grey; padding: 15px; width: 100%; height: 100%;">
+          <p>Ide jönnek majd a fényképek</p>
+        </div>
+      </div>
+    </div>
+    <app-owner-buttons class="row" [currentUser]="currentUser"
+                       [event]="event" (delete)="onDelete(event)"
+    ></app-owner-buttons>
+  </div>
+</ng-container>

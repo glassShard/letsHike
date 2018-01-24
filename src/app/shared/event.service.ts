@@ -9,7 +9,6 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/zip';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/forkJoin';
-import {ItemModel} from './item-model';
 
 @Injectable()
 export class EventService {
@@ -46,26 +45,49 @@ export class EventService {
 
   }
 
-  getEventById(id: number): Observable<EventModel> {
+  getEventById(id: string): Observable<EventModel> {
     return this._http
       .get<EventModel>(`${environment.firebase.baseUrl}/events/${id}.json`)
       .flatMap(
-        event => Observable.combineLatest(
-          Observable.of(new EventModel(event)),
-          this._userService.getUserById(event.creatorId),
-          event.guestsIds.map(
-            guestId =>
-              this._userService.getUserById(guestId)
-          ),
-          (e: EventModel, u: UserModel, g: UserModel[]) => {
-            return {
-              ...e,
-              creator: u,
-              guests: g
-            };
+        event => {
+          if (event.guestsIds) {
+            event.guestsIds = Object.keys(event.guestsIds);
+            return Observable.combineLatest(
+              Observable.of(new EventModel(event)),
+              this._userService.getUserById(event.creatorId),
+              Observable.forkJoin(
+                event.guestsIds.map(user => this._userService.getUserById(user))
+              ),
+              (e: EventModel, u: UserModel, g: UserModel[]) => {
+                return {
+                  ...e,
+                  creator: u,
+                  guests: g
+                };
+              }
+            );
+          } else {
+            return Observable.combineLatest(
+              Observable.of(new EventModel(event)),
+              this._userService.getUserById(event.creatorId),
+              (e: EventModel, u: UserModel) => {
+                return {
+                  ...e,
+                  creator: u
+                };
+              }
+            );
           }
-        )
+        }
       );
+  }
+
+  join(user: string, event: string) {
+    return this._http.put(`${environment.firebase.baseUrl}/events/${event}/guestsIds/${user}.json`, true);
+  }
+
+  deleteJoin(user: string, event: string) {
+    return this._http.delete(`${environment.firebase.baseUrl}/events/${event}/guestsIds/${user}.json`);
   }
 
   save(param: EventModel) {
