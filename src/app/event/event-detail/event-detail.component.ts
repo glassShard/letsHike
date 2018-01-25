@@ -42,13 +42,19 @@ export class EventDetailComponent implements OnInit {
     };
     this.eventForm = this._fb.group(
       {
-        title: ['', Validators.required],
+        title: ['', Validators.compose([
+          Validators.required,
+          Validators.maxLength(25)])],
         days: [null, Validators.compose([
           Validators.required,
           Validators.min(1)
         ])],
-        country: ['', Validators.required],
-        region: '',
+        country: ['', Validators.compose([
+          Validators.required,
+          Validators.maxLength(25)])],
+        region: ['', Validators.compose([
+          Validators.required,
+          Validators.maxLength(25)])],
         date: [null, Validators.compose([
           Validators.required,
           futureValidator
@@ -67,8 +73,11 @@ export class EventDetailComponent implements OnInit {
             handle404();
           } else {
             this.event = evm;
-            const unixDate = new Date(this.event.date * 1000);
-            const date = unixDate.toJSON().substr(0, 10);
+            let date: string = null;
+            if (this.event.date) {
+              const unixDate = new Date(this.event.date * 1000);
+              date = unixDate.toJSON().substr(0, 10);
+            }
             this.eventForm.patchValue({
               title: this.event.title,
               days: this.event.days,
