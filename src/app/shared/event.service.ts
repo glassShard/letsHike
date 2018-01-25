@@ -96,6 +96,7 @@ export class EventService {
     if (param.id) { // update ag
       return this._http.put(`${environment.firebase.baseUrl}/events/${param.id}.json`, param);
     } else { // create ag
+      Object.assign(param, {dateOfPublish: Math.floor(Date.now() / 1000)});
       return this._http.post(`${environment.firebase.baseUrl}/events.json`, param)
         .map((fbPostReturn: { name: string }) => fbPostReturn.name)
         .do(fbid => console.log(fbid))

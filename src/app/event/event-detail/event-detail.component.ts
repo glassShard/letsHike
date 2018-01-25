@@ -9,6 +9,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {futureValidator} from './event.validators';
 import {UserModel} from '../../shared/user-model';
 
+
 @Component({
   selector: 'app-event-detail',
   templateUrl: './event-detail.component.html',
@@ -66,12 +67,14 @@ export class EventDetailComponent implements OnInit {
             handle404();
           } else {
             this.event = evm;
+            const unixDate = new Date(this.event.date * 1000);
+            const date = unixDate.toJSON().substr(0, 10);
             this.eventForm.patchValue({
               title: this.event.title,
               days: this.event.days,
               country: this.event.country,
               region: this.event.region,
-              date: this.event.date,
+              date: date,
               description: this.event.description,
               category: this.event.category,
               picUrl: this.event.picUrl
@@ -90,10 +93,12 @@ export class EventDetailComponent implements OnInit {
     this.submitted = true;
     if (this.eventForm.valid) {
       Object.assign(this.event, this.eventForm.value);
+      const date = new Date(this.eventForm.get('date').value).getTime() / 1000;
+      Object.assign(this.event, {date: date});
       console.log(this.event);
       this._eventService.save(this.event).subscribe(() => {
+        this._router.navigate(['/turak']);
       }, error => console.log(error));
-      this._router.navigate(['/turak']);
     }
   }
   onDelete(eventId) {

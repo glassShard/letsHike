@@ -23,7 +23,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {MomentModule} from 'angular2-moment';
 import 'moment/locale/hu';
 import { LoadingSpinnerComponent } from './core/loading-spinner/loading-spinner.component';
-import { OwnerButtonsComponent } from './event/owner-buttons/owner-buttons.component';
+import { OwnerButtonsComponent } from './core/owner-buttons/owner-buttons.component';
 
 @NgModule({
   declarations: [
