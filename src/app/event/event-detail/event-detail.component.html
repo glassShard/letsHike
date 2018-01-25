@@ -1,96 +1,139 @@
-<div class="container title-and-search">
-  <h1 class="display-4" *ngIf="!event.id; else modify">Új túra</h1>
-  <ng-template #modify>
-    <h1 class="display-4">"{{event.title}}" módosítása</h1>
-  </ng-template>
-</div>
+<ng-container *ngIf="event">
+  <div class="container title-and-search">
+    <h1 class="display-4" *ngIf="!event.id; else modify">Új túra</h1>
+    <ng-template #modify>
+      <h1 class="display-4">"{{event.title}}" módosítása</h1>
+    </ng-template>
+  </div>
 
-<div class="container">
-  <form #eventForm="ngForm" (ngSubmit)="onSubmit(eventForm.value)">
-    <div class="row">
-      <div class="form-group col-sm-8">
-        <label for="title">Cím:</label>
-        <input type="text" class="form-control" id="title"
-               placeholder="A túra címe, max. 25 karakter..." maxlength="25"
-               [(ngModel)]="event.title" name="title" required #title="ngModel">
-        <alert type="warning"
-               *ngIf="title.touched && title.pristine">Kötelezően kitöltendő
-          mező!
-        </alert>
-      </div>
-      <div class="form-group col-sm-4">
-        <label for="days">Időtartam:</label>
-        <input type="number" class="form-control" id="days"
-               placeholder="Napok száma..." [(ngModel)]="event.days"
-               name="days" required #days="ngModel">
-        <alert type="warning"
-               *ngIf="days.touched && days.pristine">Kötelezően kitöltendő
-          mező!
-        </alert>
-      </div>
-    </div>
-    <div class="row">
-      <div class="form-group col-md-6 col-lg-4">
-        <label for="country">Ország:</label>
-        <input type="text" class="form-control" id="country"
-               placeholder="Melyik országban lesz? max. 25 karakter..."
-               maxlength="25" [(ngModel)]="event.country"
-               name="country" required #country="ngModel">
-        <alert type="warning"
-               *ngIf="country.touched && country.pristine">Kötelezően kitöltendő
-          mező!
-        </alert>
-        <small class="form-text text-muted">Ha nem fér ki a felsorolás, írj pl. "Több ország"-ot.</small>
-      </div>
-      <div class="form-group col-md-6 col-lg-4">
-        <label for="region">Közelebbi helyszín:</label>
-        <input type="text" class="form-control" id="region"
-               placeholder="Régió v. hegység? max. 25 karakter..."
-               maxlength="25" [(ngModel)]="event.region" name="region">
-      </div>
-      <div class="form-group col-md-6 col-lg-4">
-        <label for="date">Túra kezdete:</label>
-        <input type="date" class="form-control" id="date"
-               [(ngModel)]="event.date" name="date" required #date="ngModel">
-        <alert type="warning"
-               *ngIf="date.touched && date.pristine">Kötelezően kitöltendő
-          mező!
-        </alert>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="description">Leírás:</label>
-      <textarea type="text" class="form-control" id="description"
-                name="description"
-                placeholder="Itt add meg a túra részleteit..."
-                required #description="ngModel"
-                [(ngModel)]="event.description"></textarea>
-      <alert type="warning"
-             *ngIf="description.touched && description.pristine">Kötelezően kitöltendő
-        mező!
-      </alert>
-    </div>
-    <div class="form-group" id="categories">
-      <dl class="mydl">Válassz kategóriát:</dl>
+  <div class="container">
+    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
       <div class="row">
-
-        <div class="col-6 col-md-3 col-lg-2" *ngFor="let ev of eventCategories">
-          <div class="card categories category-input text-center">
-            <img class="card-img-top" [src]="ev.picUrl"
-                 alt="Card image cap">
-            <div class="card-body">
-              <p>{{ev.category}}<br />
-                <input type="radio" name="category"
-                       value="{{ev.category}}" [(ngModel)]="event.category"></p>
-            </div>
+        <div class="form-group col-sm-8">
+          <label for="title">Cím:</label>
+          <input type="text"
+                 class="form-control"
+                 id="title"
+                 placeholder="A túra címe, max. 25 karakter..."
+                 maxlength="25"
+                 formControlName="title"
+                 [ngClass]="{'is-invalid': submitted && eventForm.get('title').invalid}">
+          <div class="invalid-feedback"
+               *ngIf="eventForm.get('title').hasError('required')">Kérjük,
+            töltsd ki ezt a mezőt
           </div>
         </div>
-
+        <div class="form-group col-sm-4">
+          <label for="days">Időtartam:</label>
+          <input type="number"
+                 class="form-control"
+                 id="days"
+                 placeholder="Napok száma..."
+                 formControlName="days"
+                 [ngClass]="{'is-invalid': submitted && eventForm.get('days').invalid}">
+          <div class="invalid-feedback"
+               *ngIf="submitted && eventForm.get('days').hasError('required')">
+            A túra időtartamát meg kall adni
+          </div>
+          <div class="invalid-feedback"
+               *ngIf="submitted && eventForm.get('days').hasError('min')">
+            A túra időtartama minimális értéke 1
+            mező!
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="form-group text-right">
-      <button type="submit" class="btn btn-primary">Túra mentése</button>
-    </div>
-  </form>
-</div>
+      <div class="row">
+        <div class="form-group col-md-6 col-lg-4">
+          <label for="country">Ország:</label>
+          <input type="text"
+                 class="form-control"
+                 id="country"
+                 placeholder="Melyik országban lesz? max. 25 karakter..."
+                 maxlength="25"
+                 formControlName="country"
+                 [ngClass]="{'is-invalid': submitted && eventForm.get('country').invalid}">
+          <div class="invalid-feedback"
+               *ngIf="submitted && eventForm.get('country').hasError('required')">
+            Kérjük, add meg a túra helyszínét
+          </div>
+          <small class="form-text text-muted">Ha nem fér ki a felsorolás, írj
+            pl.
+            "Több ország"-ot.
+          </small>
+        </div>
+        <div class="form-group col-md-6 col-lg-4">
+          <label for="region">Közelebbi helyszín:</label>
+          <input type="text"
+                 class="form-control"
+                 id="region"
+                 placeholder="Régió v. hegység? max. 25 karakter..."
+                 maxlength="25"
+                 formControlName="region">
+        </div>
+        <div class="form-group col-md-6 col-lg-4">
+          <label for="date">Túra kezdete:</label>
+          <input type="date"
+                 class="form-control"
+                 id="date"
+                 [ngClass]="{'is-invalid': submitted && eventForm.get('date').invalid}"
+                 formControlName="date">
+          <div class="invalid-feedback"
+               *ngIf="submitted && eventForm.get('date').hasError('required')">
+            Add meg a túra indulásának időpontját
+          </div>
+          <div class="invalid-feedback"
+               *ngIf="submitted && eventForm.get('date').hasError('validateFuture')">
+            A túra indulásának időpontja nem lehet a múltban
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="description">Leírás:</label>
+        <textarea type="text"
+                  class="form-control"
+                  id="description"
+                  formControlName="description"
+                  placeholder="Itt add meg a túra részleteit..."
+                  [ngClass]="{'is-invalid': submitted && eventForm.get('description').invalid}"></textarea>
+        <div class="invalid-feedback"
+             *ngIf="submitted && eventForm.get('description').hasError('required')">
+          Adj meg leírást a túrához
+        </div>
+      </div>
+      <div class="form-group" id="categories">
+        <dl class="mydl">Válassz kategóriát:</dl>
+        <div class="row">
+
+          <div class="col-6 col-md-3 col-lg-2"
+               *ngFor="let ev of eventCategories">
+            <div class="card categories category-input text-center"
+                 (click)="onCategoryClick($event)"
+                 [ngClass]="{'invalid-category': submitted && eventForm.get('category').invalid, 'category-checked': eventForm.get('category').value === ev.category}">
+              <img class="card-img-top" [src]="ev.picUrl"
+                   alt="Card image cap">
+              <div class="card-body">
+                <p>{{ev.category}}</p>
+                <input type="radio"
+                       formControlName="category"
+                       class="custom-control-input"
+                       value="{{ev.category}}">
+              </div>
+            </div>
+          </div>
+          <div class="feedback-invalid col-12"
+               *ngIf="submitted && eventForm.get('category').hasError('required')">
+            A kategória kiválasztása kötelező
+          </div>
+        </div>
+      </div>
+      <app-owner-buttons class="row"
+                         [currentUser]="currentUser"
+                         [model]="event"
+                         [isOnEdit]="true"
+                         (delete)="onDelete($event.idFromButton)"
+                         (save)="onSubmit()">
+      </app-owner-buttons>
+    </form>
+  </div>
+</ng-container>
 

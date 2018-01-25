@@ -14,7 +14,6 @@ import 'rxjs/add/observable/combineLatest';
 
 @Injectable()
 export class ItemService {
-  private _items: ItemModel[];
 
   constructor(private _userService: UserService,
               private _http: HttpClient) {
@@ -71,7 +70,7 @@ export class ItemService {
     }
   }
 
-  delete(item: ItemModel) {
-    return this._http.delete(`${environment.firebase.baseUrl}/items/${item.id}.json`);
+  delete(itemId: string) {
+    return this._http.delete(`${environment.firebase.baseUrl}/items/${itemId}.json`);
   }
 }

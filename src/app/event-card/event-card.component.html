@@ -2,20 +2,33 @@
      alt="Card image cap">
 <div class="card-body">
   <h5 class="card-title">{{tura.title}}</h5>
-  <p class="mb-0">{{tura.country}}</p>
-  <p class="card-text">{{tura.region}}</p>
+  <p class="mb-1">{{tura.country}}</p>
   <h5 class="card-title">{{tura.days}} nap</h5>
-  <p class="mb-1">Túra indul:</p>
-  <h6 class="card-title mb-3">{{tura.date | amFromUnix | amDateFormat:
-    'LL'}} ({{tura.date | amFromUnix | amTimeAgo}})</h6>
-  <h6 class="card-title mb-3">Feltöltötte: valaki</h6>
-  <!--<h6 class="card-title mb-3">Feltöltötte: {{tura.creator.nick}}</h6>-->
-  <!--<p class="mb-0">Jelentkeztek:</p>-->
-  <!--<p class="mb-1" *ngFor="let guest of tura.guests">{{guest.nick}}</p>-->
-  <a [routerLink]="['./view', tura.id]" class="btn btn-lg btn-primary">Részletek
-  </a>
+  <p class="mb-0">Indulás: {{tura.date | amFromUnix | amDateFormat:
+    'LL'}}</p>
+  <p class="mb-0"><small> ({{tura.date | amFromUnix |
+    amTimeAgo}})</small></p>
+
+
+</div>
+<div class="card-footer for-buttons">
+  <a [routerLink]="['./view', tura.id]"
+     class="btn btn-lg btn-primary mb-1">Részletek
+</a>
   <a *ngIf="currentUserId && tura.creatorId === currentUserId"
      [routerLink]="['./', tura.id]"
-     class="btn btn-lg btn-success"
-     title="Módosít..."><i class="icon-pencil"></i></a>
+     class="btn btn-lg btn-success mb-1"
+     title="Módosít..."><i class="icon-pencil"></i></a></div>
+<div class="card-footer">
+  <div class="row">
+    <small class="text-muted col-4 pr-1 pl-1" title="Ennyi megtekintés"><i
+      class="icon-eye"></i>125</small>
+    <small class="text-muted col-3 pr-1 pl-1"
+           title="Ennyi fénykép a részletes leírásban"><i
+      class="icon-camera"></i>5</small>
+    <small class="text-muted col-5 pr-1 pl-1" title="A túra feltöltője"><i
+      class="icon-user"></i>
+      {{tura.creator.nick}}
+    </small>
+  </div>
 </div>

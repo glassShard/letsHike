@@ -12,7 +12,6 @@ import 'rxjs/add/observable/forkJoin';
 
 @Injectable()
 export class EventService {
-  private _events: EventModel[];
 
   constructor(private _userService: UserService,
               private _http: HttpClient) {
@@ -95,20 +94,20 @@ export class EventService {
     delete param.creator;
     delete param.guests;
     if (param.id) { // update ag
-      this._http.put(`${environment.firebase.baseUrl}/events/${param.id}.json`, param).subscribe();
+      return this._http.put(`${environment.firebase.baseUrl}/events/${param.id}.json`, param);
     } else { // create ag
-      this._http.post(`${environment.firebase.baseUrl}/events.json`, param)
+      return this._http.post(`${environment.firebase.baseUrl}/events.json`, param)
         .map((fbPostReturn: { name: string }) => fbPostReturn.name)
         .do(fbid => console.log(fbid))
         .switchMap(fbId => this._http.patch(
           `${environment.firebase.baseUrl}/events/${fbId}.json`,
           {id: fbId}
-        )).subscribe(data => data, error => console.log(error));
+        ));
     }
   }
 
-  delete(event: EventModel) {
-    return this._http.delete(`${environment.firebase.baseUrl}/events/${event.id}.json`);
+  delete(eventId: string) {
+    return this._http.delete(`${environment.firebase.baseUrl}/events/${eventId}.json`);
   }
 
   // update(ev: EventModel) {

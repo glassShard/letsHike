@@ -87,14 +87,18 @@ export class EventViewComponent implements OnInit {
     });
   }
 
-  onDelete(event) {
-    this._eventService.delete(event)
+  onDelete(eventId) {
+    this._eventService.delete(eventId)
       .subscribe(
         () => this._router.navigate(['/turak']),
         (err) => {
           console.warn(`Problémánk van a tölésnél: ${err}`);
         }
       );
+  }
+
+  onEdit(eventId) {
+    this._router.navigate(['/turak', eventId]);
   }
 }
 

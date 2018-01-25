@@ -62,7 +62,7 @@
                     (click)="onDeleteJoin(currentUser.id, event.id)"
                     title="Jelentkezés törlése"
                     [disabled]="buttonDisabled">
-              <i class="icon-trash"></i>Törlöm a jelentkezésemet a túráról
+              <i class="icon-trash"></i> Törlöm a jelentkezésemet a túráról
             </button>
           </div>
 
@@ -74,8 +74,12 @@
         </div>
       </div>
     </div>
-    <app-owner-buttons class="row" [currentUser]="currentUser"
-                       [event]="event" (delete)="onDelete(event)"
+    <app-owner-buttons class="row"
+                       [currentUser]="currentUser"
+                       [isOnEdit]="false"
+                       [model]="event"
+                       (delete)="onDelete($event.idFromButton)"
+                       (edit)="onEdit($event.idFromButton)"
     ></app-owner-buttons>
   </div>
 </ng-container>

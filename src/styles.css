@@ -121,6 +121,12 @@ footer {
   color: #dc3545;
 }
 
+.for-buttons {
+  background: #fff;
+  border-top: none;
+  padding-top: 0;
+}
+
 @media (min-width: 576px) {
   .negative-margin {
     margin-left: -15px;

@@ -2,11 +2,16 @@
   <h1 class="display-4">Túrák</h1>
   <div class="row ">
     <div class="col-sm-3">
-      <button class="btn btn-primary btn-block mt-2" type="button" (click)="isCollapsed = !isCollapsed" data-toggle="collapse" data-target="#categories" aria-expanded="false" aria-controls="categories" >Kategóriák</button>
+      <button class="btn btn-primary btn-block mt-2" type="button"
+              (click)="isCollapsed = !isCollapsed" data-toggle="collapse"
+              data-target="#categories" aria-expanded="false"
+              aria-controls="categories">Kategóriák
+      </button>
     </div>
     <div class="col-sm-6">
       <div class="input-group mt-2">
-        <input type="text" class="form-control" placeholder="Keress itt..." aria-label="Kereső" aria-describedby="basic-addon2">
+        <input type="text" class="form-control" placeholder="Keress itt..."
+               aria-label="Kereső" aria-describedby="basic-addon2">
         <div class="input-group-append">
           <button class="btn btn-outline-primary" type="button">Keresés</button>
         </div>
@@ -34,19 +39,25 @@
   </div>
 </div>
 
-
-<div class="container">
-
-  <div class="row"
-       *ngFor="let evg of eventsGrouppedBy2$ | async">
-    <div class="col-lg-6 card-deck-container" *ngFor="let ev of evg">
-      <div class="card-deck card-deck-item-list">
-        <app-event-card class="card"
-                        *ngFor="let e of ev"
-                        [tura]="e"
-                        [currentUserId]="currentUserId"></app-event-card>
+<ng-container
+  *ngIf="(eventsGrouppedBy2$ | async)?.length && (!isLoggedIn || isLoggedIn && currentUserId); else loading">
+  <div class="container">
+    <div class="row"
+         *ngFor="let evg of eventsGrouppedBy2$ | async">
+      <div class="col-lg-6 card-deck-container" *ngFor="let ev of evg">
+        <div class="card-deck card-deck-item-list">
+          <app-event-card class="card"
+                          *ngFor="let e of ev"
+                          [tura]="e"
+                          [currentUserId]="currentUserId"></app-event-card>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</ng-container>
+
+<ng-template #loading>
+  <app-loading-spinner></app-loading-spinner>
+</ng-template>
+
 

@@ -17,7 +17,6 @@ export class ItemDetailsComponent implements OnInit {
   public item: ItemModel;
   public itemCategories;
   public currentUser: UserModel;
-  public showAlert = false;
   public form: FormGroup;
   public submitted = false;
 
@@ -68,11 +67,11 @@ export class ItemDetailsComponent implements OnInit {
             picUrl: this.item.picUrl
           });
         }
-      }, err => {
+      }, () => {
         handle404();
       });
     } else {
-      this.item = ItemModel.emptyItem;
+      this.item = new ItemModel(ItemModel.emptyItem);
     }
     this.itemCategories = this._categoryService.getItemCategories();
   }
@@ -88,8 +87,8 @@ export class ItemDetailsComponent implements OnInit {
     }
   }
 
-  onDelete( ) {
-    this._itemService.delete(this.item)
+  onDelete(itemId: string) {
+    this._itemService.delete(itemId)
       .subscribe(
         () => this._router.navigate(['/cuccok']),
         (err) => {
@@ -98,9 +97,9 @@ export class ItemDetailsComponent implements OnInit {
       );
   }
 
-  onCategoryClick(event) {
+  onCategoryClick(item) {
     this.form.patchValue({
-      category: event.currentTarget.getElementsByTagName('p')[0].innerHTML
+      category: item.currentTarget.getElementsByTagName('p')[0].innerHTML
     });
   }
 }

@@ -21,7 +21,7 @@ export class UserService {
   constructor(private _router: Router,
               private _http: HttpClient) {
     this.login('baranyieva@uvegszilank.hu', 'password').subscribe(
-      () => this._router.navigate(['/cuccok']));
+      () => this._router.navigate(['/turak']));
 
     console.log('kezdeti bejelentkezés: ', this.isLoggedIn);
   }
@@ -36,7 +36,7 @@ export class UserService {
       })
       .do((fbAuthResponse: FirebaseLoginModel) => this._fbAuthData = fbAuthResponse)
       .switchMap(fbLogin => this.getUserById(fbLogin.localId))
-      .do(user => this.isLoggedIn = true)
+      .do(() => this.isLoggedIn = true)
       .do(user => this._user = user)
       .do(user => this.currentUserId = user.id)
       .do(user => console.log('sikeres login ezzel a userrel: ', user));
@@ -60,7 +60,7 @@ export class UserService {
       .switchMap(user => {
         return this._http.put<UserModel>(`${environment.firebase.baseUrl}/users/${user.id}/json`, user);
       })
-      .do(user => this.isLoggedIn = true)
+      .do(() => this.isLoggedIn = true)
       .do(user => this._user = user)
       .do(user => console.log('sikeres login ezzel a userrel: ', user));
   }
@@ -75,6 +75,7 @@ export class UserService {
 
   logout() {
     this._user = new UserModel();
+    this.currentUserId = this._user.id;
     this.isLoggedIn = false;
     delete(this._fbAuthData);
     this._router.navigate(['/kezdolap']);
