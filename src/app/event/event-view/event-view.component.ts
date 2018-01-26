@@ -24,11 +24,14 @@ export class EventViewComponent implements OnInit {
               private _eventService: EventService,
               private _router: Router,
               private _userService: UserService) {
-    if (this._userService.isLoggedIn) {
-      this._userService.getCurrentUser().subscribe(user => {
-        this.currentUser = user;
-      });
-    }
+    _userService.isLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this._userService.getCurrentUser()
+          .subscribe(user => this.currentUser = user);
+      } else {
+        this.currentUser = null;
+      }
+    });
   }
 
   ngOnInit() {
@@ -36,7 +39,7 @@ export class EventViewComponent implements OnInit {
     if (itId) {
       this.reloadEvent(itId);
     } else {
-      this.event = EventModel.emptyEvent;
+      this.event = new EventModel();
     }
   }
 

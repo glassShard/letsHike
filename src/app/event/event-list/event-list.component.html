@@ -40,7 +40,7 @@
 </div>
 
 <ng-container
-  *ngIf="(eventsGrouppedBy2$ | async)?.length && (!isLoggedIn || isLoggedIn && currentUserId); else loading">
+  *ngIf="(eventsGrouppedBy2$ | async)?.length; else loading">
   <div class="container">
     <div class="row"
          *ngFor="let evg of eventsGrouppedBy2$ | async">

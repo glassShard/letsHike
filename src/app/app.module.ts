@@ -24,6 +24,8 @@ import {MomentModule} from 'angular2-moment';
 import 'moment/locale/hu';
 import { LoadingSpinnerComponent } from './core/loading-spinner/loading-spinner.component';
 import { OwnerButtonsComponent } from './core/owner-buttons/owner-buttons.component';
+import {environment} from '../environments/environment';
+import * as firebase from 'firebase';
 
 @NgModule({
   declarations: [
@@ -60,4 +62,8 @@ import { OwnerButtonsComponent } from './core/owner-buttons/owner-buttons.compon
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor() {
+    firebase.initializeApp(environment.firebase);
+  }
+}

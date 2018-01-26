@@ -9,37 +9,43 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/do';
 import {FirebaseRegistrationModel} from './firebase-registration-model';
 import 'rxjs/add/observable/of';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
+import * as firebase from 'firebase';
+import 'rxjs/add/observable/fromPromise';
 
 @Injectable()
 export class UserService {
-  isLoggedIn = false;
+  isLoggedIn$ = new ReplaySubject<boolean>(1);
 
-  private _user: UserModel;
-  private _fbAuthData: FirebaseLoginModel | FirebaseRegistrationModel | undefined;
+  private _user$ = new ReplaySubject<UserModel>(1);
+  private _fbAuthData: any;
   public currentUserId: string;
 
   constructor(private _router: Router,
               private _http: HttpClient) {
-    this.login('baranyieva@uvegszilank.hu', 'password').subscribe(
-      () => this._router.navigate(['/turak']));
-
-    console.log('kezdeti bejelentkezés: ', this.isLoggedIn);
+    firebase.auth().onAuthStateChanged(
+      user => {
+        if (user != null) {
+          this._fbAuthData = user;
+          this.currentUserId = user.uid;
+          this.getUserById(user.uid).subscribe(remoteUser => {
+            this._user$.next(remoteUser);
+          });
+          this.isLoggedIn$.next(true);
+        } else {
+          this._fbAuthData = null;
+          this._user$.next(null);
+          this.currentUserId = null;
+          this.isLoggedIn$.next(false);
+        }
+      }
+    );
   }
 
   login(email: string, password: string): Observable<UserModel> {
-    return this._http.post<FirebaseLoginModel>(
-      `${environment.firebase.loginUrl}?key=${environment.firebase.apiKey}`,
-      {
-        'email': email,
-        'password': password,
-        'returnSecureToken': true
-      })
-      .do((fbAuthResponse: FirebaseLoginModel) => this._fbAuthData = fbAuthResponse)
-      .switchMap(fbLogin => this.getUserById(fbLogin.localId))
-      .do(() => this.isLoggedIn = true)
-      .do(user => this._user = user)
-      .do(user => this.currentUserId = user.id)
-      .do(user => console.log('sikeres login ezzel a userrel: ', user));
+    return Observable.fromPromise(firebase.auth().signInWithEmailAndPassword(
+      email, password
+    ));
   }
 
   register(param: UserModel, password: string) {
@@ -60,13 +66,11 @@ export class UserService {
       .switchMap(user => {
         return this._http.put<UserModel>(`${environment.firebase.baseUrl}/users/${user.id}/json`, user);
       })
-      .do(() => this.isLoggedIn = true)
-      .do(user => this._user = user)
       .do(user => console.log('sikeres login ezzel a userrel: ', user));
   }
 
   getCurrentUser() {
-    return Observable.of(this._user);
+    return this._user$.asObservable();
   }
 
   getUserById(fbId: string) {
@@ -74,11 +78,13 @@ export class UserService {
   }
 
   logout() {
-    this._user = new UserModel();
-    this.currentUserId = this._user.id;
-    this.isLoggedIn = false;
-    delete(this._fbAuthData);
+    firebase.auth().signOut();
+
+    // this._user = new UserModel();
+    // this.currentUserId = this._user.id;
+    // delete(this._fbAuthData);
     this._router.navigate(['/kezdolap']);
     console.log('kileptunk');
   }
+
 }

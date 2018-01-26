@@ -22,7 +22,7 @@ export class ItemListComponent implements OnInit {
   constructor(private _itemService: ItemService,
               private _categoryService: CategoryService,
               private _userService: UserService) {
-    if (this._userService.isLoggedIn) {
+    if (this._userService.isLoggedIn$) {
       this.currentUserId = this._userService.currentUserId;
       // this._userService.getCurrentUser().subscribe(user => {
       //   this.currentUser = user;

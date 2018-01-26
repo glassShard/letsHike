@@ -14,10 +14,22 @@ export class LoggedInGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (this._userService.isLoggedIn) {
-      return true;
-    } else {
-      this._router.navigate(['/kezdolap']);
-    }
+    return this._userService.isLoggedIn$.map(
+      isLoggedIn => {
+        if (isLoggedIn === false) {
+          this._router.navigate(['/kezdolap']);
+          return false;
+        }
+        return true;
+      }
+    );
+
+
+
+    // if (this._userService.isLoggedIn$) {
+    //   return true;
+    // } else {
+    //   this._router.navigate(['/kezdolap']);
+    // }
   }
 }

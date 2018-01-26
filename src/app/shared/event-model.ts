@@ -17,25 +17,23 @@ export class EventModel {
   dateOfPublish: number;
 
   constructor(param?: EventModel) {
-    if (param) {
-      Object.assign(this, param);
-    }
+    Object.assign(this, param);
   }
 
-  static get emptyEvent(): EventModel {
-    return {
-      title: '',
-      days: null,
-      country: '',
-      region: '',
-      date: null,
-      description: '',
-      picUrl: '',
-      category: '',
-      creatorId: '',
-      dateOfPublish: 0,
-      guestsIds: []
-    };
-  }
+  // static get emptyEvent(): EventModel {
+  //   return {
+  //     title: '',
+  //     days: null,
+  //     country: '',
+  //     region: '',
+  //     date: null,
+  //     description: '',
+  //     picUrl: '',
+  //     category: '',
+  //     creatorId: '',
+  //     dateOfPublish: 0,
+  //     guestsIds: []
+  //   };
+  // }
 }
 

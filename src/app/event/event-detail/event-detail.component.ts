@@ -29,11 +29,14 @@ export class EventDetailComponent implements OnInit {
               private _location: Location,
               private _userService: UserService,
               private _fb: FormBuilder) {
-    if (this._userService.isLoggedIn) {
-      this._userService.getCurrentUser().subscribe(user => {
-        this.currentUser = user;
-      });
-    }
+    _userService.isLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this._userService.getCurrentUser()
+          .subscribe(user => this.currentUser = user);
+      } else {
+        this.currentUser = null;
+      }
+    });
   }
 
   ngOnInit() {
@@ -93,7 +96,7 @@ export class EventDetailComponent implements OnInit {
           handle404();
         });
     } else {
-      this.event = new EventModel(EventModel.emptyEvent);
+      this.event = new EventModel();
     }
     this.eventCategories = this._categoryService.getEventCategories();
   }

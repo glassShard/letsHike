@@ -26,11 +26,14 @@ export class ItemDetailsComponent implements OnInit {
               private _categoryService: CategoryService,
               private _userService: UserService,
               private _fb: FormBuilder) {
-    if (this._userService.isLoggedIn) {
-      this._userService.getCurrentUser().subscribe(user => {
-        this.currentUser = user;
-      });
-    }
+    _userService.isLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this._userService.getCurrentUser()
+          .subscribe(user => this.currentUser = user);
+      } else {
+        this.currentUser = null;
+      }
+    });
   }
 
   ngOnInit() {
@@ -71,7 +74,7 @@ export class ItemDetailsComponent implements OnInit {
         handle404();
       });
     } else {
-      this.item = new ItemModel(ItemModel.emptyItem);
+      this.item = new ItemModel();
     }
     this.itemCategories = this._categoryService.getItemCategories();
   }

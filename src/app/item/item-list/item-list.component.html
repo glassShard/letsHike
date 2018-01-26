@@ -34,7 +34,7 @@
 </div>
 
 <ng-container
-  *ngIf="(itemsGrouppedBy2$ | async)?.length && (!isLoggedIn || isLoggedIn && currentUserId); else loading">
+  *ngIf="(itemsGrouppedBy2$ | async)?.length && (!(isLoggedIn$ | async) || (isLoggedIn$ | async) && currentUserId); else loading">
   <div class="container">
     <div class="row"
          *ngFor="let itg of itemsGrouppedBy2$ | async">

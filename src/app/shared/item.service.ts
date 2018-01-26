@@ -11,7 +11,6 @@ import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/combineLatest';
 
-
 @Injectable()
 export class ItemService {
 

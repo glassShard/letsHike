@@ -19,7 +19,16 @@ export class ItemViewComponent implements OnInit {
               private _itemService: ItemService,
               private _router: Router,
               private _userService: UserService) {
-    if (this._userService.isLoggedIn) {
+    _userService.isLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this._userService.getCurrentUser()
+          .subscribe(user => this.currentUser = user);
+      } else {
+        this.currentUser = null;
+      }
+    });
+
+    if (this._userService.isLoggedIn$) {
       this._userService.getCurrentUser().subscribe(user => {
         this.currentUser = user;
       });
@@ -31,7 +40,7 @@ export class ItemViewComponent implements OnInit {
     if (itId) {
       this._itemService.getItemById(itId).subscribe(it => this.item = it);
     } else {
-      this.item = ItemModel.emptyItem;
+      this.item = new ItemModel();
     }
   }
 

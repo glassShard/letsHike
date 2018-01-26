@@ -53,7 +53,8 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/tobbiek" routerLinkActive="active">Többiek</a>
       </li>
-      <ng-container *ngIf="!userService.isLoggedIn; else loggedInBlock">
+      <ng-container
+        *ngIf="!(userService.isLoggedIn$ | async); else loggedInBlock">
         <li class="nav-item">
           <!--<a class="nav-link" routerLink="/user/login" routerLinkActive="active"-->
           <!--data-toggle="modal" data-target="#loginModal">Belépés</a>-->

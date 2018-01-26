@@ -1,7 +1,7 @@
 import {UserModel} from './user-model';
 
 export class ItemModel {
-  id?: string;
+  id: string;
   title: string;
   price: number;
   shortDescription: string;
@@ -9,29 +9,21 @@ export class ItemModel {
   picUrl: string;
   category: string;
   creatorId: string;
-  creator?: UserModel;
+  creator: UserModel;
   seen: number;
   dateOfPublish: number;
 
   constructor(param?: ItemModel) {
-    if (param) {
-      Object.assign(this, param);
-    }
+    Object.assign(this, param);
   }
 
-  static get emptyItem(): ItemModel {
-    return {
-      id: '',
-      title: '',
-      price: null,
-      shortDescription: '',
-      description: '',
-      picUrl: '',
-      category: '',
-      creatorId: '',
-      seen: 0,
-      dateOfPublish: null
-    };
-  }
+  // setCreator(creator: UserModel) {
+  //   delete this.creator;
+  //   this.creator = creator;
+  //   const creatorPropertyDescriptor = Object.getOwnPropertyDescriptor(this, 'creator');
+  //   creatorPropertyDescriptor.enumerable = false;
+  //   Object.defineProperty(this, 'creator', creatorPropertyDescriptor);
+  //   return this;
+  // }
 }
 

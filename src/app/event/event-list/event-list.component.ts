@@ -20,7 +20,12 @@ export class EventListComponent implements OnInit {
   constructor(private _eventService: EventService,
               private _categoryService: CategoryService,
               private _userService: UserService) {
-    this.currentUserId = this._userService.currentUserId;
+    this._userService.isLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this._userService.getCurrentUser()
+          .subscribe(user => this.currentUserId = user.id);
+      }
+    });
   }
 
   ngOnInit() {

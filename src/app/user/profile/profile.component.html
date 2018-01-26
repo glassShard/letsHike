@@ -5,7 +5,7 @@
   <h1 class="display-4">Profil</h1>
 </div>
 
-<div class="container">
+<div class="container" *ngIf="user$ | async as user; else loading">
 
   <div class="profile-header bg-mylight">
     <div class="profile-avatar">
@@ -74,3 +74,7 @@
 
   </div>
 </div>
+
+<ng-template #loading>
+  <app-loading-spinner></app-loading-spinner>
+</ng-template>

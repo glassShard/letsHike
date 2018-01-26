@@ -94,6 +94,9 @@ export class EventService {
     delete param.creator;
     delete param.guests;
     if (param.id) { // update ag
+      const convertedGuestsIds = param.guestsIds
+        .reduce((acc, guestId) => Object.assign(acc, {[guestId]: true}), {});
+      Object.assign(param, {guestsIds: convertedGuestsIds});
       return this._http.put(`${environment.firebase.baseUrl}/events/${param.id}.json`, param);
     } else { // create ag
       Object.assign(param, {dateOfPublish: Math.floor(Date.now() / 1000)});
