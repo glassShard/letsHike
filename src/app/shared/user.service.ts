@@ -29,6 +29,8 @@ export class UserService {
           this._fbAuthData = user;
           this.currentUserId = user.uid;
           this.getUserById(user.uid).subscribe(remoteUser => {
+            console.log(this._router.routerState.snapshot);
+            console.log(remoteUser);
             this._user$.next(remoteUser);
           });
           this.isLoggedIn$.next(true);
@@ -73,8 +75,16 @@ export class UserService {
     return this._user$.asObservable();
   }
 
-  getUserById(fbId: string) {
+  getUserById(fbId: string): Observable<UserModel> {
     return this._http.get<UserModel>(`${environment.firebase.baseUrl}/users/${fbId}.json`);
+    // return new Observable(
+    //   observer => {
+    //     const dbUser = firebase.database().ref(`users/${fbId}`);
+    //     dbUser.once('value').then(snapshot => {
+    //       observer.next(snapshot.val());
+    //     });
+    //   }
+    // );
   }
 
   logout() {
@@ -83,7 +93,7 @@ export class UserService {
     // this._user = new UserModel();
     // this.currentUserId = this._user.id;
     // delete(this._fbAuthData);
-    this._router.navigate(['/kezdolap']);
+    this._router.navigate(['../']);
     console.log('kileptunk');
   }
 

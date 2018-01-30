@@ -1,24 +1,29 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {UserModel} from '../../shared/user-model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EventModel} from '../../shared/event-model';
 import {EventService} from '../../shared/event.service';
 import 'rxjs/add/operator/concat';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/share';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-event-view',
   templateUrl: './event-view.component.html',
   styleUrls: ['./event-view.component.css']
 })
-export class EventViewComponent implements OnInit {
-  public event: EventModel;
+export class EventViewComponent implements OnInit, OnDestroy {
+
+  public event$: Observable<EventModel>;
   public currentUser: UserModel;
   public isGuest = false;
   public joinSuccessAlert = false;
   public dangerAlert = false;
   public deleteJoinSuccessAlert = false;
   buttonDisabled = false;
+  private eventWatcherSubscription: Subscription;
 
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,
@@ -37,22 +42,27 @@ export class EventViewComponent implements OnInit {
   ngOnInit() {
     const itId = this._route.snapshot.params['id'];
     if (itId) {
-      this.reloadEvent(itId);
+      this.loadEvent(itId);
     } else {
-      this.event = new EventModel();
+      this.event$ = Observable.of(new EventModel());
     }
   }
 
-  private reloadEvent(itId: string) {
+  ngOnDestroy(): void {
+    this.eventWatcherSubscription.unsubscribe();
+  }
+
+  private loadEvent(itId: string) {
     const handle404 = () => {
       this._router.navigate(['404']);
     };
-    this._eventService.getEventById(itId).subscribe(ev => {
+    this.event$ = this._eventService.getEventById(itId).share();
+    this.eventWatcherSubscription = this.event$.subscribe(ev => {
+      console.log('ev: ', ev);
+      this.buttonDisabled = false;
       if (ev === null) {
         handle404();
       } else {
-        this.buttonDisabled = false;
-        this.event = ev;
         if (this.currentUser && ev.guestsIds) {
           this.isGuest = ev.guestsIds.filter(id => id === this.currentUser.id).length > 0;
         }
@@ -72,7 +82,7 @@ export class EventViewComponent implements OnInit {
     this._eventService.join(userId, eventId).subscribe(() => {
       this.joinSuccessAlert = true;
       console.log(this.joinSuccessAlert);
-      this.reloadEvent(eventId);
+ //     this.loadEvent(eventId);
     }, () => {
       this.dangerAlert = true;
     });
@@ -84,7 +94,7 @@ export class EventViewComponent implements OnInit {
     this.dangerAlert = false;
     this._eventService.deleteJoin(userId, eventId).subscribe(() => {
       this.deleteJoinSuccessAlert = true;
-      this.reloadEvent(eventId);
+//      this.loadEvent(eventId);
     }, () => {
       this.dangerAlert = true;
     });

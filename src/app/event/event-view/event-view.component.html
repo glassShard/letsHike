@@ -1,4 +1,4 @@
-<ng-container *ngIf="event">
+<ng-container *ngIf="event$ | async as event">
   <div class="container title-and-search">
     <h1 class="display-4">{{event.title}}</h1>
   </div>

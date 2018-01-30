@@ -21,8 +21,9 @@ export class LoginComponent implements OnInit {
   login(email: string, password: string) {
     console.log(email, password);
     this._userService.login(email, password).subscribe(
-      () => {
+      (res) => {
         this._router.navigate(['/turak']);
+        console.log(res);
       },
       err => {
         console.warn('hibara futottunk a logincmp-ben', err);

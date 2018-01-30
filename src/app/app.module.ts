@@ -26,6 +26,7 @@ import { LoadingSpinnerComponent } from './core/loading-spinner/loading-spinner.
 import { OwnerButtonsComponent } from './core/owner-buttons/owner-buttons.component';
 import {environment} from '../environments/environment';
 import * as firebase from 'firebase';
+import { FilterAndNewBarComponent } from './core/filter-and-new-bar/filter-and-new-bar.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import * as firebase from 'firebase';
     LoginModalComponent,
     PointReplacerPipe,
     LoadingSpinnerComponent,
-    OwnerButtonsComponent
+    OwnerButtonsComponent,
+    FilterAndNewBarComponent
   ],
   imports: [
     BsDropdownModule.forRoot(),

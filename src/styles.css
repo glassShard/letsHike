@@ -229,20 +229,21 @@ a:hover {
 .btn-success.disabled,
 .btn-success:disabled {
   background-color: rgba(197, 253, 114, 1);
-  border-color: rgba(197, 253, 114, 1)
+  border-color: rgba(197, 253, 114, 1);
 }
 
 .btn-success:not([disabled]):not(.disabled).active,
 .btn-success:not([disabled]):not(.disabled):active,
 .show > .btn-success.dropdown-toggle {
-  background-color: rgba(197, 253, 114, 1);
-  border-color: rgba(197, 253, 114, 1);
+  background-color: rgba(163, 235, 47, 1);
+  border-color: rgba(163, 235, 47, 1);
+  box-shadow: 0 0 0 .2rem rgba(197, 253, 114, 1);
 }
 
 .btn-success:not([disabled]):not(.disabled).active:focus,
 .btn-success:not([disabled]):not(.disabled):active:focus,
 .show > .btn-success.dropdown-toggle:focus, .category-checked {
-  box-shadow: 0 0 0 .2rem rgba(197, 253, 114, 1)
+  box-shadow: 0 0 0 .2rem rgba(197, 253, 114, 1);
 }
 
 .btn-outline-success {
