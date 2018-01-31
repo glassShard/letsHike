@@ -10,6 +10,7 @@ import 'rxjs/add/observable/zip';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/forkJoin';
 import * as firebase from 'firebase';
+import 'rxjs/add/operator/first';
 
 @Injectable()
 export class EventService {
@@ -35,6 +36,18 @@ export class EventService {
       .switchMap(zipStreamArray => Observable.forkJoin(zipStreamArray));
   }
 
+  join(user: string, event: string) {
+    return this._http.put(`${environment.firebase.baseUrl}/events/${event}/guestsIds/${user}.json`, true);
+  }
+
+  addSeen(id: string, seen: number) {
+    return this._http.put(`${environment.firebase.baseUrl}/events/${id}/seen.json`, seen);
+  }
+
+  getEventByIdOnce(id: string): Observable<EventModel> {
+    return this.getEventById(id).first();
+  }
+
   getEventById(id: string): Observable<EventModel> {
 
     return new Observable(
@@ -42,47 +55,45 @@ export class EventService {
         const dbEvent = firebase.database().ref(`events/${id}`);
         dbEvent.on('value',
           snapshot => {
-          const event = snapshot.val();
-          if (event.guestsIds) {
-            event.guestsIds = Object.keys(event.guestsIds);
-            const subscription = Observable.combineLatest(
-              Observable.of(new EventModel(event)),
-              this._userService.getUserById(event.creatorId),
-              Observable.forkJoin(
-                event.guestsIds.map(user => this._userService.getUserById(user))
-              ),
-              (e: EventModel, u: UserModel, g: UserModel[]) => {
-                console.log(e);
-                console.log(u);
-                console.log(g);
-                return {
-                  ...e,
-                  creator: u,
-                  guests: g
-                };
-              }
-            ).subscribe(eventModel => {
-              observer.next(eventModel);
-              subscription.unsubscribe();
-            });
-          } else {
-            const subscription = Observable.combineLatest(
-              Observable.of(new EventModel(event)),
-              this._userService.getUserById(event.creatorId),
-              (e: EventModel, u: UserModel) => {
-                return {
-                  ...e,
-                  creator: u
-                };
-              }
-            ).subscribe(eventModel => {
-              observer.next(eventModel);
-              subscription.unsubscribe();
-            });
-          }
-        });
+            const event = snapshot.val();
+            if (event.guestsIds) {
+              event.guestsIds = Object.keys(event.guestsIds);
+              const subscription = Observable.combineLatest(
+                Observable.of(new EventModel(event)),
+                this._userService.getUserById(event.creatorId),
+                Observable.forkJoin(
+                  event.guestsIds.map(user => this._userService.getUserById(user))
+                ),
+                (e: EventModel, u: UserModel, g: UserModel[]) => {
+                  return {
+                    ...e,
+                    creator: u,
+                    guests: g
+                  };
+                }
+              ).subscribe(eventModel => {
+                observer.next(eventModel);
+                subscription.unsubscribe();
+              });
+            } else {
+              const subscription = Observable.combineLatest(
+                Observable.of(new EventModel(event)),
+                this._userService.getUserById(event.creatorId),
+                (e: EventModel, u: UserModel) => {
+                  return {
+                    ...e,
+                    creator: u
+                  };
+                }
+              ).subscribe(eventModel => {
+                observer.next(eventModel);
+                subscription.unsubscribe();
+              });
+            }
+          });
       }
     );
+
 
 
     // return this._http
@@ -119,10 +130,6 @@ export class EventService {
     //       }
     //     }
     //   );
-  }
-
-  join(user: string, event: string) {
-    return this._http.put(`${environment.firebase.baseUrl}/events/${event}/guestsIds/${user}.json`, true);
   }
 
   deleteJoin(user: string, event: string) {

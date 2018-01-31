@@ -82,6 +82,15 @@ export class EventListComponent implements OnInit {
       });
   }
 
+  addSeen(eventId: string): void {
+    this._eventService.getEventByIdOnce(eventId)
+      .do(ev => console.log(ev.title))
+      .switchMap(ev => {
+        const seen = ev.seen ? ++ ev.seen : 1;
+        return this._eventService.addSeen(ev.id, seen);
+      }).subscribe();
+  }
+
   assignText(text) {
     this.stringFromSearch$.next(text);
   }

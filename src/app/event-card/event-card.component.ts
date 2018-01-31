@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
 import {EventModel} from '../shared/event-model';
 
 @Component({
@@ -9,9 +9,16 @@ import {EventModel} from '../shared/event-model';
 export class EventCardComponent implements OnInit {
   @Input() tura: EventModel;
   @Input() currentUserId: string;
+  @Output() addSeen = new EventEmitter();
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onViewClick() {
+    if (!(this.currentUserId && this.currentUserId === this.tura.creatorId)) {
+      this.addSeen.emit({id: this.tura.id});
+    }
   }
 
 }

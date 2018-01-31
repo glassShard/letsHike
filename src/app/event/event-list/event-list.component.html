@@ -15,7 +15,8 @@
           <app-event-card class="card"
                           *ngFor="let e of ev"
                           [tura]="e"
-                          [currentUserId]="currentUserId"></app-event-card>
+                          [currentUserId]="currentUserId"
+                          (addSeen)="addSeen($event.id)"></app-event-card>
         </div>
       </div>
     </div>

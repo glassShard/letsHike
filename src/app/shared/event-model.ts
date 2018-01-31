@@ -15,6 +15,7 @@ export class EventModel {
   guestsIds: string[];
   guests?: UserModel[];
   dateOfPublish: number;
+  seen: number;
 
   constructor(param?: EventModel) {
     Object.assign(this, param);

@@ -56,9 +56,9 @@ export class EventViewComponent implements OnInit, OnDestroy {
     const handle404 = () => {
       this._router.navigate(['404']);
     };
+
     this.event$ = this._eventService.getEventById(itId).share();
     this.eventWatcherSubscription = this.event$.subscribe(ev => {
-      console.log('ev: ', ev);
       this.buttonDisabled = false;
       if (ev === null) {
         handle404();
@@ -69,6 +69,7 @@ export class EventViewComponent implements OnInit, OnDestroy {
         if (!ev.guestsIds) {
           this.isGuest = false;
         }
+
       }
     }, () => {
       handle404();

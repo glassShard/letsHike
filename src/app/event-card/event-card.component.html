@@ -12,17 +12,21 @@
 
 </div>
 <div class="card-footer for-buttons">
-  <a [routerLink]="['./view', tura.id]"
-     class="btn btn-lg btn-primary mb-1">Részletek
-</a>
+  <button class="btn btn-lg btn-primary mb-1" (click)="onViewClick()"
+          [routerLink]="['./view', tura.id]">
+
+     Részletek
+</button>
   <a *ngIf="currentUserId && tura.creatorId === currentUserId"
      [routerLink]="['./', tura.id]"
      class="btn btn-lg btn-success mb-1"
-     title="Módosít..."><i class="icon-pencil"></i></a></div>
+     title="Módosít..."><i class="icon-pencil"
+                           ></i></a></div>
+
 <div class="card-footer">
   <div class="row">
     <small class="text-muted col-4 pr-1 pl-1" title="Ennyi megtekintés"><i
-      class="icon-eye"></i>125</small>
+      class="icon-eye"></i>{{tura.seen}}</small>
     <small class="text-muted col-3 pr-1 pl-1"
            title="Ennyi fénykép a részletes leírásban"><i
       class="icon-camera"></i>5</small>
