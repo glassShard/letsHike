@@ -22,8 +22,8 @@
       <div class="card-button">
         <a routerLink="/cuccok" class="btn btn-lg btn-primary">Cuccok</a>
       </div>
-      <div class="card-footer bg-mylight">
-        <small class="text-muted">125 cucc</small>
+      <div class="card-footer bg-mylight" *ngIf="items && events">
+        <small class="text-muted">{{items}} cucc</small>
       </div>
     </div>
     <div class="card text-center">
@@ -35,8 +35,8 @@
       <div class="card-button">
         <a routerLink="/turak" class="btn btn-lg btn-primary">Túrák</a>
       </div>
-      <div class="card-footer bg-mylight">
-        <small class="text-muted">23 túra</small>
+      <div class="card-footer bg-mylight" *ngIf="events && items">
+        <small class="text-muted">{{events}} túra</small>
       </div>
     </div>
   </div>

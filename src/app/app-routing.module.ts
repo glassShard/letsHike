@@ -19,18 +19,10 @@ import {EventViewComponent} from './event/event-view/event-view.component';
 
 const routes: Routes = [
   {path: 'kezdolap', component: HomeComponent},
-  {path: 'cuccok', component: ItemComponent, children: [
-      {path: '', component: ItemListComponent},
-      {path: 'new', component: ItemDetailsComponent, canActivate: [LoggedInGuard]},
-      {path: ':id', component: ItemDetailsComponent, canActivate: [LoggedInGuard]},
-      {path: 'view/:id', component: ItemViewComponent}
-    ]},
-  {path: 'turak', component: EventComponent, children: [
-      {path: '', component: EventListComponent},
-      {path: 'new', component: EventDetailComponent, canActivate: [LoggedInGuard]},
-      {path: ':id', component: EventDetailComponent},
-      {path: 'view/:id', component: EventViewComponent}
-    ]},
+
+  {path: 'turak', loadChildren: 'app/event/event.module#EventModule'},
+  {path: 'cuccok', loadChildren: 'app/item/item.module#ItemModule'},
+
   {path: 'tobbiek', component: UsersComponent},
   {path: 'user', children: [
       {path: '', component: ProfileComponent, canActivate: [LoggedInGuard]},
@@ -50,14 +42,6 @@ const routes: Routes = [
 export class AppRoutingModule {
   static routableComponents = [
     HomeComponent,
-    ItemComponent,
-    ItemListComponent,
-    ItemDetailsComponent,
-    ItemViewComponent,
-    EventComponent,
-    EventListComponent,
-    EventDetailComponent,
-    EventViewComponent,
     LoginComponent,
     RegistrationComponent,
     ProfileComponent,
