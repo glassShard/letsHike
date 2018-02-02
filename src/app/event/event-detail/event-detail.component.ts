@@ -57,7 +57,7 @@ export class EventDetailComponent implements OnInit {
           Validators.maxLength(25)])],
         region: ['', Validators.compose([
           Validators.required,
-          Validators.maxLength(25)])],
+          Validators.maxLength(50)])],
         date: [null, Validators.compose([
           Validators.required,
           futureValidator

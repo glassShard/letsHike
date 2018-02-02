@@ -5,64 +5,125 @@
 </div>
 
 <div class="container">
-  <form #registrationForm="ngForm"
-        (ngSubmit)="register(registrationForm.value)">
+  <form [formGroup]="form"
+        (ngSubmit)="onSubmit()">
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="nick">Felhasználónév:</label>
-        <input type="text" class="form-control" id="nick" name="nick"
+        <input type="text"
+               class="form-control"
+               id="nick"
+               formControlName="nick"
                placeholder="Ezen a néven látnak majd a többiek..."
-               [(ngModel)]="user.nick" required #nick="ngModel">
-        <alert type="warning" *ngIf="nick.invalid && nick.touched">
-          Kötelező mező!
-        </alert>
+               [ngClass]="{'is-invalid': submitted && form.get('nick').invalid}">
+        <div class="invalid-feedback"
+             *ngIf="form.get('nick').hasError('required')">
+          A felhasználónév kitöltése kötelező
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="form.get('nick').hasError('maxLength')">
+          A felhasználónév maximális hossza 15 karakter
+        </div>
       </div>
       <div class="form-group col-md-4">
         <label for="password">Jelszó:</label>
-        <input type="password" class="form-control" id="password"
-               name="password" placeholder="Jelszó..." ngModel
-               #password="ngModel" required>
-        <alert type="warning" *ngIf="password.invalid && password.touched">
-          Kötelező mező!
-        </alert>
+        <input type="password"
+               class="form-control"
+               id="password"
+               formControlName="password"
+               placeholder="Jelszó..."
+               [ngClass]="{'is-invalid': submitted && form.get('password').invalid}">
+        {{form.get('password').value}} {{form.get('password').invalid}}
+        <div class="invalid-feedback"
+             *ngIf="form.get('password').hasError('required')">
+          A jelszó kitöltése kötelező
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="form.get('password').hasError('minLength') || form.get('password').hasError('maxLength')">
+          A "Jelszó újra" mező minimális hossza 6 maximális hossza 15 karakter
+        </div>
+        <!--<div class="invalid-feedback"-->
+             <!--*ngIf="form.get('passwordAgain').hasError('passwordMatch')">-->
+          <!--A két jelszó nem egyezik-->
+        <!--</div>-->
       </div>
       <div class="form-group col-md-4">
         <label for="passwordAgain">Jelszó újra:</label>
-        <input type="password" class="form-control" id="passwordAgain"
-               name="passwordAgain" placeholder="Jelszó újra..." ngModel
-               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}"
-               required #passwordAgain="ngModel">
-        <alert type="warning" *ngIf="passwordAgain.invalid && passwordAgain.touched">
-          Kötelező mező!
-        </alert>
-        <alert type="warning"
-               *ngIf="!password.invalid && !passwordAgain.invalid && password !== passwordAgain">
-          A két jelszó nem egyezik!
-        </alert>
+        <input type="password"
+               class="form-control"
+               id="passwordAgain"
+               formControlName="passwordAgain"
+               placeholder="Jelszó újra..."
+               [ngClass]="{'is-invalid': submitted && form.get('passwordAgain').invalid}">
+        <div class="invalid-feedback"
+             *ngIf="form.get('passwordAgain').hasError('required')">
+          A "Jelszó újra" kitöltése kötelező
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="form.get('passwordAgain').hasError('minLength') || form.get('passwordAgain').hasError('maxLength')">
+          A "Jelszó újra" mező minimális hossza 6 maximális hossza 15 karakter
+        </div>
+        <!--<div class="invalid-feedback"-->
+             <!--*ngIf="form.get('passwordAgain').hasError('passwordMatch')">-->
+          <!--A két jelszó nem egyezik-->
+        <!--</div>-->
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="email">Email:</label>
-        <input type="email" class="form-control" id="email" name="email"
-               name="email" placeholder="Email..." [(ngModel)]="user.email"
-               #email="ngModel">
+        <input type="email"
+               class="form-control"
+               id="email"
+               formControlName="email"
+               placeholder="Email..."
+               [ngClass]="{'is-invalid': submitted && form.get('email').invalid}">
+        <div class="invalid-feedback"
+             *ngIf="form.get('email').hasError('required')">
+          Kérjük, add meg az email címedet
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="form.get('email').hasError('email')">
+          Kérjük, valódi email címet ajd meg
+        </div>
         <small class="form-text text-muted">Kérjük, hogy valós email címet adj meg, erre küldjük a megerősítő linket, az értesítéseket (ha kéred), és a tagok neked szóló üzeneteit. Email címed a tagok számára sem lesz publikus.</small>
-        <alert type="warning" *ngIf="email.invalid && email.touched">
-          Kötelező mező!
-        </alert>
       </div>
       <div class="form-group col-md-4">
         <label for="dateOfBirth">Születési dátum:</label>
-        <input type="date" class="form-control" id="dateOfBirth"
-               name="dateOfBirth" [(ngModel)]="dateOfBirth">
-        <small class="form-text text-muted">Ha kitöltöd, adatlapodon megjelenítjük életkorodat (az adatlap csak a tagok számára látható).</small>
+        <input type="date"
+               class="form-control"
+               id="dateOfBirth"
+               formControlName="dateOfBirth">
+        <small class="form-text text-muted">Ha kitöltöd, adatlapodon
+          megjelenítjük életkorodat (az adatlap csak a tagok számára látható).</small>
       </div>
       <div class="form-group col-md-4">
         <label for="tel">Telefonszám:</label>
-        <input type="text" class="form-control" id="tel"
-               name="tel" placeholder="Telefonszámod..." [(ngModel)]="tel">
+        <input type="text"
+               class="form-control"
+               id="tel"
+               formControlName="tel"
+               placeholder="Telefonszámod...">
         <small class="form-text text-muted">Ha kitöltöd, adatlapodon, valamint hirdetés feladása esetén a termék oldalán kattintás után láthatóvá tesszük. Ha nem adod meg, de hirdetést adsz fel, csak a tagok fognak tudni veled kapcsolatba lépni, ezért javasoljuk, hogy hirdetés-feladás esetén mindenképpen töltsd ki!</small>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-sm-4">
+        <label for="avatar">Avatar:</label>
+        <input type="file"
+               class="form-control"
+               id="avatar"
+               (change)="onFileChange($event)"
+               #fileInput>
+        <small class="form-text text-muted">
+          Itt tölthetsz fel profilképet. (A feltöltött képet négyzet alakúra
+          vágjuk.)
+        </small>
+      </div>
+      <div class="imgToUpload col-sm-4"
+           *ngIf="avatar">
+        <img [src]="avatar">
+
       </div>
     </div>
     <div class="form-group text-right">

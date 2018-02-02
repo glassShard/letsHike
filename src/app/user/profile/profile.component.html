@@ -9,7 +9,15 @@
 
   <div class="profile-header bg-mylight">
     <div class="profile-avatar">
-      <img src="../assets/vector/user.svg" title="avatar" alt="avatar">
+      <img src="{{user.picUrl}}"
+           title="avatar"
+           *ngIf="user.picUrl"
+           alt="avatar">
+      <img src="../assets/vector/user.svg"
+           title="avatar"
+           *ngIf="!user.picUrl"
+           alt="avatar">
+
     </div>
   </div>
 

@@ -22,6 +22,10 @@
                *ngIf="eventForm.get('title').hasError('required')">Kérjük,
             töltsd ki ezt a mezőt
           </div>
+          <div class="invalid-feedback"
+               *ngIf="eventForm.get('title').hasError('maxLength')">A mező
+            hossza maximum 25 karakter lehet
+          </div>
         </div>
         <div class="form-group col-sm-4">
           <label for="days">Időtartam:</label>
@@ -37,8 +41,7 @@
           </div>
           <div class="invalid-feedback"
                *ngIf="submitted && eventForm.get('days').hasError('min')">
-            A túra időtartama minimális értéke 1
-            mező!
+            A túra időtartamának minimális értéke 1 (nap)!
           </div>
         </div>
       </div>
@@ -56,6 +59,10 @@
                *ngIf="submitted && eventForm.get('country').hasError('required')">
             Kérjük, add meg a túra helyszínét
           </div>
+          <div class="invalid-feedback"
+               *ngIf="eventForm.get('country').hasError('maxLength')">A mező
+            hossza maximum 25 karakter lehet
+          </div>
           <small class="form-text text-muted">Ha nem fér ki a felsorolás, írj
             pl.
             "Több ország"-ot.
@@ -67,8 +74,13 @@
                  class="form-control"
                  id="region"
                  placeholder="Régió v. hegység? max. 25 karakter..."
-                 maxlength="25"
-                 formControlName="region">
+                 maxlength="50"
+                 formControlName="region"
+                 [ngClass]="{'is-invalid': submitted && eventForm.get('region').invalid}">
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="eventForm.get('title').hasError('maxLength')">A mező
+          hossza maximum 50 karakter lehet
         </div>
         <div class="form-group col-md-6 col-lg-4">
           <label for="date">Túra kezdete:</label>

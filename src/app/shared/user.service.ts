@@ -65,10 +65,10 @@ export class UserService {
           ...param
         };
       })
+      .do(user => console.log(user))
       .switchMap(user => {
-        return this._http.put<UserModel>(`${environment.firebase.baseUrl}/users/${user.id}/json`, user);
-      })
-      .do(user => console.log('sikeres login ezzel a userrel: ', user));
+        return this._http.put<UserModel>(`${environment.firebase.baseUrl}/users/${user.id}.json`, user);
+      });
   }
 
   getCurrentUser() {

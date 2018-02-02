@@ -2,7 +2,7 @@ export class UserModel {
   id: string;
   email: string;
   nick: string;
-  dateOfBirth?: string;
+  dateOfBirth?: number;
   tel?: string;
 
   constructor(param?: UserModel) {
@@ -10,23 +10,14 @@ export class UserModel {
       Object.assign(this, param);
     }
   }
+
   static get exampleUser(): UserModel {
     return {
       id: '',
       email: 'info@uvegszilank.hu',
       nick: 'Eva',
-      dateOfBirth: '1966-05-18',
+      dateOfBirth: 152365245223,
       tel: '+36306478394'
-    };
-  }
-
-  static get emptyUser(): UserModel {
-    return {
-      id: '',
-      email: '',
-      nick: '',
-      dateOfBirth: '',
-      tel: ''
     };
   }
 }
