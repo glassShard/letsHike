@@ -5,6 +5,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import 'rxjs/add/operator/mergeMap';
 import {FileService} from '../../shared/file.service';
+import {Subscription} from 'rxjs/Subscription';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-profile-edit',
@@ -13,52 +15,30 @@ import {FileService} from '../../shared/file.service';
 })
 export class ProfileEditComponent implements OnInit {
 
-  public currentUser: UserModel;
+   public currentUser: UserModel;
   public submitted = false;
   public user: UserModel;
   public form: FormGroup;
   public avatar: any;
   @ViewChild('fileInput') fileInput: ElementRef;
+  private subscription: Subscription;
 
   constructor(private _userService: UserService,
               private _router: Router,
               private _route: ActivatedRoute,
               private _fb: FormBuilder,
-              private _fileService: FileService) {
-    this._userService.isLoggedIn$.subscribe(isLoggedIn => {
-      if (isLoggedIn) {
-        this._userService.getCurrentUser()
-          .subscribe(user => {
-            this.currentUser = user;
-            console.log(user);
-            this.fillForm();
-          });
-      }
-    });
-  }
+              private _fileService: FileService) {  }
 
   ngOnInit() {
     const handle404 = () => {
       this._router.navigate(['404']);
     };
-    const passwordPattern = '^[a-zA-Z0-9áéíóöőúüűÁÉÍÓÖŐÚÜŰ]*$';
+
     this.form = this._fb.group(
       {
         nick: ['', Validators.compose([
           Validators.required,
           Validators.maxLength(15)])],
-        password: ['', Validators.compose([
-          Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(15),
-          Validators.pattern(passwordPattern),
-        ])],
-        passwordAgain: ['', Validators.compose([
-          Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(15),
-          Validators.pattern(passwordPattern),
-        ])],
         email: ['', Validators.compose([
           Validators.required,
           Validators.email])],
@@ -67,9 +47,28 @@ export class ProfileEditComponent implements OnInit {
         avatar: null,
       }
     );
+
+    this.subscription = this._userService.isLoggedIn$
+    .flatMap(isLoggedIn => {
+      if (isLoggedIn) {
+        return this._userService.getCurrentUser();
+      } else {
+        return Observable.of(null);
+      }
+    })
+    .subscribe(user => {
+      if (user) {
+        this.currentUser = user;
+        this.user = user;
+        console.log(user);
+        this.fillForm();
+      } else {
+        this._router.navigate(['./registration']);
+      }
+    });
   }
 
-  fillForm() {
+  fillForm () {
     if (this.currentUser.id) {
       console.log(true);
       let date: string = null;
@@ -107,47 +106,29 @@ export class ProfileEditComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (this.form.valid) {
-      let userId = '';
-      const password = this.form.get('password').value;
 
-      this.user.nick = this.form.get('nick').value;
-      this.user.email = this.form.get('email').value;
-      this.user.tel = this.form.get('tel').value;
-      this.user.dateOfBirth = !(this.form.get('dateOfBirth').value === null)
+      this.currentUser.nick = this.form.get('nick').value;
+      this.currentUser.email = this.form.get('email').value;
+      this.currentUser.tel = this.form.get('tel').value;
+      this.currentUser.dateOfBirth = !(this.form.get('dateOfBirth').value === null)
         ? new Date(this.form.get('dateOfBirth').value).getTime() / 1000 : null;
-      this.user.tel = this.form.get('tel').value;
+      this.currentUser.tel = this.form.get('tel').value;
 
-      if (this.currentUser.id) {
-        if (this.currentUser.email === this.user.email) {
-          if (this.avatar) {
-            this._userService.modify(this.user)
-              .flatMap(user => {
-                const formModel = this.prepareSave(this.currentUser.id);
-                return this._fileService.uploadAvatar(this.currentUser.id, formModel);
-              }).subscribe(res => console.log(res), err => console.warn(err));
-          } else {
-            this._userService.modify(this.user)
-              .subscribe(data => console.log(data), err => console.warn(err));
-          }
-        } else {
-
-        }
-      } else {
+      if (this.currentUser.email === this.user.email) {
         if (this.avatar) {
-          this._userService.register(this.user, password)
-            .flatMap(user => {
-              const formModel = this.prepareSave(user.id);
-              userId = user.id;
-              return this._fileService.uploadAvatar(userId, formModel);
-            }).subscribe(data => {
-              console.log(data);
-            },
-            err => console.warn(err));
+          this._userService.modify(this.currentUser)
+            .flatMap(() => {
+              const formModel = this.prepareSave(this.currentUser.id);
+              return this._fileService.uploadAvatar(this.currentUser.id, formModel);
+            }).subscribe(res => console.log(res), err => console.warn(err));
         } else {
-          this._userService.register(this.user, password)
+          this._userService.modify(this.currentUser)
             .subscribe(data => console.log(data), err => console.warn(err));
         }
+      } else {
+
       }
+      this._router.navigate(['/user']);
     }
   }
 
@@ -162,6 +143,10 @@ export class ProfileEditComponent implements OnInit {
     this.form.get('avatar').setValue(null);
     this.fileInput.nativeElement.value = '';
     this.avatar = null;
+  }
+
+  clearPicUrl() {
+    this.currentUser.picUrl = '';
   }
 }
 

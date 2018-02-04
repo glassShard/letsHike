@@ -9,7 +9,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/take';
 import {element} from 'protractor';
-import {Subscription} from "rxjs/Subscription";
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-users',
@@ -86,7 +86,7 @@ export class UsersComponent implements OnDestroy {
       .flatMap(isLoggedIn => {
         if (isLoggedIn) {
           console.log(isLoggedIn);
-          return http1$
+          return http1$;
         } else {
           console.log('null');
           return Observable.of(null);

@@ -9,14 +9,14 @@
 
   <div class="profile-header bg-mylight">
     <div class="profile-avatar">
+      <ng-container *ngIf="user.picUrl; else defaultPic">
       <img src="{{user.picUrl}}"
            title="avatar"
-           *ngIf="user.picUrl; else defaultPic"
            alt="avatar">
+      </ng-container>
       <ng-template #defaultPic>
         <img src="../assets/vector/user.svg"
              title="avatar"
-             *ngIf="!user.picUrl"
              alt="avatar">
       </ng-template>
     </div>
@@ -61,7 +61,10 @@
 
       <div class="form-group row text-right">
         <div class="col-sm-12">
-          <button type="submit" class="btn btn-primary">Módosítás</button>
+          <button type="submit"
+                  class="btn btn-primary" routerLink="/user/edit">
+            Módosítás
+          </button>
         </div>
       </div>
     </div>

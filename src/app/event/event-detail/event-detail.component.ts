@@ -39,6 +39,31 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.eventForm = this._fb.group(
+      {
+        title: ['', Validators.compose([
+          Validators.required,
+          Validators.maxLength(25)])],
+        days: [null, Validators.compose([
+          Validators.required,
+          Validators.min(1)
+        ])],
+        country: ['', Validators.compose([
+          Validators.required,
+          Validators.maxLength(25)])],
+        region: ['', Validators.compose([
+          Validators.required,
+          Validators.maxLength(50)])],
+        date: [null, Validators.compose([
+          Validators.required,
+          futureValidator
+        ])],
+        description: ['', Validators.required],
+        category: ['', Validators.required],
+        picUrl: ''
+      }
+    );
+
     this.subscription = this._userService.isLoggedIn$
       .flatMap(isLoggedIn => {
         if (isLoggedIn) {
@@ -78,31 +103,6 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           }
         }
       });
-
-    this.eventForm = this._fb.group(
-      {
-        title: ['', Validators.compose([
-          Validators.required,
-          Validators.maxLength(25)])],
-        days: [null, Validators.compose([
-          Validators.required,
-          Validators.min(1)
-        ])],
-        country: ['', Validators.compose([
-          Validators.required,
-          Validators.maxLength(25)])],
-        region: ['', Validators.compose([
-          Validators.required,
-          Validators.maxLength(50)])],
-        date: [null, Validators.compose([
-          Validators.required,
-          futureValidator
-        ])],
-        description: ['', Validators.required],
-        category: ['', Validators.required],
-        picUrl: ''
-      }
-    );
 
     const fillForm = () => {
       let date: string = null;

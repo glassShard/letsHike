@@ -1,7 +1,7 @@
 <app-navbar class="navbar navbar-expand-lg navbar-light bg-mylight"></app-navbar>
 
 <div class="container title-and-search">
-  <h1 class="display-4">Regisztráció</h1>
+  <h1 class="display-4">Profil módosítása</h1>
 </div>
 
 <div class="container">
@@ -26,68 +26,23 @@
         </div>
       </div>
       <div class="form-group col-md-4">
-        <label for="password">Jelszó:</label>
-        <input type="password"
-               class="form-control"
-               id="password"
-               formControlName="password"
-               placeholder="Jelszó..."
-               [ngClass]="{'is-invalid': submitted && form.get('password').invalid}">
-        {{form.get('password').value}} {{form.get('password').invalid}}
-        <div class="invalid-feedback"
-             *ngIf="form.get('password').hasError('required')">
-          A jelszó kitöltése kötelező
-        </div>
-        <div class="invalid-feedback"
-             *ngIf="form.get('password').hasError('minLength') || form.get('password').hasError('maxLength')">
-          A "Jelszó újra" mező minimális hossza 6 maximális hossza 15 karakter
-        </div>
-        <!--<div class="invalid-feedback"-->
-        <!--*ngIf="form.get('passwordAgain').hasError('passwordMatch')">-->
-        <!--A két jelszó nem egyezik-->
-        <!--</div>-->
+      <label for="email">Email:</label>
+      <input type="email"
+             class="form-control"
+             id="email"
+             formControlName="email"
+             placeholder="Email..."
+             [ngClass]="{'is-invalid': submitted && form.get('email').invalid}">
+      <div class="invalid-feedback"
+           *ngIf="form.get('email').hasError('required')">
+        Kérjük, add meg az email címedet
       </div>
-      <div class="form-group col-md-4">
-        <label for="passwordAgain">Jelszó újra:</label>
-        <input type="password"
-               class="form-control"
-               id="passwordAgain"
-               formControlName="passwordAgain"
-               placeholder="Jelszó újra..."
-               [ngClass]="{'is-invalid': submitted && form.get('passwordAgain').invalid}">
-        <div class="invalid-feedback"
-             *ngIf="form.get('passwordAgain').hasError('required')">
-          A "Jelszó újra" kitöltése kötelező
-        </div>
-        <div class="invalid-feedback"
-             *ngIf="form.get('passwordAgain').hasError('minLength') || form.get('passwordAgain').hasError('maxLength')">
-          A "Jelszó újra" mező minimális hossza 6 maximális hossza 15 karakter
-        </div>
-        <!--<div class="invalid-feedback"-->
-        <!--*ngIf="form.get('passwordAgain').hasError('passwordMatch')">-->
-        <!--A két jelszó nem egyezik-->
-        <!--</div>-->
+      <div class="invalid-feedback"
+           *ngIf="form.get('email').hasError('email')">
+        Kérjük, valódi email címet ajd meg
       </div>
+      <small class="form-text text-muted">Kérjük, hogy valós email címet adj meg, erre küldjük a megerősítő linket, az értesítéseket (ha kéred), és a tagok neked szóló üzeneteit. Email címed a tagok számára sem lesz publikus.</small>
     </div>
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <label for="email">Email:</label>
-        <input type="email"
-               class="form-control"
-               id="email"
-               formControlName="email"
-               placeholder="Email..."
-               [ngClass]="{'is-invalid': submitted && form.get('email').invalid}">
-        <div class="invalid-feedback"
-             *ngIf="form.get('email').hasError('required')">
-          Kérjük, add meg az email címedet
-        </div>
-        <div class="invalid-feedback"
-             *ngIf="form.get('email').hasError('email')">
-          Kérjük, valódi email címet ajd meg
-        </div>
-        <small class="form-text text-muted">Kérjük, hogy valós email címet adj meg, erre küldjük a megerősítő linket, az értesítéseket (ha kéred), és a tagok neked szóló üzeneteit. Email címed a tagok számára sem lesz publikus.</small>
-      </div>
       <div class="form-group col-md-4">
         <label for="dateOfBirth">Születési dátum:</label>
         <input type="date"
@@ -97,6 +52,9 @@
         <small class="form-text text-muted">Ha kitöltöd, adatlapodon
           megjelenítjük életkorodat (az adatlap csak a tagok számára látható).</small>
       </div>
+    </div>
+
+    <div class="form-row">
       <div class="form-group col-md-4">
         <label for="tel">Telefonszám:</label>
         <input type="text"
@@ -106,8 +64,6 @@
                placeholder="Telefonszámod...">
         <small class="form-text text-muted">Ha kitöltöd, adatlapodon, valamint hirdetés feladása esetén a termék oldalán kattintás után láthatóvá tesszük. Ha nem adod meg, de hirdetést adsz fel, csak a tagok fognak tudni veled kapcsolatba lépni, ezért javasoljuk, hogy hirdetés-feladás esetén mindenképpen töltsd ki!</small>
       </div>
-    </div>
-    <div class="form-row">
       <div class="form-group col-12 col-sm-6 col-md-4">
         <label for="avatar">Profilkép:</label>
         <input type="file"
@@ -116,12 +72,12 @@
                (change)="onFileChange($event)"
                #fileInput>
         <small class="form-text text-muted">
-          Itt tölthetsz fel profilképet. (A feltöltött képet négyzet alakúra
-          vágjuk.)
+          Itt töltheted fel, vagy cserélheted profilképedet. (A feltöltött
+          képet négyzet alakúra vágjuk.)
         </small>
       </div>
       <div class="imgToUpload col-12 col-sm-6 col-md-4"
-           *ngIf="avatar">
+           *ngIf="avatar; else profilePic">
         <img [src]="avatar">
         <button type="button"
                 class="btn btn-small btn-outline-danger delete"
@@ -130,8 +86,22 @@
         </button>
 
       </div>
+      <ng-template #profilePic>
+
+          <div class="imgToUpload col-12 col-sm-6 col-md-4"
+               *ngIf="currentUser?.picUrl">
+            <img [src]="currentUser.picUrl">
+            <button type="button"
+                    class="btn btn-small btn-outline-danger delete"
+                    (click)="clearPicUrl()">
+              <i class="icon-trash"></i>
+            </button>
+
+          </div>
+
+      </ng-template>
     </div>
-    <div class="form-group text-right">
+    <div class="form-group text-right mt-3">
       <button class="btn btn-primary" type="submit">
         <i class="icon-database"></i> Adatok
         mentése</button>
