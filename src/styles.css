@@ -127,6 +127,21 @@ footer {
   padding-top: 0;
 }
 
+.imgToUpload {
+  max-width: 300px;
+}
+.imgToUpload img {
+  width: 100%;
+  height: auto;
+  position: relative;
+}
+
+.delete {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
 @media (min-width: 576px) {
   .negative-margin {
     margin-left: -15px;

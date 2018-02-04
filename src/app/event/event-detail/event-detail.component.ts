@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {EventService} from '../../shared/event.service';
 import {EventModel} from '../../shared/event-model';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -8,19 +8,22 @@ import {UserService} from '../../shared/user.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {futureValidator} from './event.validators';
 import {UserModel} from '../../shared/user-model';
-
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/mergeMap';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-event-detail',
   templateUrl: './event-detail.component.html',
   styleUrls: ['./event-detail.component.css']
 })
-export class EventDetailComponent implements OnInit {
+export class EventDetailComponent implements OnInit, OnDestroy {
   public event: EventModel;
   public eventCategories;
   public eventForm: FormGroup;
   public submitted = false;
   public currentUser: UserModel;
+  private subscription: Subscription;
 
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,
@@ -29,20 +32,53 @@ export class EventDetailComponent implements OnInit {
               private _location: Location,
               private _userService: UserService,
               private _fb: FormBuilder) {
-    _userService.isLoggedIn$.subscribe(isLoggedIn => {
-      if (isLoggedIn) {
-        this._userService.getCurrentUser()
-          .subscribe(user => this.currentUser = user);
-      } else {
-        this.currentUser = null;
-      }
-    });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   ngOnInit() {
-    const handle404 = () => {
-      this._router.navigate(['404']);
-    };
+    this.subscription = this._userService.isLoggedIn$
+      .flatMap(isLoggedIn => {
+        if (isLoggedIn) {
+          console.log(isLoggedIn);
+          return this._userService.getCurrentUser();
+        } else {
+          return Observable.of(null);
+        }
+      })
+      .flatMap((user: UserModel) => {
+        console.log(user);
+        if (user === null) {
+          return Observable.of(null);
+        } else {
+          this.currentUser = user;
+          const evId = this._route.snapshot.params['id'];
+          if (evId) {
+            return this._eventService.getEventById(evId);
+          } else {
+            return Observable.of(new EventModel());
+          }
+        }
+      }).subscribe(event => {
+        console.log(event);
+        if (event === null) {
+          if (this.currentUser.id) {
+            this._router.navigate(['404']);
+          } else {
+            this._router.navigate(['/login']);
+          }
+        } else {
+          this.event = event;
+          if (this.event.creatorId === this.currentUser.id) {
+            fillForm();
+          } else {
+            this._router.navigate(['/turak/new']);
+          }
+        }
+      });
+
     this.eventForm = this._fb.group(
       {
         title: ['', Validators.compose([
@@ -68,36 +104,24 @@ export class EventDetailComponent implements OnInit {
       }
     );
 
-    const evId = this._route.snapshot.params['id'];
-    if (evId) {
-      this._eventService.getEventById(evId)
-        .subscribe(evm => {
-          if (evm === null) {
-            handle404();
-          } else {
-            this.event = evm;
-            let date: string = null;
-            if (this.event.date) {
-              const unixDate = new Date(this.event.date * 1000);
-              date = unixDate.toJSON().substr(0, 10);
-            }
-            this.eventForm.patchValue({
-              title: this.event.title,
-              days: this.event.days,
-              country: this.event.country,
-              region: this.event.region,
-              date: date,
-              description: this.event.description,
-              category: this.event.category,
-              picUrl: this.event.picUrl
-            });
-          }
-        }, () => {
-          handle404();
-        });
-    } else {
-      this.event = new EventModel();
-    }
+    const fillForm = () => {
+      let date: string = null;
+      if (this.event.date) {
+        const unixDate = new Date(this.event.date * 1000);
+        date = unixDate.toJSON().substr(0, 10);
+      }
+      this.eventForm.patchValue({
+        title: this.event.title,
+        days: this.event.days,
+        country: this.event.country,
+        region: this.event.region,
+        date: date,
+        description: this.event.description,
+        category: this.event.category,
+        picUrl: this.event.picUrl
+      });
+    };
+
     this.eventCategories = this._categoryService.getEventCategories();
   }
 
@@ -129,3 +153,4 @@ export class EventDetailComponent implements OnInit {
     });
   }
 }
+

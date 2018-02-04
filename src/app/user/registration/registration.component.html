@@ -108,8 +108,8 @@
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group col-sm-4">
-        <label for="avatar">Avatar:</label>
+      <div class="form-group col-12 col-sm-6 col-md-4">
+        <label for="avatar">Profilkép:</label>
         <input type="file"
                class="form-control"
                id="avatar"
@@ -120,14 +120,20 @@
           vágjuk.)
         </small>
       </div>
-      <div class="imgToUpload col-sm-4"
+      <div class="imgToUpload col-12 col-sm-6 col-md-4"
            *ngIf="avatar">
         <img [src]="avatar">
+        <button type="button"
+                class="btn btn-small btn-outline-danger delete"
+                (click)="clearFile()">
+          <i class="icon-trash"></i>
+        </button>
 
       </div>
     </div>
     <div class="form-group text-right">
-      <button class="btn btn-primary" type="submit">Adatok
+      <button class="btn btn-primary" type="submit" [disabled]="submitted">
+        <i class="icon-database"></i> Adatok
         mentése</button>
     </div>
   </form>

@@ -53,8 +53,13 @@ export class EventListComponent implements OnInit {
           });
       })
       .flatMap(events => {
-        return this.stringFromSearch$
+        return this.stringFromSearch$ // még itt van egy m.l. ha váltogatom
+        // a kategóriát és a kereső mezőt,
+        // mindig újra elindítja a streamet
+        // vagy vmi ilyesmi... de már oldalbetöltéskor is kétszer futtatja a
+        // console.logot két sorral ez alatt.
           .map(filteredText => {
+            console.log(filteredText);
             if (filteredText === null) {
               return events;
             } else {

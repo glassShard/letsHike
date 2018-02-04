@@ -56,41 +56,43 @@ export class EventService {
         dbEvent.on('value',
           snapshot => {
             const event = snapshot.val();
-            if (event.guestsIds) {
-              event.guestsIds = Object.keys(event.guestsIds);
-              const subscription = Observable.combineLatest(
-                Observable.of(new EventModel(event)),
-                this._userService.getUserById(event.creatorId),
-                Observable.forkJoin(
-                  event.guestsIds.map(user => this._userService.getUserById(user))
-                ),
-                (e: EventModel, u: UserModel, g: UserModel[]) => {
-                  return {
-                    ...e,
-                    creator: u,
-                    guests: g
-                  };
-                }
-              ).subscribe(eventModel => {
-                observer.next(eventModel);
-                subscription.unsubscribe();
-              });
-            } else {
-              const subscription = Observable.combineLatest(
-                Observable.of(new EventModel(event)),
-                this._userService.getUserById(event.creatorId),
-                (e: EventModel, u: UserModel) => {
-                  return {
-                    ...e,
-                    creator: u
-                  };
-                }
-              ).subscribe(eventModel => {
-                observer.next(eventModel);
-                subscription.unsubscribe();
-              });
+            if (event) {
+              if (event.guestsIds) {
+                event.guestsIds = Object.keys(event.guestsIds);
+                const subscription = Observable.combineLatest(
+                  Observable.of(new EventModel(event)),
+                  this._userService.getUserById(event.creatorId),
+                  Observable.forkJoin(
+                    event.guestsIds.map(user => this._userService.getUserById(user))
+                  ),
+                  (e: EventModel, u: UserModel, g: UserModel[]) => {
+                    return {
+                      ...e,
+                      creator: u,
+                      guests: g
+                    };
+                  }
+                ).subscribe(eventModel => {
+                  observer.next(eventModel);
+                  subscription.unsubscribe();
+                });
+              } else {
+                const subscription = Observable.combineLatest(
+                  Observable.of(new EventModel(event)),
+                  this._userService.getUserById(event.creatorId),
+                  (e: EventModel, u: UserModel) => {
+                    return {
+                      ...e,
+                      creator: u
+                    };
+                  }
+                ).subscribe(eventModel => {
+                  observer.next(eventModel);
+                  subscription.unsubscribe();
+                });
+              }
             }
-          });
+        });
       }
     );
 

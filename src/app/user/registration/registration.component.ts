@@ -1,28 +1,41 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {
+  Component, ElementRef, OnDestroy, OnInit,
+  ViewChild
+} from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {UserModel} from '../../shared/user-model';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import 'rxjs/add/operator/mergeMap';
 import {FileService} from '../../shared/file.service';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent implements OnInit, OnDestroy {
   public submitted = false;
   public user: UserModel;
   public form: FormGroup;
   public avatar: any;
   @ViewChild('fileInput') fileInput: ElementRef;
-  @ViewChild('imgToUpload') imgToUpload: ElementRef;
+  private _subscription: Subscription;
 
   constructor(private _userService: UserService,
               private _router: Router,
               private _fb: FormBuilder,
               private _fileService: FileService) {
+    this._subscription = this._userService.isLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this._userService.logout();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
   }
 
   ngOnInit() {
@@ -65,14 +78,15 @@ export class RegistrationComponent implements OnInit {
       reader.onload = (ev) => {
         console.log(ev);
         console.log(ev.target);
-          this.avatar = ev.target.result;
+        this.avatar = reader.result;
       };
     }
   }
 
   onSubmit() {
-    this.submitted = true;
+
     if (this.form.valid) {
+      this.submitted = true;
       let userId = '';
       const password = this.form.get('password').value;
 
@@ -83,16 +97,20 @@ export class RegistrationComponent implements OnInit {
         ? new Date(this.form.get('dateOfBirth').value).getTime() / 1000 : null;
       this.user.tel = this.form.get('tel').value;
 
-      this._userService.register(this.user, password)
-        .flatMap(user => {
-          const formModel = this.prepareSave(user.id);
-          userId = user.id;
-          return this._fileService.uploadAvatar(userId, formModel);
-        }).subscribe(data => {
-          console.log(data);
-          this._router.navigate(['/user']);
-        },
-        err => console.warn(err));
+      if (this.avatar) {
+        this._userService.register(this.user, password)
+          .flatMap(user => {
+            const formModel = this.prepareSave(user.id);
+            userId = user.id;
+            return this._fileService.uploadAvatar(userId, formModel);
+          }).subscribe(data => {
+            console.log(data);
+          },
+          err => console.warn(err));
+      } else {
+        this._userService.register(this.user, password)
+          .subscribe(data => console.log(data), err => console.warn(err));
+      }
     }
   }
 
@@ -101,5 +119,11 @@ export class RegistrationComponent implements OnInit {
     input.append('id', id);
     input.append('avatar', this.form.get('avatar').value);
     return input;
+  }
+
+  clearFile() {
+    this.form.get('avatar').setValue(null);
+    this.fileInput.nativeElement.value = '';
+    this.avatar = null;
   }
 }

@@ -29,7 +29,6 @@ export class UserService {
           this._fbAuthData = user;
           this.currentUserId = user.uid;
           this.getUserById(user.uid).subscribe(remoteUser => {
-            console.log(this._router.routerState.snapshot);
             console.log(remoteUser);
             this._user$.next(remoteUser);
           });
@@ -71,6 +70,10 @@ export class UserService {
       });
   }
 
+  modify(user: UserModel) {
+    return this._http.put<UserModel>(`${environment.firebase.baseUrl}/users/${user.id}.json`, user);
+  }
+
   getCurrentUser() {
     return this._user$.asObservable();
   }
@@ -89,12 +92,6 @@ export class UserService {
 
   logout() {
     firebase.auth().signOut();
-
-    // this._user = new UserModel();
-    // this.currentUserId = this._user.id;
-    // delete(this._fbAuthData);
-    this._router.navigate(['../']);
-    console.log('kileptunk');
   }
 
 }

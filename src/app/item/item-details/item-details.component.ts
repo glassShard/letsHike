@@ -26,12 +26,17 @@ export class ItemDetailsComponent implements OnInit {
               private _categoryService: CategoryService,
               private _userService: UserService,
               private _fb: FormBuilder) {
-    _userService.isLoggedIn$.subscribe(isLoggedIn => {
+    this._userService.isLoggedIn$.subscribe(isLoggedIn => {
       if (isLoggedIn) {
+        console.log(isLoggedIn);
         this._userService.getCurrentUser()
-          .subscribe(user => this.currentUser = user);
+          .subscribe(user => {
+            this.currentUser = user;
+            console.log(this.currentUser);
+          }).unsubscribe();
       } else {
         this.currentUser = null;
+        console.log(this.currentUser);
       }
     });
   }

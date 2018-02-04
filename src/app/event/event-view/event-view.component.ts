@@ -102,6 +102,7 @@ export class EventViewComponent implements OnInit, OnDestroy {
   }
 
   onDelete(eventId) {
+    // this.eventWatcherSubscription.unsubscribe();
     this._eventService.delete(eventId)
       .subscribe(
         () => this._router.navigate(['/turak']),

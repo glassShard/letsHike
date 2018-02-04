@@ -10,7 +10,7 @@ const routes: Routes = [
   {path: '', component: EventComponent, children: [
       {path: '', component: EventListComponent},
       {path: 'new', component: EventDetailComponent, canActivate: [LoggedInGuard]},
-      {path: ':id', component: EventDetailComponent},
+      {path: ':id', component: EventDetailComponent, canActivate: [LoggedInGuard]},
       {path: 'view/:id', component: EventViewComponent}
     ]},
 ];

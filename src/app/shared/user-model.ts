@@ -4,6 +4,7 @@ export class UserModel {
   nick: string;
   dateOfBirth?: number;
   tel?: string;
+  picUrl?: string;
 
   constructor(param?: UserModel) {
     if (param) {

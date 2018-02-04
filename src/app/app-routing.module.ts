@@ -26,7 +26,7 @@ const routes: Routes = [
   {path: 'tobbiek', component: UsersComponent},
   {path: 'user', children: [
       {path: '', component: ProfileComponent, canActivate: [LoggedInGuard]},
-      {path: 'edit', component: ProfileEditComponent},
+      {path: 'edit', component: ProfileEditComponent, canActivate: [LoggedInGuard]},
       {path: 'login', component: LoginComponent},
       {path: 'registration', component: RegistrationComponent}
     ]},
