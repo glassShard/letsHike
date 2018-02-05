@@ -25,7 +25,7 @@ export class CategoryService {
       },
       {
         category: 'Lábbeli',
-        picUrl: '../assets/vector/bootcb.svg'
+        picUrl: '../assets/vector/boot2cb.svg'
       },
       {
         category: 'Étkezés',
@@ -51,7 +51,7 @@ export class CategoryService {
     this._eventCategories = [
       {
         category: 'Magashegyi túra',
-        picUrl: '../assets/vector/axecb.svg'
+        picUrl: '../assets/vector/cramponcb.svg'
       },
       {
         category: 'Via Ferrata',
@@ -59,11 +59,11 @@ export class CategoryService {
       },
       {
         category: 'Gyalogtúra',
-        picUrl: '../assets/vector/bootcb.svg'
+        picUrl: '../assets/vector/boot2cb.svg'
       },
       {
         category: 'Sítúra',
-        picUrl: '../assets/vector/axecb.svg'
+        picUrl: '../assets/vector/skicb.svg'
       },
       {
         category: 'Kerékpártúra',
@@ -71,7 +71,7 @@ export class CategoryService {
       },
       {
         category: 'Hótalpas túra',
-        picUrl: '../assets/vector/axecb.svg'
+        picUrl: '../assets/vector/snowshoecb.svg'
       }
     ];
   }

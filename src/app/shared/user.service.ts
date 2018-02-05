@@ -93,4 +93,12 @@ export class UserService {
     firebase.auth().signOut();
   }
 
+  changeEmail(email) {
+    return Observable.fromPromise(firebase.auth().currentUser.updateEmail(email));
+  }
+
+  reLogin(credential) {
+    return Observable.fromPromise(firebase.auth().currentUser.reauthenticateWithPopup(credential));
+  }
+
 }

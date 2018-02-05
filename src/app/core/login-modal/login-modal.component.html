@@ -1,0 +1,36 @@
+<div class="modal-header">
+  <h5 class="modal-title" *ngIf="modalTitle">{{modalTitle}}</h5>
+  <button type="button" class="close" (click)="modalRef.hide()"
+          aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p>{{text}}</p>
+  <form>
+    <div class="form-group">
+      <label for="loginEmail">Email:</label>
+      <input type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp" placeholder="Email címed...">
+      <small id="emailHelp" class="form-text text-muted">Email címedet soha nem adjuk ki harmadik félnek.</small>
+    </div>
+    <div class="form-group">
+      <label for="loginPassword">Jelszó</label>
+      <input type="password" class="form-control" id="loginPassword" placeholder="Jelszavad...">
+    </div>
+    <div class="form-check" *ngIf="rememberMe">
+      <input type="checkbox" class="form-check-input ml-0"
+             id="loginRemember" checked="checked">
+      <label class="form-check-label" for="loginRemember">Maradjak bejelentkezve</label>
+    </div>
+    <div class="form-group mt-3 text-right">
+      <button type="button" (click)="onClick()"
+              class="btn btn-primary">{{closeBtnName
+        }}</button>
+      <button type="button" class="btn btn-secondary"
+              (click)="modalRef.hide()">Mégse</button>
+    </div>
+  </form>
+</div>
+
+
+

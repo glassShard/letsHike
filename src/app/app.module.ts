@@ -5,11 +5,10 @@ import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {CollapseModule} from 'ngx-bootstrap/collapse';
 import {ButtonsModule} from 'ngx-bootstrap/buttons';
-import {LoginModalComponent} from './login-modal/login-modal.component';
 import {EventService} from './shared/event.service';
 import {ItemService} from './shared/item.service';
 import {UserService} from './shared/user.service';
-import {AlertModule} from 'ngx-bootstrap';
+import {AlertModule, ModalModule} from 'ngx-bootstrap';
 import {LoggedInGuard} from './shared/logged-in.guard';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CategoryService} from './shared/category.service';
@@ -20,18 +19,19 @@ import {environment} from '../environments/environment';
 import * as firebase from 'firebase';
 import {CoreModule} from './core/core.module';
 import {FileService} from './shared/file.service';
+import {LoginModalComponent} from './core/login-modal/login-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ...AppRoutingModule.routableComponents,
-    LoginModalComponent
   ],
   imports: [
     BsDropdownModule.forRoot(),
     ButtonsModule.forRoot(),
     CollapseModule.forRoot(),
     AlertModule.forRoot(),
+    ModalModule.forRoot(),
     ReactiveFormsModule,
     BrowserModule,
     FormsModule,
@@ -47,6 +47,9 @@ import {FileService} from './shared/file.service';
     CategoryService,
     LoggedInGuard,
     FileService
+  ],
+  entryComponents: [
+    LoginModalComponent
   ],
   bootstrap: [AppComponent]
 })

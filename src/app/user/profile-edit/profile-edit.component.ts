@@ -1,4 +1,7 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {
+  Component, ElementRef, OnInit, TemplateRef,
+  ViewChild
+} from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {UserModel} from '../../shared/user-model';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -7,6 +10,8 @@ import 'rxjs/add/operator/mergeMap';
 import {FileService} from '../../shared/file.service';
 import {Subscription} from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {LoginModalComponent} from '../../core/login-modal/login-modal.component';
 
 @Component({
   selector: 'app-profile-edit',
@@ -15,19 +20,21 @@ import {Observable} from 'rxjs/Observable';
 })
 export class ProfileEditComponent implements OnInit {
 
-   public currentUser: UserModel;
+  public currentUser: UserModel;
   public submitted = false;
-  public user: UserModel;
+  public userEmail: string;
   public form: FormGroup;
   public avatar: any;
   @ViewChild('fileInput') fileInput: ElementRef;
   private subscription: Subscription;
+  public modalRef: BsModalRef;
 
   constructor(private _userService: UserService,
               private _router: Router,
               private _route: ActivatedRoute,
               private _fb: FormBuilder,
-              private _fileService: FileService) {  }
+              private _fileService: FileService,
+              private _modalService: BsModalService) {  }
 
   ngOnInit() {
     const handle404 = () => {
@@ -59,7 +66,7 @@ export class ProfileEditComponent implements OnInit {
     .subscribe(user => {
       if (user) {
         this.currentUser = user;
-        this.user = user;
+        this.userEmail = user.email;
         console.log(user);
         this.fillForm();
       } else {
@@ -114,7 +121,7 @@ export class ProfileEditComponent implements OnInit {
         ? new Date(this.form.get('dateOfBirth').value).getTime() / 1000 : null;
       this.currentUser.tel = this.form.get('tel').value;
 
-      if (this.currentUser.email === this.user.email) {
+      if (this.currentUser.email === this.userEmail) {
         if (this.avatar) {
           this._userService.modify(this.currentUser)
             .flatMap(() => {
@@ -126,7 +133,9 @@ export class ProfileEditComponent implements OnInit {
             .subscribe(data => console.log(data), err => console.warn(err));
         }
       } else {
-
+        console.log('itt');
+        this._userService.changeEmail(this.currentUser.email)
+          .subscribe(res => console.log(res));
       }
       this._router.navigate(['/user']);
     }
@@ -148,5 +157,19 @@ export class ProfileEditComponent implements OnInit {
   clearPicUrl() {
     this.currentUser.picUrl = '';
   }
+
+  show() {
+    const initialState = {
+      modalTitle: 'Belépési adatok',
+      text: 'Az e-mail cím megváltoztatásához kérjük, erősítsd' +
+      ' meg, hogy tényleg Te vagy:',
+      rememberMe: false,
+      closeBtnName: 'Mehet'
+    };
+    this.modalRef = this._modalService.show(LoginModalComponent);
+    Object.assign(this.modalRef.content, initialState);
+    console.log(this.modalRef);
+  }
+
 }
 
