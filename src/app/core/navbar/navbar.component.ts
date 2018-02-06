@@ -27,7 +27,8 @@ export class NavbarComponent implements OnInit {
     this.eventCategories = this._categoryService.getEventCategories();
   }
 
-  logout() {
+  logout(event) {
+    event.preventDefault();
     this.userService.logout();
   }
 

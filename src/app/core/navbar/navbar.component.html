@@ -68,8 +68,8 @@
       </ng-container>
       <ng-template #loggedInBlock>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/user/login"
-             routerLinkActive="active" (click)="logout()">Kilépés</a>
+          <a class="nav-link" href="#"
+             routerLinkActive="active" (click)="logout($event)">Kilépés</a>
         </li>
         <li class="nav-item">
           <a routerLink="/user" routerLinkActive="active"
