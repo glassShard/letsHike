@@ -50,6 +50,7 @@ export class LoginModalComponent implements OnInit {
   reAuth(password) {
     this.disabled = true;
     this._userService.reAuth(password).subscribe(res => {
+      console.log(res);
       this.authFailed = false;
       this.modalRef.hide();
     }, err => {

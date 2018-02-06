@@ -18,3 +18,5 @@ export class ProfileComponent implements OnInit {
     this.user$ = this._userService.getCurrentUser();
   }
 }
+
+// TODO: profilkép módosítás utáni oldalbetöltéskor nem frissíti a képet

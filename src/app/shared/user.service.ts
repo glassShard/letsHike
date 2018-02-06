@@ -103,6 +103,7 @@ export class UserService {
       user.email,
       password
     );
+    console.log(credential);
     return Observable.fromPromise(firebase.auth().currentUser.reauthenticateWithCredential(credential));
   }
 

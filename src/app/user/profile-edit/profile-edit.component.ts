@@ -20,7 +20,6 @@ import {LoginModalComponent} from '../../core/login-modal/login-modal.component'
 export class ProfileEditComponent implements OnInit, OnDestroy {
 
   public currentUser: UserModel;
-  public submitted = false;
   public userEmail: string;
   public userOldDatas = {
     dateOfBirth: null,
@@ -102,7 +101,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
 
   fillForm () {
     if (this.currentUser.id) {
-      console.log(true);
       let date: string = null;
       if (this.currentUser.dateOfBirth) {
         const unixDate = new Date(this.currentUser.dateOfBirth * 1000);
@@ -138,7 +136,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.disabled = true;
     delete(this.error);
-    this.submitted = true;
     if (this.form.valid) {
 
       this.currentUser.nick = this.form.get('nick').value;
@@ -220,7 +217,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         this.error = 'Az adatokat a hibás autentikáció miatt nem mentettük.' +
           ' Kérjük, próbáld újra.';
       } else {
-        this.saveChanges();
+        this._subscriptions.push(this._userService.changeEmail(this.currentUser.email)
+          .subscribe(() => this.saveChanges(), error2 => {
+            this.error = 'Hiba történt az email mentése során. Kérjük,' +
+              ' próbáld újra.';
+            console.warn(error2);
+          }));
       }
     }));
     const initialState = {
