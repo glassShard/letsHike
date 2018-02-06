@@ -5,10 +5,10 @@ import {CategoryService} from '../../shared/category.service';
 import {Observable} from 'rxjs/Observable';
 import {UserService} from '../../shared/user.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/switchMap';
 
 @Component({
   selector: 'app-event-list',
@@ -27,20 +27,21 @@ export class EventListComponent implements OnInit {
 
   constructor(private _eventService: EventService,
               private _categoryService: CategoryService,
-              private _userService: UserService) {
-    this._userService.isLoggedIn$.subscribe(isLoggedIn => {
-      if (isLoggedIn) {
-        this.currentUserId = this._userService.currentUserId;
-        // this._userService.getCurrentUser()
-        //   .subscribe(user => this.currentUserId = user.id);
-      }
-    });
-  }
+              private _userService: UserService) {}
 
   ngOnInit() {
     this.eventCategories = this._categoryService.getEventCategories();
+
+    this._userService.isLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this.currentUserId = this._userService.currentUserId;
+      } else {
+        this.currentUserId = null;
+      }
+    });
+
     this.eventsGrouppedBy2$ = this._eventService.getAllEvents()
-      .flatMap(events => {
+      .switchMap(events => {
         return this.category$
           .map(cat => {
             if (cat === null) {
@@ -52,11 +53,9 @@ export class EventListComponent implements OnInit {
             }
           });
       })
-      .flatMap(events => {
-        return this.stringFromSearch$ // még itt van egy m.l. ha váltogatom
-        // a kategóriát és a kereső mezőt,
-        // mindig újra elindítja a streamet
-        // vagy vmi ilyesmi... de már oldalbetöltéskor is kétszer futtatja a
+      .switchMap(events => {
+        return this.stringFromSearch$
+        // oldalbetöltéskor is kétszer futtatja a
         // console.logot két sorral ez alatt.
           .map(filteredText => {
             console.log(filteredText);

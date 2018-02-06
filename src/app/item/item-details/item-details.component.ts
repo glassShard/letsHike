@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ItemModel} from '../../shared/item-model';
 import {ItemService} from '../../shared/item.service';
@@ -7,18 +7,22 @@ import {UserService} from '../../shared/user.service';
 import {UserModel} from '../../shared/user-model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {priceValidator} from './item.validators';
+import {Subscription} from 'rxjs/Subscription';
+import {Observable} from 'rxjs/Observable';
+import {EventModel} from '../../shared/event-model';
 
 @Component({
   selector: 'app-item-details',
   templateUrl: './item-details.component.html',
   styleUrls: ['./item-details.component.css']
 })
-export class ItemDetailsComponent implements OnInit {
+export class ItemDetailsComponent implements OnInit, OnDestroy {
   public item: ItemModel;
   public itemCategories;
   public currentUser: UserModel;
   public form: FormGroup;
   public submitted = false;
+  private _subscription: Subscription;
 
   constructor(private _route: ActivatedRoute,
               private _itemService: ItemService,
@@ -26,25 +30,15 @@ export class ItemDetailsComponent implements OnInit {
               private _categoryService: CategoryService,
               private _userService: UserService,
               private _fb: FormBuilder) {
-    this._userService.isLoggedIn$.subscribe(isLoggedIn => {
-      if (isLoggedIn) {
-        console.log(isLoggedIn);
-        this._userService.getCurrentUser()
-          .subscribe(user => {
-            this.currentUser = user;
-            console.log(this.currentUser);
-          }).unsubscribe();
-      } else {
-        this.currentUser = null;
-        console.log(this.currentUser);
-      }
-    });
+
+  }
+
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
   }
 
   ngOnInit() {
-    const handle404 = () => {
-      this._router.navigate(['404']);
-    };
+
     this.form = this._fb.group(
       {
         title: ['', Validators.required],
@@ -59,28 +53,56 @@ export class ItemDetailsComponent implements OnInit {
       }
     );
 
-    const itId = this._route.snapshot.params['id'];
-    if (itId) {
-      this._itemService.getItemById(itId).subscribe(it => {
-        if (it === null) {
-          handle404();
+    this._subscription = this._userService.isLoggedIn$
+      .flatMap((isLoggedIn: boolean) => {
+        if (isLoggedIn) {
+          console.log(isLoggedIn);
+          return this._userService.getCurrentUser();
         } else {
-          this.item = it;
-          this.form.patchValue({
-            title: this.item.title,
-            price: this.item.price,
-            shortDescription: this.item.shortDescription,
-            description: this.item.description,
-            category: this.item.category,
-            picUrl: this.item.picUrl
-          });
+          return Observable.of(null);
         }
-      }, () => {
-        handle404();
+      })
+      .flatMap((user: UserModel) => {
+        if (user === null) {
+          return Observable.of(null);
+        } else {
+          this.currentUser = user;
+          const itId = this._route.snapshot.params['id'];
+          if (itId) {
+            return this._itemService.getItemById(itId);
+          } else {
+            return Observable.of(new EventModel());
+          }
+        }
+      }).subscribe((item: ItemModel) => {
+        console.log(item);
+        if (event === null) {
+          if (this.currentUser.id) {
+            this._router.navigate(['404']);
+          } else {
+            this._router.navigate(['/cuccok']);
+          }
+        } else {
+          this.item = item;
+          if (this.item.creatorId === this.currentUser.id) {
+            fillForm();
+          } else {
+            this._router.navigate(['/cuccok/new']);
+          }
+        }
       });
-    } else {
-      this.item = new ItemModel();
-    }
+
+    const fillForm = () => {
+      this.form.patchValue({
+        title: this.item.title,
+        price: this.item.price,
+        shortDescription: this.item.shortDescription,
+        description: this.item.description,
+        category: this.item.category,
+        picUrl: this.item.picUrl
+      });
+    };
+
     this.itemCategories = this._categoryService.getItemCategories();
   }
 

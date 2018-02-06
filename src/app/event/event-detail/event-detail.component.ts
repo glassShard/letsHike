@@ -23,7 +23,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   public eventForm: FormGroup;
   public submitted = false;
   public currentUser: UserModel;
-  private subscription: Subscription;
+  private _subscription: Subscription;
 
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,
@@ -31,11 +31,10 @@ export class EventDetailComponent implements OnInit, OnDestroy {
               private _categoryService: CategoryService,
               private _location: Location,
               private _userService: UserService,
-              private _fb: FormBuilder) {
-  }
+              private _fb: FormBuilder) {}
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this._subscription.unsubscribe();
   }
 
   ngOnInit() {
@@ -64,8 +63,8 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.subscription = this._userService.isLoggedIn$
-      .flatMap(isLoggedIn => {
+    this._subscription = this._userService.isLoggedIn$
+      .flatMap((isLoggedIn: boolean) => {
         if (isLoggedIn) {
           console.log(isLoggedIn);
           return this._userService.getCurrentUser();
@@ -86,13 +85,13 @@ export class EventDetailComponent implements OnInit, OnDestroy {
             return Observable.of(new EventModel());
           }
         }
-      }).subscribe(event => {
+      }).subscribe((event: EventModel) => {
         console.log(event);
         if (event === null) {
           if (this.currentUser.id) {
             this._router.navigate(['404']);
           } else {
-            this._router.navigate(['/login']);
+            this._router.navigate(['/turak']);
           }
         } else {
           this.event = event;

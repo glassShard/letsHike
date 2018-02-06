@@ -1,7 +1,4 @@
-import {
-  AfterViewInit,
-  Component, ElementRef, OnInit, ViewChild
-} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ItemModel} from '../../shared/item-model';
 import {ItemService} from '../../shared/item.service';
 import {CategoryService} from '../../shared/category.service';
@@ -9,9 +6,10 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/reduce';
 import {UserService} from '../../shared/user.service';
 import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/distinctUntilChanged';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/switchMap';
 
 @Component({
   selector: 'app-item-list',
@@ -28,45 +26,24 @@ export class ItemListComponent implements OnInit {
   private stringFromSearch$ = new BehaviorSubject(null);
   private category$ = new BehaviorSubject(null);
 
-
-  // @ViewChild('searchInput') searchInput: ElementRef;
-  // private filteredText$ = new BehaviorSubject<string>(null);
-
   constructor(private _itemService: ItemService,
               private _categoryService: CategoryService,
               private _userService: UserService) {
-    this._userService.isLoggedIn$.subscribe(isLoggedIn => {
-      if (isLoggedIn) {
-        this.currentUserId = this._userService.currentUserId; // getCurrentUser()
-//          .subscribe(user => this.currentUserId = user.id);
-      }
-    });
   }
-
-  // ngAfterViewInit(): void {
-  //   console.log(this.searchInput.nativeElement);
-  //   Observable.fromEvent(this.searchInput.nativeElement, 'keyup')
-  //     .delay(5000)
-  //     .map((event: Event) => {
-  //       console.log((event.srcElement as HTMLInputElement).value);
-  //       return (event.srcElement as HTMLInputElement).value;
-  //
-  //     })
-  //     .distinctUntilChanged() // ha nem változik az adat minden fél
-  //   // másodpercben, akkor nem jelez
-  //     .subscribe(text => {
-  //       if (text.length === 0) {
-  //         text = null;
-  //       }
-  //       this.filteredText$.next(text);
-  //       console.log(text);
-  //     });
-  // }
 
   ngOnInit() {
     this.itemCategories = this._categoryService.getItemCategories();
+
+    this._userService.isLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this.currentUserId = this._userService.currentUserId;
+      } else {
+        this.currentUserId = null;
+      }
+    });
+
     this.itemsGrouppedBy2$ = this._itemService.getAllItems()
-      .flatMap(items => {
+      .switchMap(items => {
         return this.category$
           .map(cat => {
             if (cat === null) {
@@ -78,7 +55,7 @@ export class ItemListComponent implements OnInit {
             }
           });
       })
-      .flatMap(items => {
+      .switchMap(items => {
         return this.stringFromSearch$
           .map(filteredText => {
             if (filteredText === null) {
