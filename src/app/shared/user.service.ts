@@ -97,8 +97,13 @@ export class UserService {
     return Observable.fromPromise(firebase.auth().currentUser.updateEmail(email));
   }
 
-  reLogin(credential) {
-    return Observable.fromPromise(firebase.auth().currentUser.reauthenticateWithPopup(credential));
+  reAuth(password) {
+    const user = firebase.auth().currentUser;
+    const credential = firebase.auth.EmailAuthProvider.credential(
+      user.email,
+      password
+    );
+    return Observable.fromPromise(firebase.auth().currentUser.reauthenticateWithCredential(credential));
   }
 
 }

@@ -1,9 +1,6 @@
-import {
-  Component, EventEmitter, OnInit, Output,
-  TemplateRef
-} from '@angular/core';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap';
-
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {BsModalRef} from 'ngx-bootstrap';
+import {UserService} from '../../shared/user.service';
 
 @Component({
   selector: 'app-login-modal',
@@ -13,25 +10,57 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 export class LoginModalComponent implements OnInit {
   modalTitle: string;
   closeBtnName: string;
-  rememberMe: boolean;
+  needRememberMe: boolean;
+  needEmail: boolean;
   text: string;
-  @Output() submitted = new EventEmitter();
+  isReAuth: boolean;
+  error: string;
+  authFailed = true;
+  @ViewChild('email') email: ElementRef;
+  @ViewChild('rememberMe') rememberMe: ElementRef;
+  disabled = false;
 
-  constructor(public modalRef: BsModalRef) {
-    console.log('from constructor: ', this.modalTitle);
+  constructor(public modalRef: BsModalRef,
+              private _userService: UserService) {
   }
 
   ngOnInit() {
-    console.log('from onInit: ', this.modalTitle);
   }
 
-  onClick() {
-    this.submitted.emit({value: 'most jöttem a componentből'});
-    console.log(this.modalRef);
-    this.modalRef.hide();
+  onClick(password) {
+    if (this.isReAuth) {
+      this.reAuth(password);
+    } else {
+      this.login(this.email.nativeElement.value, password);
+    }
   }
 
-  reLogin (value) {
-    console.log(value);
+  login(email: string, password: string) {
+    this.disabled = true;
+    this._userService.login(email, password).subscribe((res) => {
+      console.log(res);
+      this.modalRef.hide();
+    }, err => {
+      this.disabled = false;
+      console.warn('hibara futottunk a login során: ', err);
+      this.error = 'Hiba a bejelentkezési adatokban. Próbáld újra.';
+    });
+  }
+
+  reAuth(password) {
+    this.disabled = true;
+    this._userService.reAuth(password).subscribe(res => {
+      this.authFailed = false;
+      this.modalRef.hide();
+    }, err => {
+      this.disabled = false;
+      console.warn('hibara futottunk az autentikáció során: ', err);
+      this.error = 'Hiba az autentikáció során. Próbáld újra.';
+      this.authFailed = true;
+    });
+  }
+
+  clearError() {
+    delete(this.error);
   }
 }

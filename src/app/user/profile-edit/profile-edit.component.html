@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <div class="form-row">
+    <div class="form-row mb-3">
       <div class="form-group col-md-4">
         <label for="tel">Telefonszám:</label>
         <input type="text"
@@ -64,6 +64,7 @@
                placeholder="Telefonszámod...">
         <small class="form-text text-muted">Ha kitöltöd, adatlapodon, valamint hirdetés feladása esetén a termék oldalán kattintás után láthatóvá tesszük. Ha nem adod meg, de hirdetést adsz fel, csak a tagok fognak tudni veled kapcsolatba lépni, ezért javasoljuk, hogy hirdetés-feladás esetén mindenképpen töltsd ki!</small>
       </div>
+
       <div class="form-group col-12 col-sm-6 col-md-4">
         <label for="avatar">Profilkép:</label>
         <input type="file"
@@ -101,37 +102,18 @@
 
       </ng-template>
     </div>
+
+    <alert type="danger" [dismissible]="true" (onClose)="clearError()"
+           *ngIf="error">
+      <p>{{error}}</p>
+    </alert>
+    
     <div class="form-group text-right mt-3">
-      <button class="btn btn-primary" type="submit">
+      <button class="btn btn-primary"
+              type="submit"
+              [disabled]="disabled">
         <i class="icon-database"></i> Adatok
         mentése</button>
     </div>
   </form>
 </div>
-<button class="btn btn-primary"
-        type="button"
-        (click)="show()">
-  Open modal</button>
-
-
-  <!--<div bsModal #smModal="bs-modal"-->
-                   <!--class="modal fade" tabindex="-1"-->
-                   <!--role="dialog"-->
-                   <!--aria-labelledby="mySmallModalLabel"-->
-                   <!--aria-hidden="true">-->
-  <!--</div>-->
-
-<!--<button type="button" class="btn btn-primary" (click)="openModal(template)">Create template modal</button>-->
-
-<!--<ng-template #template>-->
-  <!--<div class="modal-header">-->
-    <!--<h4 class="modal-title pull-left">Modal</h4>-->
-    <!--<button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">-->
-      <!--<span aria-hidden="true">&times;</span>-->
-    <!--</button>-->
-  <!--</div>-->
-  <!--<div class="modal-body">-->
-    <!--This is a modal.-->
-  <!--</div>-->
-<!--</ng-template>-->
-

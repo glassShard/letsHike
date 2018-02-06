@@ -1,6 +1,5 @@
 import {
-  Component, ElementRef, OnInit, TemplateRef,
-  ViewChild
+  ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {UserModel} from '../../shared/user-model';
@@ -18,23 +17,43 @@ import {LoginModalComponent} from '../../core/login-modal/login-modal.component'
   templateUrl: './profile-edit.component.html',
   styleUrls: ['./profile-edit.component.css']
 })
-export class ProfileEditComponent implements OnInit {
+export class ProfileEditComponent implements OnInit, OnDestroy {
 
   public currentUser: UserModel;
   public submitted = false;
   public userEmail: string;
+  public userOldDatas = {
+    dateOfBirth: null,
+    email: '',
+    nick: '',
+    tel: '',
+  };
   public form: FormGroup;
   public avatar: any;
   @ViewChild('fileInput') fileInput: ElementRef;
   private subscription: Subscription;
   public modalRef: BsModalRef;
+  private _saveFailed: boolean;
+  private _subscriptions: Subscription[] = [];
+  public disabled = false;
+  public error: string;
 
   constructor(private _userService: UserService,
               private _router: Router,
               private _route: ActivatedRoute,
               private _fb: FormBuilder,
               private _fileService: FileService,
-              private _modalService: BsModalService) {  }
+              private _modalService: BsModalService,
+              private _changeDetection: ChangeDetectorRef) {  }
+
+  ngOnDestroy() {
+    this._subscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
+    if (this._saveFailed) {
+      Object.assign(this.currentUser, this.userOldDatas);
+    }
+  }
 
   ngOnInit() {
     const handle404 = () => {
@@ -55,7 +74,7 @@ export class ProfileEditComponent implements OnInit {
       }
     );
 
-    this.subscription = this._userService.isLoggedIn$
+    this._subscriptions.push(this._userService.isLoggedIn$
     .flatMap(isLoggedIn => {
       if (isLoggedIn) {
         return this._userService.getCurrentUser();
@@ -67,12 +86,18 @@ export class ProfileEditComponent implements OnInit {
       if (user) {
         this.currentUser = user;
         this.userEmail = user.email;
-        console.log(user);
+        Object.assign(this.userOldDatas, {
+          dateOfBirth: user.dateOfBirth,
+          email: user.email,
+          nick: user.nick,
+          tel: user.tel
+        });
+        console.log(this.userOldDatas);
         this.fillForm();
       } else {
         this._router.navigate(['./registration']);
       }
-    });
+    }));
   }
 
   fillForm () {
@@ -111,6 +136,8 @@ export class ProfileEditComponent implements OnInit {
   }
 
   onSubmit() {
+    this.disabled = true;
+    delete(this.error);
     this.submitted = true;
     if (this.form.valid) {
 
@@ -119,25 +146,34 @@ export class ProfileEditComponent implements OnInit {
       this.currentUser.tel = this.form.get('tel').value;
       this.currentUser.dateOfBirth = !(this.form.get('dateOfBirth').value === null)
         ? new Date(this.form.get('dateOfBirth').value).getTime() / 1000 : null;
-      this.currentUser.tel = this.form.get('tel').value;
 
-      if (this.currentUser.email === this.userEmail) {
-        if (this.avatar) {
-          this._userService.modify(this.currentUser)
-            .flatMap(() => {
-              const formModel = this.prepareSave(this.currentUser.id);
-              return this._fileService.uploadAvatar(this.currentUser.id, formModel);
-            }).subscribe(res => console.log(res), err => console.warn(err));
-        } else {
-          this._userService.modify(this.currentUser)
-            .subscribe(data => console.log(data), err => console.warn(err));
-        }
+      if (this.currentUser.email === this.userOldDatas.email) {
+        this.saveChanges();
       } else {
-        console.log('itt');
-        this._userService.changeEmail(this.currentUser.email)
-          .subscribe(res => console.log(res));
+        this.show();
       }
-      this._router.navigate(['/user']);
+      // this._router.navigate(['/user']);
+    }
+  }
+
+  saveChanges() {
+    if (this.avatar) {
+      this._subscriptions.push(this._userService.modify(this.currentUser)
+        .flatMap(() => {
+          const formModel = this.prepareSave(this.currentUser.id);
+          return this._fileService.uploadAvatar(this.currentUser.id, formModel);
+        }).subscribe(() => {
+          this.doIfSuccess();
+        }, err => {
+          this.doIfFailed(err);
+        }));
+    } else {
+      this._subscriptions.push(this._userService.modify(this.currentUser)
+        .subscribe(() => {
+          this.doIfSuccess();
+        }, err => {
+          this.doIfFailed(err);
+        }));
     }
   }
 
@@ -146,6 +182,17 @@ export class ProfileEditComponent implements OnInit {
     input.append('id', id);
     input.append('avatar', this.form.get('avatar').value);
     return input;
+  }
+
+  doIfSuccess() {
+    this._router.navigate(['/user']);
+  }
+
+  doIfFailed(err) {
+    this.disabled = false;
+    this._saveFailed = true;
+    console.warn(err);
+    this.error = 'Hiba az adatok mentése során. Kérjük, próbáld újra.';
   }
 
   clearFile() {
@@ -158,18 +205,35 @@ export class ProfileEditComponent implements OnInit {
     this.currentUser.picUrl = '';
   }
 
+  clearError() {
+    delete(this.error);
+  }
+
   show() {
+    this._subscriptions.push(this._modalService.onHide
+      .subscribe(() => this._changeDetection.markForCheck()));
+    this._subscriptions.push(this._modalService.onHide.subscribe(() => {
+      console.log(this.modalRef.content.authFailed);
+      if (this.modalRef.content.authFailed) {
+        this._saveFailed = true;
+        this.disabled = false;
+        this.error = 'Az adatokat a hibás autentikáció miatt nem mentettük.' +
+          ' Kérjük, próbáld újra.';
+      } else {
+        this.saveChanges();
+      }
+    }));
     const initialState = {
       modalTitle: 'Belépési adatok',
       text: 'Az e-mail cím megváltoztatásához kérjük, erősítsd' +
       ' meg, hogy tényleg Te vagy:',
-      rememberMe: false,
-      closeBtnName: 'Mehet'
+      needRememberMe: false,
+      needEmail: false,
+      closeBtnName: 'Mehet',
+      isReAuth: true
     };
     this.modalRef = this._modalService.show(LoginModalComponent);
     Object.assign(this.modalRef.content, initialState);
-    console.log(this.modalRef);
   }
-
 }
 
