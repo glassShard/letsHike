@@ -1,5 +1,11 @@
 <img class="card-img-top bg-mylight" [src]="cucc.picUrl"
+     *ngIf="cucc.picUrl; else withoutPicUrl"
      alt="Card image cap">
+<ng-template #withoutPicUrl>
+  <img class="card-img-top bg-mylight"
+       [src]="dafaultPic"
+       alt="Card image cap">
+</ng-template>
 <div class="card-body">
   <h5 class="card-title">{{cucc.title}}</h5>
   <h3 class="card-title">{{cucc.price | number | pointReplacer}} Ft</h3>

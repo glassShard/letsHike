@@ -25,7 +25,7 @@ export class CategoryService {
       },
       {
         category: 'Lábbeli',
-        picUrl: '../assets/vector/boot2cb.svg'
+        picUrl: '../assets/vector/boot3cb.svg'
       },
       {
         category: 'Étkezés',
@@ -37,7 +37,7 @@ export class CategoryService {
       },
       {
         category: 'Hátizsák, táska',
-        picUrl: '../assets/vector/backpackcb.svg'
+        picUrl: '../assets/vector/backpack1cb.svg'
       },
       {
         category: 'Téli felszerelés',
@@ -59,7 +59,7 @@ export class CategoryService {
       },
       {
         category: 'Gyalogtúra',
-        picUrl: '../assets/vector/boot2cb.svg'
+        picUrl: '../assets/vector/boot3cb.svg'
       },
       {
         category: 'Sítúra',

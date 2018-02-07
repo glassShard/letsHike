@@ -12,11 +12,12 @@
          *ngFor="let evg of eventsGrouppedBy2$ | async">
       <div class="col-lg-6 card-deck-container" *ngFor="let ev of evg">
         <div class="card-deck card-deck-item-list">
-          <app-event-card class="card"
+          <app-event-card class="card card-max-width"
                           *ngFor="let e of ev"
                           [tura]="e"
                           [currentUserId]="currentUserId"
-                          (addSeen)="addSeen($event.id)"></app-event-card>
+                          (addSeen)="addSeen($event.id)"
+                          [categories]="eventCategories"></app-event-card>
         </div>
       </div>
     </div>

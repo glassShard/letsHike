@@ -27,6 +27,10 @@ body {
   align-items: stretch;
 }
 
+.card-max-width {
+  max-width: calc(50% - 30px);
+}
+
 .my-jumbotron {
   background-color: transparent;
   margin-bottom: 0;

@@ -10,9 +10,13 @@ export class EventCardComponent implements OnInit {
   @Input() tura: EventModel;
   @Input() currentUserId: string;
   @Output() addSeen = new EventEmitter();
+  @Input() categories;
+  public dafaultPic: string;
   constructor() { }
 
   ngOnInit() {
+    this.dafaultPic = this.categories.filter(cat => cat.category === this.tura.category)[0].picUrl;
+    console.log(this.categories.filter(cat => cat.category === this.tura.category)[0].picUrl);
   }
 
   onViewClick() {
