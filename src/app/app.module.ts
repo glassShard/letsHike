@@ -20,6 +20,7 @@ import * as firebase from 'firebase';
 import {CoreModule} from './core/core.module';
 import {FileService} from './shared/file.service';
 import {LoginModalComponent} from './core/login-modal/login-modal.component';
+import {ImageService} from './shared/image.service';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import {LoginModalComponent} from './core/login-modal/login-modal.component';
     UserService,
     CategoryService,
     LoggedInGuard,
-    FileService
+    FileService,
+    ImageService
   ],
   entryComponents: [
     LoginModalComponent

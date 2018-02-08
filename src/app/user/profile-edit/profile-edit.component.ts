@@ -11,6 +11,7 @@ import {Subscription} from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {LoginModalComponent} from '../../core/login-modal/login-modal.component';
+import {ImageService} from '../../shared/image.service';
 
 @Component({
   selector: 'app-profile-edit',
@@ -43,7 +44,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
               private _fb: FormBuilder,
               private _fileService: FileService,
               private _modalService: BsModalService,
-              private _changeDetection: ChangeDetectorRef) {  }
+              private _changeDetection: ChangeDetectorRef,
+              private _imageService: ImageService) {  }
 
   ngOnDestroy() {
     this._subscriptions.forEach((subscription: Subscription) => {
@@ -120,16 +122,25 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
 
   onFileChange(event) {
     if (event.srcElement.files.length > 0) {
-      const files = event.srcElement.files[0];
-      this.form.get('avatar').setValue(files);
-
-      const reader = new FileReader();
-      reader.readAsDataURL(files);
-      reader.onload = (ev) => {
-        console.log(ev);
-        console.log(ev.target);
-        this.avatar = reader.result;
-      };
+      const file = event.srcElement.files[0];
+      this._imageService.getOrientation(file)
+        .take(1)
+        .subscribe(orientation => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          if (orientation === 8 || orientation === 3 || orientation === 6) {
+            reader.onload = (ev) => {
+            this._imageService.resetOrientation(reader.result, orientation)
+              .take(1)
+              .subscribe(newImage => this.avatar = newImage);
+            };
+          } else {
+            reader.onload = (ev) => {
+              this.avatar = reader.result;
+            };
+          }
+      });
+      this.form.get('avatar').setValue(file);
     }
   }
 
@@ -237,5 +248,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     this.modalRef = this._modalService.show(LoginModalComponent);
     Object.assign(this.modalRef.content, initialState);
   }
+
 }
 
