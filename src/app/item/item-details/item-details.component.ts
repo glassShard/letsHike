@@ -10,6 +10,9 @@ import {priceValidator} from './item.validators';
 import {Subscription} from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
 import {EventModel} from '../../shared/event-model';
+import {FileService} from '../../shared/file.service';
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {Subject} from "rxjs/Subject";
 
 @Component({
   selector: 'app-item-details',
@@ -22,19 +25,22 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   public currentUser: UserModel;
   public form: FormGroup;
   public submitted = false;
-  private _subscription: Subscription;
+  private _subscriptions: Subscription[] = [];
+  public error: string;
+  public success: string;
 
   constructor(private _route: ActivatedRoute,
               private _itemService: ItemService,
               private _router: Router,
               private _categoryService: CategoryService,
               private _userService: UserService,
-              private _fb: FormBuilder) {
-
-  }
+              private _fileService: FileService,
+              private _fb: FormBuilder) {}
 
   ngOnDestroy() {
-    this._subscription.unsubscribe();
+    this._subscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
   }
 
   ngOnInit() {
@@ -49,11 +55,13 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
         shortDescription: '',
         description: '',
         category: ['', Validators.required],
-        picUrl: ''
+        picUrl: '',
+        images: [],
+        imagesToUpload: null
       }
     );
 
-    this._subscription = this._userService.isLoggedIn$
+    this._subscriptions.push(this._userService.isLoggedIn$
       .flatMap((isLoggedIn: boolean) => {
         if (isLoggedIn) {
           console.log(isLoggedIn);
@@ -90,7 +98,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
             this._router.navigate(['/cuccok/new']);
           }
         }
-      });
+      }));
 
     const fillForm = () => {
       this.form.patchValue({
@@ -99,7 +107,8 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
         shortDescription: this.item.shortDescription,
         description: this.item.description,
         category: this.item.category,
-        picUrl: this.item.picUrl
+        picUrl: this.item.picUrl,
+        images: this.item.images
       });
     };
 
@@ -107,14 +116,64 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.clearError();
+    delete(this.success);
     this.submitted = true;
     if (this.form.valid) {
       Object.assign(this.item, this.form.value);
       console.log(this.item);
-      this._itemService.save(this.item).subscribe(() => {
-      }, error => console.log(error));
-      this._router.navigate(['/cuccok']);
+      this.saveChanges();
+
     }
+  }
+
+  saveChanges() {
+    if (this.form.get('imagesToUpload').value) {
+      console.log(this.form.get('imagesToUpload').value);
+      this._subscriptions.push(this._itemService.save(this.item)
+        .flatMap(() => {
+          const formModel = this.prepareSave(this.item.id);
+          return this._fileService.uploadImages(this.item.id, formModel, 'items');
+        }).subscribe(() => {
+          this.doIfSuccess();
+        }, err => {
+          this.doIfFailed();
+        }));
+    } else {
+      this._itemService.save(this.item).subscribe(() => {
+        this.doIfSuccess();
+      }, error => {
+        this.doIfFailed();
+        console.log(error);
+      });
+      // this._router.navigate(['/cuccok']);
+    }
+  }
+
+  doIfSuccess() {
+    this.success = 'Az adatokat mentettük.';
+    this.clearFileFromForm();
+  }
+
+  doIfFailed() {
+    this.error = 'Hiba történt az adatok mentése közben. Kérjük, próbáld újra.';
+  }
+
+  clearFileFromForm() {
+    this.form.get('imagesToUpload').setValue(null);
+  }
+
+
+  private prepareSave(id): FormData {
+    const input = new FormData();
+    input.append('id', id);
+    input.append('whereTo', 'items');
+    input.append('imagesToUpload', this.form.get('imagesToUpload').value);
+    return input;
+  }
+
+  filesChange(images) {
+    this.form.get('imagesToUpload').setValue(images);
   }
 
   onDelete(itemId: string) {
@@ -131,5 +190,9 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     this.form.patchValue({
       category: item.currentTarget.getElementsByTagName('p')[0].innerHTML
     });
+  }
+
+  clearError() {
+    delete(this.error);
   }
 }

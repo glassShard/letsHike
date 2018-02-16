@@ -27,10 +27,6 @@ body {
   align-items: stretch;
 }
 
-.card-max-width {
-  max-width: calc(50% - 30px);
-}
-
 .my-jumbotron {
   background-color: transparent;
   margin-bottom: 0;
@@ -154,6 +150,10 @@ footer {
 
   .card-deck-container {
     margin-bottom: 30px;
+  }
+
+  .card-max-width {
+    max-width: calc(50% - 30px);
   }
 }
 

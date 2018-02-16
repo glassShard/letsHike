@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {PointReplacerPipe} from './point-replacer.pipe';
 
 @NgModule({
@@ -7,10 +7,11 @@ import {PointReplacerPipe} from './point-replacer.pipe';
     CommonModule
   ],
   declarations: [
-    PointReplacerPipe
+    PointReplacerPipe,
   ],
   exports: [
     PointReplacerPipe
   ]
 })
-export class PointReplacerModule { }
+export class PointReplacerModule {
+}

@@ -12,6 +12,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {CoreModule} from '../core/core.module';
 import {ItemCardModule} from '../item-card/item-card.module';
 import {PointReplacerModule} from '../shared/point-replacer.module';
+import {ImgUploaderModule} from '../shared/img/img-uploader/img-uploader.module';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import {PointReplacerModule} from '../shared/point-replacer.module';
     ReactiveFormsModule,
     CoreModule,
     ItemCardModule,
-    PointReplacerModule
+    PointReplacerModule,
+    ImgUploaderModule
   ],
   declarations: [
     ItemComponent,

@@ -92,7 +92,21 @@
             A kategória kiválasztása kötelező
           </div>
         </div>
+
+        <app-img-uploader class="row"
+                          (formValue)="filesChange($event.images)">
+
+        </app-img-uploader>
       </div>
+
+      <alert type="success" dismissOnTimeout="3000" *ngIf="success">
+        <p>{{success}}</p>
+      </alert>
+
+      <alert type="danger" [dismissible]="true" (onClose)="clearError()"
+             *ngIf="error">
+        <p>{{error}}</p>
+      </alert>
 
       <app-owner-buttons class="row"
                          [currentUser]="currentUser"

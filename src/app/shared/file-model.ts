@@ -1,4 +1,4 @@
 export class FileModel {
-  url?: string;
+  url?: string[];
   error?: string;
 }
