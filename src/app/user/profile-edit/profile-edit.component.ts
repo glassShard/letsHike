@@ -123,6 +123,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   onFileChange(event) {
     if (event.srcElement.files.length > 0) {
       const file = event.srcElement.files[0];
+      console.log(event.srcElement.files);
+      console.log(file);
       this._imageService.getOrientation(file)
         .take(1)
         .subscribe(orientation => {

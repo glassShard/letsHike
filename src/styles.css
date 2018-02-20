@@ -127,9 +127,22 @@ footer {
   padding-top: 0;
 }
 
-.imgToUpload {
+.imgContainer{
+  height: 150px;
+  display: inline-block;
+  position: relative;
+}
+
+.imgContainer img {
+
+  height: 100%;
+  width: auto;
+}
+
+.imgSetToUpload img{
   max-width: 300px;
 }
+
 .imgToUpload img {
   width: 100%;
   height: auto;
@@ -261,7 +274,8 @@ a:hover {
 
 .btn-success:not([disabled]):not(.disabled).active:focus,
 .btn-success:not([disabled]):not(.disabled):active:focus,
-.show > .btn-success.dropdown-toggle:focus, .category-checked {
+.show > .btn-success.dropdown-toggle:focus, .category-checked,
+.imgChecked {
   box-shadow: 0 0 0 .2rem rgba(197, 253, 114, 1);
 }
 

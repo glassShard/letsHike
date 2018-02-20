@@ -12,13 +12,13 @@ import {ItemModel} from '../shared/item-model';
 })
 export class ItemCardComponent implements OnInit {
   @Input() categories;
-  public dafaultPic: string;
+  public defaultPic: string;
   @Input() cucc: ItemModel;
   @Input() currentUserId: string;
   constructor() { }
 
   ngOnInit() {
-    this.dafaultPic = this.categories.filter(cat => cat.category === this.cucc.category)[0].picUrl;
+    this.defaultPic = this.categories.filter(cat => cat.category === this.cucc.category)[0].picUrl;
   }
 
 }

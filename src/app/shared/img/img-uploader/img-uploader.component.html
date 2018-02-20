@@ -1,0 +1,26 @@
+<div class="imgSetToUpload col-12"
+     *ngIf="images">
+  <ng-container *ngFor="let singleImage of images">
+    <div class="imgContainer mb-1">
+      <img [src]="singleImage"
+           (click)="markFile(singleImage)"
+           [ngClass]="{'imgChecked': marked && singleImage === marked[0]}">
+    </div>
+  </ng-container>
+</div>
+
+<div class="form-group col-12">
+  <label for="images">Képek:</label>
+  <input type="file"
+         class="form-control"
+         id="images"
+         name="images[]"
+         (change)="onFileChange($event)"
+         multiple
+         #fileInput>
+  <small class="form-text text-muted">
+    Itt tölthetsz fel képeket. A kijelölt kép lesz a borítókép, melyet 5:3
+    arányúra vágunk.
+  </small>
+</div>
+

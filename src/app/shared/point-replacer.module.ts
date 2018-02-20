@@ -7,7 +7,7 @@ import {PointReplacerPipe} from './point-replacer.pipe';
     CommonModule
   ],
   declarations: [
-    PointReplacerPipe,
+    PointReplacerPipe
   ],
   exports: [
     PointReplacerPipe

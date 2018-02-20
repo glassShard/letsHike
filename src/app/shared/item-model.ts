@@ -7,7 +7,7 @@ export class ItemModel {
   shortDescription: string;
   description: string;
   picUrl: string;
-  images: string[];
+  images: string;
   category: string;
   creatorId: string;
   creator: UserModel;

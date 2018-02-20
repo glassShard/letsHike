@@ -93,17 +93,28 @@
           </div>
         </div>
 
-        <app-img-uploader class="row"
-                          (formValue)="filesChange($event.images)">
-
-        </app-img-uploader>
       </div>
 
-      <alert type="success" dismissOnTimeout="3000" *ngIf="success">
+      <app-img-uploader class="row"
+                        (formValue)="filesChange($event.images)"
+                        (index)="setIndex($event.imgIndex)">
+
+      </app-img-uploader>
+
+      <app-img-preview class="row"
+                        [uploadedImages]="uploadedImages"
+                        (deleteImage)="deleteImage($event.imgUrl)"
+                        (coverImg)="setCoverImage($event.coverImg)"
+                        [oldCoverImg]="oldCoverImg">
+      </app-img-preview>
+
+      <alert type="success" dismissOnTimeout="3000"
+             *ngIf="success">
         <p>{{success}}</p>
       </alert>
 
-      <alert type="danger" [dismissible]="true" (onClose)="clearError()"
+      <alert type="danger" [dismissible]="true"
+      (onClose)="clearError()"
              *ngIf="error">
         <p>{{error}}</p>
       </alert>

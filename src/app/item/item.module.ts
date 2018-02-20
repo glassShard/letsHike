@@ -13,6 +13,7 @@ import {CoreModule} from '../core/core.module';
 import {ItemCardModule} from '../item-card/item-card.module';
 import {PointReplacerModule} from '../shared/point-replacer.module';
 import {ImgUploaderModule} from '../shared/img/img-uploader/img-uploader.module';
+import {ImgPreviewModule} from "../shared/img/img-preview/img-preview.module";
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import {ImgUploaderModule} from '../shared/img/img-uploader/img-uploader.module'
     CoreModule,
     ItemCardModule,
     PointReplacerModule,
-    ImgUploaderModule
+    ImgUploaderModule,
+    ImgPreviewModule
   ],
   declarations: [
     ItemComponent,

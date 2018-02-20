@@ -11,8 +11,7 @@ import {Subscription} from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
 import {EventModel} from '../../shared/event-model';
 import {FileService} from '../../shared/file.service';
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {Subject} from "rxjs/Subject";
+import 'rxjs/add/operator/mergeMap';
 
 @Component({
   selector: 'app-item-details',
@@ -28,6 +27,11 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription[] = [];
   public error: string;
   public success: string;
+  private _markedImgIndex = -1;
+  private _coverImg = '';
+  public oldCoverImg = '';
+  public uploadedImages: any[] = [];
+  private _root = 'http://localhost/turazzunk/';
 
   constructor(private _route: ActivatedRoute,
               private _itemService: ItemService,
@@ -56,7 +60,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
         description: '',
         category: ['', Validators.required],
         picUrl: '',
-        images: [],
+        images: '',
         imagesToUpload: null
       }
     );
@@ -84,7 +88,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
         }
       }).subscribe((item: ItemModel) => {
         console.log(item);
-        if (event === null) {
+        if (item === null) {
           if (this.currentUser.id) {
             this._router.navigate(['404']);
           } else {
@@ -92,6 +96,16 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
           }
         } else {
           this.item = item;
+          if (this.item.images) {
+            this.uploadedImages = this.item.images.split(',')
+              .map(imageUrl => `${this._root}${imageUrl}`);
+          }
+          if (!this.item.picUrl) {
+            this._markedImgIndex = 0;
+          } else {
+            this.oldCoverImg = this.item.picUrl;
+            console.log(this.oldCoverImg);
+          }
           if (this.item.creatorId === this.currentUser.id) {
             fillForm();
           } else {
@@ -129,25 +143,98 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
 
   saveChanges() {
     if (this.form.get('imagesToUpload').value) {
-      console.log(this.form.get('imagesToUpload').value);
-      this._subscriptions.push(this._itemService.save(this.item)
-        .flatMap(() => {
-          const formModel = this.prepareSave(this.item.id);
-          return this._fileService.uploadImages(this.item.id, formModel, 'items');
-        }).subscribe(() => {
-          this.doIfSuccess();
-        }, err => {
-          this.doIfFailed();
-        }));
+      if (Object.values(this.form.get('imagesToUpload').value)
+          .map((curr) => curr['size'])
+          .reduce((acc, curr) => acc + curr) > 32000000) {
+        this.doIfTooBigPost();
+      } else {
+        this._subscriptions.push(this._itemService.save(this.item)
+          .flatMap(() => {
+            const formModel = this.prepareSave(this.item.id);
+            return this._fileService.uploadImages(
+              this.item.id,
+              formModel,
+              'items',
+              this.item.images
+            );
+          }).subscribe(response => {
+            console.log(response);
+            //     if (response.error)
+            this.doIfSuccess();
+          }, err => {
+            this.doIfFailed();
+          }));
+      }
     } else {
-      this._itemService.save(this.item).subscribe(() => {
-        this.doIfSuccess();
-      }, error => {
-        this.doIfFailed();
-        console.log(error);
-      });
+      console.log(this._coverImg);
+      console.log(this.oldCoverImg);
+      if (this._coverImg && this.oldCoverImg !== `cover_${this._coverImg}`) {
+        this._fileService.setCoverImage(
+          this.item.id,
+          'items',
+          this._coverImg.replace(this._root, '')
+        )
+          .do(coverImg => {
+            if (coverImg.url) {
+              this.item.picUrl = `${coverImg.url}`;
+            }
+          })
+          .flatMap(() => this._itemService.save(this.item))
+          .subscribe(() => {
+            this.doIfSuccess();
+          }, error => {
+            this.doIfFailed();
+          });
+      } else {
+        this._itemService.save(this.item).subscribe(() => {
+          this.doIfSuccess();
+        }, error => {
+          this.doIfFailed();
+          console.log(error);
+        });
+      }
       // this._router.navigate(['/cuccok']);
     }
+  }
+
+  private prepareSave(id): FormData {
+    const input = new FormData();
+    input.append('id', id);
+    input.append('whereTo', 'items');
+    input.append('markedImageIndex', this._markedImgIndex.toString());
+    console.log(this._markedImgIndex);
+    Object.values(this.form.get('imagesToUpload').value).map(image => {
+      input.append('imagesToUpload[]', image);
+    });
+    return input;
+  }
+
+  deleteImage(imgUrl) {
+    console.log(imgUrl);
+    console.log(this.uploadedImages);
+    const index = this.uploadedImages.indexOf(imgUrl);
+    console.log(index);
+    if (index > -1) {
+      this.uploadedImages.splice(index, 1);
+    }
+    console.log(this.uploadedImages);
+    console.log(this.item.images);
+    this.item.images = this.uploadedImages
+      .map(img => img.replace(this._root, ''))
+      .join();
+    this.form.patchValue({
+      images: this.item.images
+    });
+    console.log(this.item.images);
+    const urlToDelete = imgUrl.replace(this._root, '');
+    this._fileService.deleteImage(this.item.id, 'items', urlToDelete, this.item.images)
+      .subscribe();
+  }
+
+  doIfTooBigPost() {
+    this.error = 'A feltölteni kívánt fájlok maximális mérete 32MB lehet. A' +
+      ' te képeid összesített mérete ezt meghaladja. Kérjük,' +
+      ' tartsd be a limitet.';
   }
 
   doIfSuccess() {
@@ -161,15 +248,6 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
 
   clearFileFromForm() {
     this.form.get('imagesToUpload').setValue(null);
-  }
-
-
-  private prepareSave(id): FormData {
-    const input = new FormData();
-    input.append('id', id);
-    input.append('whereTo', 'items');
-    input.append('imagesToUpload', this.form.get('imagesToUpload').value);
-    return input;
   }
 
   filesChange(images) {
@@ -194,5 +272,16 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
 
   clearError() {
     delete(this.error);
+  }
+
+  setIndex(imgIndex) {
+    this._coverImg = '';
+    this._markedImgIndex = imgIndex;
+  }
+
+  setCoverImage(imgUrl) {
+    this._markedImgIndex = -1;
+    this._coverImg = imgUrl;
+    console.log(imgUrl);
   }
 }
