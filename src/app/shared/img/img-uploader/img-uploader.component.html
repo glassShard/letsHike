@@ -4,7 +4,7 @@
     <div class="imgContainer mb-1">
       <img [src]="singleImage"
            (click)="markFile(singleImage)"
-           [ngClass]="{'imgChecked': marked && singleImage === marked[0]}">
+           [ngClass]="{'imgChecked': marked && !coverFromSaved && singleImage === marked[0]}">
     </div>
   </ng-container>
 </div>

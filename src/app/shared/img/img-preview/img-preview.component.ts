@@ -7,6 +7,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class ImgPreviewComponent implements OnInit {
   public marked: any = null;
+  @Input() coverFromSaved: boolean;
   @Input() uploadedImages: any[] = [];
   @Input() oldCoverImg: string;
   @Output() deleteImage = new EventEmitter();

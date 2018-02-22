@@ -97,7 +97,8 @@
 
       <app-img-uploader class="row"
                         (formValue)="filesChange($event.images)"
-                        (index)="setIndex($event.imgIndex)">
+                        (index)="setIndex($event.imgIndex)"
+                        [coverFromSaved]="coverFromSaved">
 
       </app-img-uploader>
 
@@ -105,7 +106,8 @@
                         [uploadedImages]="uploadedImages"
                         (deleteImage)="deleteImage($event.imgUrl)"
                         (coverImg)="setCoverImage($event.coverImg)"
-                        [oldCoverImg]="oldCoverImg">
+                        [oldCoverImg]="oldCoverImg"
+                        [coverFromSaved]="coverFromSaved">
       </app-img-preview>
 
       <alert type="success" dismissOnTimeout="3000"

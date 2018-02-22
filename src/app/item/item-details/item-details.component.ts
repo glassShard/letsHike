@@ -12,6 +12,7 @@ import {Observable} from 'rxjs/Observable';
 import {EventModel} from '../../shared/event-model';
 import {FileService} from '../../shared/file.service';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/concat';
 
 @Component({
   selector: 'app-item-details',
@@ -29,6 +30,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   public success: string;
   private _markedImgIndex = -1;
   private _coverImg = '';
+  public coverFromSaved = true; // borítókép kiválasztáshoz toggle változó
   public oldCoverImg = '';
   public uploadedImages: any[] = [];
   private _root = 'http://localhost/turazzunk/';
@@ -135,66 +137,87 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     this.submitted = true;
     if (this.form.valid) {
       Object.assign(this.item, this.form.value);
-      console.log(this.item);
       this.saveChanges();
-
     }
   }
 
   saveChanges() {
+    let stream = Observable.of(null);
     if (this.form.get('imagesToUpload').value) {
+      const formModel = this.prepareSave(this.item.id);
       if (Object.values(this.form.get('imagesToUpload').value)
           .map((curr) => curr['size'])
           .reduce((acc, curr) => acc + curr) > 32000000) {
         this.doIfTooBigPost();
       } else {
-        this._subscriptions.push(this._itemService.save(this.item)
+        if (this._coverImg && this.oldCoverImg !== `cover_${this._coverImg}`) {
+          stream = (this._fileService.setCoverImage(
+            this.item.id,
+            'items',
+            this._coverImg.replace(this._root, '')
+          )
+          .do(coverImg => {
+            if (coverImg.url) {
+              this.item.picUrl = `${coverImg.url}`;
+            } else {
+              this.doIfFailed('Hiba a borítókép beállításánál. Kérjük,' +
+                ' próbáld újra');
+            }
+          })
+          .flatMap(() => this._itemService.save(this.item))
           .flatMap(() => {
-            const formModel = this.prepareSave(this.item.id);
             return this._fileService.uploadImages(
               this.item.id,
               formModel,
               'items',
               this.item.images
             );
-          }).subscribe(response => {
-            console.log(response);
-            //     if (response.error)
-            this.doIfSuccess();
-          }, err => {
-            this.doIfFailed();
           }));
+        } else {
+          stream = (this._itemService.save(this.item)
+            .flatMap(() => {
+              return this._fileService.uploadImages(
+                this.item.id,
+                formModel,
+                'items',
+                this.item.images
+              );
+            })
+          );
+        }
       }
     } else {
-      console.log(this._coverImg);
-      console.log(this.oldCoverImg);
       if (this._coverImg && this.oldCoverImg !== `cover_${this._coverImg}`) {
-        this._fileService.setCoverImage(
+        stream = this._fileService.setCoverImage(
           this.item.id,
           'items',
           this._coverImg.replace(this._root, '')
         )
-          .do(coverImg => {
-            if (coverImg.url) {
-              this.item.picUrl = `${coverImg.url}`;
-            }
-          })
-          .flatMap(() => this._itemService.save(this.item))
-          .subscribe(() => {
-            this.doIfSuccess();
-          }, error => {
-            this.doIfFailed();
-          });
-      } else {
-        this._itemService.save(this.item).subscribe(() => {
-          this.doIfSuccess();
-        }, error => {
-          this.doIfFailed();
-          console.log(error);
-        });
+        .do(coverImg => {
+          if (coverImg.url) {
+            this.item.picUrl = `${coverImg.url}`;
+          } else {
+            this.doIfFailed('Hiba a borítókép beállításánál. Kérjük,' +
+              ' próbáld újra');
+          }
+        })
+        .flatMap(() => this._itemService.save(this.item));
+       } else {
+        stream = this._itemService.save(this.item);
       }
-      // this._router.navigate(['/cuccok']);
     }
+    this._subscriptions.push(stream.subscribe((response) => {
+      console.log(response);
+      if (response.error) {
+        this.doIfFailed('Hiba a képek feltöltésénél. Kérjük próbáld újra.');
+      } else {
+        this.doIfSuccess();
+        // this._router.navigate(['/cuccok']);
+      }
+    }, error => {
+      console.warn(error);
+      this.doIfFailed('Hiba az adatok mentésekor. Kérjük, próbáld újra.');
+    }));
   }
 
   private prepareSave(id): FormData {
@@ -210,22 +233,16 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   }
 
   deleteImage(imgUrl) {
-    console.log(imgUrl);
-    console.log(this.uploadedImages);
     const index = this.uploadedImages.indexOf(imgUrl);
-    console.log(index);
     if (index > -1) {
       this.uploadedImages.splice(index, 1);
     }
-    console.log(this.uploadedImages);
-    console.log(this.item.images);
     this.item.images = this.uploadedImages
       .map(img => img.replace(this._root, ''))
       .join();
     this.form.patchValue({
       images: this.item.images
     });
-    console.log(this.item.images);
     const urlToDelete = imgUrl.replace(this._root, '');
     this._fileService.deleteImage(this.item.id, 'items', urlToDelete, this.item.images)
       .subscribe();
@@ -242,8 +259,8 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     this.clearFileFromForm();
   }
 
-  doIfFailed() {
-    this.error = 'Hiba történt az adatok mentése közben. Kérjük, próbáld újra.';
+  doIfFailed(error) {
+    this.error = error;
   }
 
   clearFileFromForm() {
@@ -276,11 +293,13 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
 
   setIndex(imgIndex) {
     this._coverImg = '';
+    this.coverFromSaved = false;
     this._markedImgIndex = imgIndex;
   }
 
   setCoverImage(imgUrl) {
     this._markedImgIndex = -1;
+    this.coverFromSaved = true;
     this._coverImg = imgUrl;
     console.log(imgUrl);
   }

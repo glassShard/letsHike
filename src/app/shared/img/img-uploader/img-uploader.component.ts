@@ -16,6 +16,7 @@ export class ImgUploaderComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
   @Output() formValue = new EventEmitter();
   @Output() index = new EventEmitter();
+  @Input() coverFromSaved: boolean;
 
   constructor(private _imageService: ImageService) { }
 

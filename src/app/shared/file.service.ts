@@ -41,7 +41,7 @@ export class FileService {
           payload.images = urls;
           return this._http.patch(`${environment.firebase.baseUrl}/${whereTo}/${id}.json`, payload);
         } else {
-          return Observable.of(response.error);
+          return Observable.of({'error': response.error});
         }
       });
   }
@@ -60,5 +60,4 @@ export class FileService {
     input.append('id', id);
     return this._http.post<FileModel>(this._setCoverUrl, input);
   }
-
 }
