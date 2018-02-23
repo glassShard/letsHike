@@ -62,6 +62,11 @@ export class ImgUploaderComponent implements OnInit {
     });
   }
 
+  clearForm() {
+    this.fileInput.nativeElement.value = '';
+    this.images = [];
+  }
+
 
 
 

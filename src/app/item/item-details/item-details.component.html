@@ -95,20 +95,15 @@
 
       </div>
 
-      <app-img-uploader class="row"
-                        (formValue)="filesChange($event.images)"
-                        (index)="setIndex($event.imgIndex)"
-                        [coverFromSaved]="coverFromSaved">
+      <app-img [uploadedImages]="uploadedImages"
+               [imagesString]="item.images"
+               [oldCoverImg]="oldCoverImg"
+               [whereTo]="'items'"
+               [id]="item.id"
+               (alert)="setAlert($event)"
+               (formValue)="filesChange($event.images)">
 
-      </app-img-uploader>
-
-      <app-img-preview class="row"
-                        [uploadedImages]="uploadedImages"
-                        (deleteImage)="deleteImage($event.imgUrl)"
-                        (coverImg)="setCoverImage($event.coverImg)"
-                        [oldCoverImg]="oldCoverImg"
-                        [coverFromSaved]="coverFromSaved">
-      </app-img-preview>
+      </app-img>
 
       <alert type="success" dismissOnTimeout="3000"
              *ngIf="success">
@@ -131,10 +126,4 @@
     </form>
 
   </div>
-
 </ng-container>
-<!--<pre>-->
-<!--{{form.value | json}}-->
-  <!--{{form.get('title').errors | json}}, {{form.get('price').errors | json}},-->
-  <!--{{form.get('category').errors | json}}-->
-<!--</pre>-->

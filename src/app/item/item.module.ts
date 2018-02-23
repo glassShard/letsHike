@@ -12,8 +12,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {CoreModule} from '../core/core.module';
 import {ItemCardModule} from '../item-card/item-card.module';
 import {PointReplacerModule} from '../shared/point-replacer.module';
-import {ImgUploaderModule} from '../shared/img/img-uploader/img-uploader.module';
-import {ImgPreviewModule} from "../shared/img/img-preview/img-preview.module";
+import {ImgModule} from '../shared/img/img/img.module';
 
 @NgModule({
   imports: [
@@ -25,8 +24,7 @@ import {ImgPreviewModule} from "../shared/img/img-preview/img-preview.module";
     CoreModule,
     ItemCardModule,
     PointReplacerModule,
-    ImgUploaderModule,
-    ImgPreviewModule
+    ImgModule
   ],
   declarations: [
     ItemComponent,

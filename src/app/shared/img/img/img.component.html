@@ -1,0 +1,14 @@
+<app-img-uploader class="row"
+                  (formValue)="filesChange($event.images)"
+                  (index)="setIndex($event.imgIndex)"
+                  [coverFromSaved]="coverFromSaved">
+
+</app-img-uploader>
+
+<app-img-preview class="row"
+                 [uploadedImages]="uploadedImages"
+                 (deleteImage)="deleteImage($event.imgUrl)"
+                 (coverImg)="setCoverImage($event.coverImg)"
+                 [oldCoverImg]="oldCoverImg"
+                 [coverFromSaved]="coverFromSaved">
+</app-img-preview>

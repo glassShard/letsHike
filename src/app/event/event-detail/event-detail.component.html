@@ -138,6 +138,28 @@
           </div>
         </div>
       </div>
+
+      <app-img [uploadedImages]="uploadedImages"
+               [imagesString]="event.images"
+               [oldCoverImg]="oldCoverImg"
+               [whereTo]="'events'"
+               [id]="event.id"
+               (alert)="setAlert($event)"
+               (formValue)="filesChange($event.images)">
+
+      </app-img>
+
+      <alert type="success" dismissOnTimeout="3000"
+             *ngIf="success">
+        <p>{{success}}</p>
+      </alert>
+
+      <alert type="danger" [dismissible]="true"
+             (onClose)="clearError()"
+             *ngIf="error">
+        <p>{{error}}</p>
+      </alert>
+
       <app-owner-buttons class="row"
                          [currentUser]="currentUser"
                          [model]="event"

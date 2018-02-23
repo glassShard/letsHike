@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {EventService} from '../../shared/event.service';
 import {EventModel} from '../../shared/event-model';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -11,6 +11,7 @@ import {UserModel} from '../../shared/user-model';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
 import {Subscription} from 'rxjs/Subscription';
+import {ImgComponent} from '../../shared/img/img/img.component';
 
 @Component({
   selector: 'app-event-detail',
@@ -18,12 +19,18 @@ import {Subscription} from 'rxjs/Subscription';
   styleUrls: ['./event-detail.component.css']
 })
 export class EventDetailComponent implements OnInit, OnDestroy {
+  @ViewChild(ImgComponent) private _imgComponent: ImgComponent;
   public event: EventModel;
   public eventCategories;
   public eventForm: FormGroup;
   public submitted = false;
   public currentUser: UserModel;
-  private _subscription: Subscription;
+  private _subscriptions: Subscription[] = [];
+  public error: string;
+  public success: string;
+  public oldCoverImg = '';
+  public uploadedImages: any[] = [];
+  private _root = 'http://localhost/turazzunk/';
 
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,
@@ -34,7 +41,9 @@ export class EventDetailComponent implements OnInit, OnDestroy {
               private _fb: FormBuilder) {}
 
   ngOnDestroy() {
-    this._subscription.unsubscribe();
+    this._subscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
   }
 
   ngOnInit() {
@@ -59,11 +68,13 @@ export class EventDetailComponent implements OnInit, OnDestroy {
         ])],
         description: ['', Validators.required],
         category: ['', Validators.required],
-        picUrl: ''
+        picUrl: '',
+        images: '',
+        imagesToUpload: null
       }
     );
 
-    this._subscription = this._userService.isLoggedIn$
+    this._subscriptions.push(this._userService.isLoggedIn$
       .flatMap((isLoggedIn: boolean) => {
         if (isLoggedIn) {
           console.log(isLoggedIn);
@@ -95,13 +106,20 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           }
         } else {
           this.event = event;
+          if (this.event.images) {
+            this.uploadedImages = this.event.images.split(',')
+              .map(imageUrl => `${this._root}${imageUrl}`);
+          }
+          if (this.event.picUrl) {
+            this.oldCoverImg = this.event.picUrl;
+          }
           if (this.event.creatorId === this.currentUser.id) {
             fillForm();
           } else {
             this._router.navigate(['/turak/new']);
           }
         }
-      });
+      }));
 
     const fillForm = () => {
       let date: string = null;
@@ -117,7 +135,8 @@ export class EventDetailComponent implements OnInit, OnDestroy {
         date: date,
         description: this.event.description,
         category: this.event.category,
-        picUrl: this.event.picUrl
+        picUrl: this.event.picUrl,
+        images: this.event.images
       });
     };
 
@@ -125,15 +144,25 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.clearError();
+    delete(this.success);
     this.submitted = true;
     if (this.eventForm.valid) {
       Object.assign(this.event, this.eventForm.value);
       const date = new Date(this.eventForm.get('date').value).getTime() / 1000;
       Object.assign(this.event, {date: date});
       console.log(this.event);
-      this._eventService.save(this.event).subscribe(() => {
-        this._router.navigate(['/turak']);
-      }, error => console.log(error));
+      this._subscriptions.push(this._eventService.save(this.event)
+        .subscribe(
+          (response: EventModel) => {
+            this.event.id = response.id;
+            this._imgComponent.saveImages(this.event.id);
+            // this._router.navigate(['/turak']);
+          },
+          (error => this.error = 'Hiba az adatok mentése közben. Kérjük,' +
+          ' próbáld újra.')
+        )
+      );
     }
   }
   onDelete(eventId) {
@@ -150,6 +179,23 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     this.eventForm.patchValue({
       category: event.currentTarget.getElementsByTagName('p')[0].innerHTML
     });
+  }
+
+  clearError() {
+    delete(this.error);
+  }
+
+  filesChange(images) {
+    this.eventForm.get('imagesToUpload').setValue(images);
+  }
+
+  setAlert(event) {
+    if (event.type === 'success') {
+      this.success = event.value;
+    }
+    if (event.type === 'error') {
+      this.error = event.value;
+    }
   }
 }
 

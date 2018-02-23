@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ItemModel} from '../../shared/item-model';
 import {ItemService} from '../../shared/item.service';
@@ -13,13 +13,15 @@ import {EventModel} from '../../shared/event-model';
 import {FileService} from '../../shared/file.service';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/concat';
+import {ImgComponent} from '../../shared/img/img/img.component';
 
 @Component({
   selector: 'app-item-details',
   templateUrl: './item-details.component.html',
-  styleUrls: ['./item-details.component.css']
+  styleUrls: ['./item-details.component.css'],
 })
 export class ItemDetailsComponent implements OnInit, OnDestroy {
+  @ViewChild(ImgComponent) private _imgComponent: ImgComponent;
   public item: ItemModel;
   public itemCategories;
   public currentUser: UserModel;
@@ -28,9 +30,6 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription[] = [];
   public error: string;
   public success: string;
-  private _markedImgIndex = -1;
-  private _coverImg = '';
-  public coverFromSaved = true; // borítókép kiválasztáshoz toggle változó
   public oldCoverImg = '';
   public uploadedImages: any[] = [];
   private _root = 'http://localhost/turazzunk/';
@@ -102,11 +101,8 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
             this.uploadedImages = this.item.images.split(',')
               .map(imageUrl => `${this._root}${imageUrl}`);
           }
-          if (!this.item.picUrl) {
-            this._markedImgIndex = 0;
-          } else {
+          if (this.item.picUrl) {
             this.oldCoverImg = this.item.picUrl;
-            console.log(this.oldCoverImg);
           }
           if (this.item.creatorId === this.currentUser.id) {
             fillForm();
@@ -137,134 +133,18 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     this.submitted = true;
     if (this.form.valid) {
       Object.assign(this.item, this.form.value);
-      this.saveChanges();
-    }
-  }
-
-  saveChanges() {
-    let stream = Observable.of(null);
-    if (this.form.get('imagesToUpload').value) {
-      const formModel = this.prepareSave(this.item.id);
-      if (Object.values(this.form.get('imagesToUpload').value)
-          .map((curr) => curr['size'])
-          .reduce((acc, curr) => acc + curr) > 32000000) {
-        this.doIfTooBigPost();
-      } else {
-        if (this._coverImg && this.oldCoverImg !== `cover_${this._coverImg}`) {
-          stream = (this._fileService.setCoverImage(
-            this.item.id,
-            'items',
-            this._coverImg.replace(this._root, '')
-          )
-          .do(coverImg => {
-            if (coverImg.url) {
-              this.item.picUrl = `${coverImg.url}`;
-            } else {
-              this.doIfFailed('Hiba a borítókép beállításánál. Kérjük,' +
-                ' próbáld újra');
-            }
-          })
-          .flatMap(() => this._itemService.save(this.item))
-          .flatMap(() => {
-            return this._fileService.uploadImages(
-              this.item.id,
-              formModel,
-              'items',
-              this.item.images
-            );
-          }));
-        } else {
-          stream = (this._itemService.save(this.item)
-            .flatMap(() => {
-              return this._fileService.uploadImages(
-                this.item.id,
-                formModel,
-                'items',
-                this.item.images
-              );
-            })
-          );
-        }
-      }
-    } else {
-      if (this._coverImg && this.oldCoverImg !== `cover_${this._coverImg}`) {
-        stream = this._fileService.setCoverImage(
-          this.item.id,
-          'items',
-          this._coverImg.replace(this._root, '')
+      console.log(this.form.value);
+      this._subscriptions.push(this._itemService.save(this.item)
+        .subscribe(
+          (response: ItemModel) => {
+            this.item.id = response.id;
+            this._imgComponent.saveImages(this.item.id);
+          },
+          (error => this.error = 'Hiba az adatok mentése közben. Kérjük,' +
+            ' próbáld újra.')
         )
-        .do(coverImg => {
-          if (coverImg.url) {
-            this.item.picUrl = `${coverImg.url}`;
-          } else {
-            this.doIfFailed('Hiba a borítókép beállításánál. Kérjük,' +
-              ' próbáld újra');
-          }
-        })
-        .flatMap(() => this._itemService.save(this.item));
-       } else {
-        stream = this._itemService.save(this.item);
-      }
+      );
     }
-    this._subscriptions.push(stream.subscribe((response) => {
-      console.log(response);
-      if (response.error) {
-        this.doIfFailed('Hiba a képek feltöltésénél. Kérjük próbáld újra.');
-      } else {
-        this.doIfSuccess();
-        // this._router.navigate(['/cuccok']);
-      }
-    }, error => {
-      console.warn(error);
-      this.doIfFailed('Hiba az adatok mentésekor. Kérjük, próbáld újra.');
-    }));
-  }
-
-  private prepareSave(id): FormData {
-    const input = new FormData();
-    input.append('id', id);
-    input.append('whereTo', 'items');
-    input.append('markedImageIndex', this._markedImgIndex.toString());
-    console.log(this._markedImgIndex);
-    Object.values(this.form.get('imagesToUpload').value).map(image => {
-      input.append('imagesToUpload[]', image);
-    });
-    return input;
-  }
-
-  deleteImage(imgUrl) {
-    const index = this.uploadedImages.indexOf(imgUrl);
-    if (index > -1) {
-      this.uploadedImages.splice(index, 1);
-    }
-    this.item.images = this.uploadedImages
-      .map(img => img.replace(this._root, ''))
-      .join();
-    this.form.patchValue({
-      images: this.item.images
-    });
-    const urlToDelete = imgUrl.replace(this._root, '');
-    this._fileService.deleteImage(this.item.id, 'items', urlToDelete, this.item.images)
-      .subscribe();
-  }
-
-  doIfTooBigPost() {
-    this.error = 'A feltölteni kívánt fájlok maximális mérete 32MB lehet. A' +
-      ' te képeid összesített mérete ezt meghaladja. Kérjük,' +
-      ' tartsd be a limitet.';
-  }
-
-  doIfSuccess() {
-    this.success = 'Az adatokat mentettük.';
-    this.clearFileFromForm();
-  }
-
-  doIfFailed(error) {
-    this.error = error;
-  }
-
-  clearFileFromForm() {
-    this.form.get('imagesToUpload').setValue(null);
   }
 
   filesChange(images) {
@@ -291,16 +171,12 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     delete(this.error);
   }
 
-  setIndex(imgIndex) {
-    this._coverImg = '';
-    this.coverFromSaved = false;
-    this._markedImgIndex = imgIndex;
-  }
-
-  setCoverImage(imgUrl) {
-    this._markedImgIndex = -1;
-    this.coverFromSaved = true;
-    this._coverImg = imgUrl;
-    console.log(imgUrl);
+  setAlert(event) {
+    if (event.type === 'success') {
+      this.success = event.value;
+    }
+    if (event.type === 'error') {
+      this.error = event.value;
+    }
   }
 }

@@ -58,6 +58,14 @@ export class FileService {
     input.append('url', imgUrl);
     input.append('whereTo', whereTo);
     input.append('id', id);
-    return this._http.post<FileModel>(this._setCoverUrl, input);
+    return this._http.post<FileModel>(this._setCoverUrl, input)
+      .flatMap(response => {
+        console.log(response);
+        if (response.coverImg) {
+          return this._http.patch(`${environment.firebase.baseUrl}/${whereTo}/${id}.json`, {'picUrl': response.coverImg});
+        } else {
+          return Observable.of({'error': response.error});
+        }
+      });
   }
 }

@@ -9,6 +9,7 @@ export class EventModel {
   date: number;
   description: string;
   picUrl: string;
+  images: string;
   category: string;
   creatorId: string;
   creator?: UserModel;

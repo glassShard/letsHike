@@ -11,6 +11,7 @@ import {MomentModule} from 'angular2-moment';
 import 'moment/locale/hu';
 import {ReactiveFormsModule} from '@angular/forms';
 import {AlertModule} from 'ngx-bootstrap';
+import {ImgModule} from "../shared/img/img/img.module";
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import {AlertModule} from 'ngx-bootstrap';
     EventCardModule,
     MomentModule,
     ReactiveFormsModule,
-    AlertModule
+    AlertModule,
+    ImgModule
   ],
   declarations: [
     EventComponent,
