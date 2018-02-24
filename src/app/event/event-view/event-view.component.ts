@@ -8,6 +8,7 @@ import 'rxjs/add/operator/concat';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/share';
 import {Subscription} from 'rxjs/Subscription';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-event-view',
@@ -24,6 +25,7 @@ export class EventViewComponent implements OnInit, OnDestroy {
   public deleteJoinSuccessAlert = false;
   buttonDisabled = false;
   private eventWatcherSubscription: Subscription;
+  public root = environment.links.root;
 
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,

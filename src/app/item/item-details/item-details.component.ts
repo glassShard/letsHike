@@ -14,6 +14,7 @@ import {FileService} from '../../shared/file.service';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/concat';
 import {ImgComponent} from '../../shared/img/img/img.component';
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-item-details',
@@ -32,7 +33,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   public success: string;
   public oldCoverImg = '';
   public uploadedImages: any[] = [];
-  private _root = 'http://localhost/turazzunk/';
+  private _root = environment.links.root;
 
   constructor(private _route: ActivatedRoute,
               private _itemService: ItemService,
@@ -172,6 +173,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   }
 
   setAlert(event) {
+    this.submitted = false;
     if (event.type === 'success') {
       this.success = event.value;
     }

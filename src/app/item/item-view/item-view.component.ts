@@ -4,6 +4,7 @@ import {UserModel} from '../../shared/user-model';
 import {ItemModel} from '../../shared/item-model';
 import {ItemService} from '../../shared/item.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {environment} from '../../../environments/environment';
 
 
 @Component({
@@ -14,6 +15,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class ItemViewComponent implements OnInit {
   public item: ItemModel;
   public currentUser: UserModel;
+  public root = environment.links.root;
 
   constructor(private _route: ActivatedRoute,
               private _itemService: ItemService,

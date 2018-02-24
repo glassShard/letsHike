@@ -155,6 +155,10 @@ footer {
   right: 10px;
 }
 
+.imagesPreviewContainer {
+  background-color: #fbfbfb;
+}
+
 @media (min-width: 576px) {
   .negative-margin {
     margin-left: -15px;

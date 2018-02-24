@@ -160,8 +160,9 @@
         <p>{{error}}</p>
       </alert>
 
-      <app-owner-buttons class="row"
+      <app-owner-buttons class="col-12 text-right mb-3"
                          [currentUser]="currentUser"
+                         [submitted]="submitted"
                          [model]="event"
                          [isOnEdit]="true"
                          (delete)="onDelete($event.idFromButton)"

@@ -15,6 +15,7 @@ export class NavbarComponent implements OnInit {
   public eventCategories;
   private _subscriptions: Subscription[] = [];
   public modalRef: BsModalRef;
+  public isCollapsed = true;
 
   constructor(public userService: UserService,
               private _categoryService: CategoryService,

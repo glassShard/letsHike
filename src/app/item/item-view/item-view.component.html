@@ -5,33 +5,45 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-md-8">
+
+      <div class="col-md-6">
         <h2>Ár: {{item.price | number | pointReplacer}} Ft</h2>
-        <br />
-        <h3>Kategória: {{item.category}}</h3>
-        <h4>Feltöltötte: {{item.creator.nick}}, telefon: {{item.creator
-          .tel}}</h4>
+        <hr />
+        <h3>{{item.category}}</h3>
+        <h4>Feltöltötte: {{item.creator.nick}}</h4>
+        <h4>Tel: {{item.creator.tel}}</h4>
         <h5>Közzétéve: {{item.dateOfPublish | amFromUnix | amDateFormat:
           'LL'}}</h5>
         <br />
-        <h3>Leírás:</h3>
+      </div>
+
+      <div class="col-md-6">
+        <h2>Leírás:</h2>
         <hr/>
         <p>{{item.shortDescription}}</p>
         <p>{{item.description}}</p>
       </div>
-      <div class="col-md-4">
-        <div style="border: 1px solid grey; padding: 15px; width: 100%; height: 100%;">
-          <p>Ide jönnek majd a fényképek</p>
+    </div>
+
+    <div class="row">
+      <app-owner-buttons class="col-12 text-right mb-3"
+                         [currentUser]="currentUser"
+                         [isOnEdit]="false"
+                         [model]="item"
+                         (delete)="onDelete($event.idFromButton)"
+                         (edit)="onEdit($event.idFromButton)">
+      </app-owner-buttons>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="imagesPreviewContainer mt-2" *ngIf="item.images">
+          <img *ngFor="let image of item.images.split(',')"
+               src="{{root}}{{image}}"
+               height="120">
         </div>
       </div>
     </div>
-    <app-owner-buttons class="row"
-                       [currentUser]="currentUser"
-                       [isOnEdit]="false"
-                       [model]="item"
-                       (delete)="onDelete($event.idFromButton)"
-                       (edit)="onEdit($event.idFromButton)"
-    ></app-owner-buttons>
   </div>
 </ng-container>
 

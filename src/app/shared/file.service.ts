@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {FileModel} from './file-model';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/observable/throw';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs/Observable';
 
@@ -30,18 +31,15 @@ export class FileService {
   uploadImages(id: string, form: FormData, whereTo: string, oldImages: string) {
     return this._http.post<FileModel>(this._imagesUrl, form)
       .flatMap(response => {
-        console.log(response);
         const payload: {picUrl?: string, images: string} = {'images': ''};
         if (response.url) {
           if (response.coverImg) {
             payload.picUrl = response.coverImg;
           }
-          const urls = oldImages ? `${oldImages},${response.url.join()}` : response.url.join();
-          console.log(urls);
-          payload.images = urls;
+          payload.images = oldImages ? `${oldImages},${response.url.join()}` : response.url.join();
           return this._http.patch(`${environment.firebase.baseUrl}/${whereTo}/${id}.json`, payload);
         } else {
-          return Observable.of({'error': response.error});
+          return Observable.throw(new Error(response.error));
         }
       });
   }
@@ -60,11 +58,10 @@ export class FileService {
     input.append('id', id);
     return this._http.post<FileModel>(this._setCoverUrl, input)
       .flatMap(response => {
-        console.log(response);
         if (response.coverImg) {
           return this._http.patch(`${environment.firebase.baseUrl}/${whereTo}/${id}.json`, {'picUrl': response.coverImg});
         } else {
-          return Observable.of({'error': response.error});
+          return Observable.throw(new Error(response.error));
         }
       });
   }

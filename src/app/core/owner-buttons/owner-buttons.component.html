@@ -1,4 +1,4 @@
-<div class="col-12 mt-3 text-right"
+<ng-container
      *ngIf="currentUser && (!model.creatorId || model.creatorId === currentUser.id)">
   <alert type="danger"
          class="mt-3 mb-2"
@@ -27,6 +27,7 @@
     <button type="button"
             *ngIf="isOnEdit"
             (click)="onSave()"
+            [disabled]="submitted"
             class="btn btn-primary">
       <i class="icon-database"></i> Mentés
     </button>
@@ -37,4 +38,4 @@
       <i class="icon-trash"></i> Törlés
     </button>
   </div>
-</div>
+</ng-container>

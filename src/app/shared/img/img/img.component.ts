@@ -7,6 +7,7 @@ import {FileService} from '../../file.service';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/do';
 import {ImgUploaderComponent} from '../img-uploader/img-uploader.component';
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-img',
@@ -33,7 +34,7 @@ export class ImgComponent implements OnInit {
     ' tartsd be a limitet.';
   public errorCoverImg = 'Hiba a borítókép beállításánál. Kérjük,' +
     ' próbáld újra';
-  private _root = 'http://localhost/turazzunk/';
+  private _root = environment.links.root;
 
   constructor(private _fileService: FileService) { }
 
@@ -64,11 +65,11 @@ export class ImgComponent implements OnInit {
             id,
             this.whereTo,
             this._coverImg.replace(this._root, ''))
-            .do(response  => {
-              if (response['error']) {
-                this.doIfFailed(this.errorCoverImg);
-              }
-            })
+            // .do(response  => {
+            //   if (response['error']) {
+            //     this.doIfFailed(this.errorCoverImg);
+            //   }
+            // })
             .flatMap(() => {
               return this._fileService.uploadImages(
                 id,
@@ -91,17 +92,16 @@ export class ImgComponent implements OnInit {
         this._stream = this._fileService.setCoverImage(
           id,
           this.whereTo,
-          this._coverImg.replace(this._root, ''))
-          .do(response  => {
-            if (response['error']) {
-              this.doIfFailed(this.errorCoverImg);
-            }
-          });
+          this._coverImg.replace(this._root, ''));
+          // .do(response => {
+          //   if (response['error']) {
+          //     this.doIfFailed(this.errorCoverImg);
+          //   }
+          // });
       }
     }
     if (this._stream) {
       this._stream.subscribe((response) => {
-        console.log(response);
         if (response['error']) {
           this.doIfFailed('Hiba a képek feltöltésénél. Kérjük próbáld újra.');
         } else {
@@ -112,6 +112,8 @@ export class ImgComponent implements OnInit {
         console.warn(error);
         this.doIfFailed('Hiba az adatok mentésekor. Kérjük, próbáld újra.');
       });
+    } else {
+      this.doIfSuccess();
     }
   }
 
@@ -167,7 +169,7 @@ export class ImgComponent implements OnInit {
     //   images: this.item.images
     // });
     const urlToDelete = imgUrl.replace(this._root, '');
-    this._fileService.deleteImage(this.id, 'items', urlToDelete, this.imagesString)
+    this._fileService.deleteImage(this.id, this.whereTo, urlToDelete, this.imagesString)
       .subscribe();
   }
 }

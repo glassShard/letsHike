@@ -12,6 +12,7 @@ export class OwnerButtonsComponent implements OnInit {
   @Input() currentUser: UserModel;
   @Input() model: EventModel | ItemModel;
   @Input() isOnEdit: boolean;
+  @Input() submitted: boolean;
   @Output() delete = new EventEmitter();
   @Output() edit = new EventEmitter();
   @Output() save = new EventEmitter();

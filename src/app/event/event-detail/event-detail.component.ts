@@ -12,6 +12,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
 import {Subscription} from 'rxjs/Subscription';
 import {ImgComponent} from '../../shared/img/img/img.component';
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-event-detail',
@@ -30,7 +31,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   public success: string;
   public oldCoverImg = '';
   public uploadedImages: any[] = [];
-  private _root = 'http://localhost/turazzunk/';
+  private _root = environment.links.root;
 
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,
@@ -190,6 +191,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   }
 
   setAlert(event) {
+    this.submitted = false;
     if (event.type === 'success') {
       this.success = event.value;
     }
