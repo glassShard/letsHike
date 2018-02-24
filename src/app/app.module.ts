@@ -39,7 +39,7 @@ import {ImageService} from './shared/image.service';
     AppRoutingModule,
     HttpClientModule,
     MomentModule,
-    CoreModule
+    CoreModule,
   ],
   providers: [
     EventService,
@@ -48,7 +48,7 @@ import {ImageService} from './shared/image.service';
     CategoryService,
     LoggedInGuard,
     FileService,
-    ImageService
+    ImageService,
   ],
   entryComponents: [
     LoginModalComponent

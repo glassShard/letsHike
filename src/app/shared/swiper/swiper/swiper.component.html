@@ -1,0 +1,13 @@
+<swiper [config]="swiperConfig">
+  <div class="swiperImg"
+       *ngFor="let image of swiperImages"
+       [style.background-image]="image">
+    <img
+       src="" style="width: 100%">
+  </div>
+</swiper>
+
+<div class="closeBtn"
+     (click)="hideSwiper()">
+  <i class="icon-cancel-circled-outline"></i>
+</div>

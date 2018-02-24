@@ -159,6 +159,35 @@ footer {
   background-color: #fbfbfb;
 }
 
+.fixedSwiper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.swiperImg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0,0,0,0.85);
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.closeBtn {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  font-size: 50px;
+  color: white;
+  z-index: 10;
+  text-shadow: 0 0 20px black;
+  cursor: pointer;
+}
+
 @media (min-width: 576px) {
   .negative-margin {
     margin-left: -15px;

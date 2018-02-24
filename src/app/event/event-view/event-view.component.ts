@@ -24,8 +24,10 @@ export class EventViewComponent implements OnInit, OnDestroy {
   public dangerAlert = false;
   public deleteJoinSuccessAlert = false;
   buttonDisabled = false;
-  private eventWatcherSubscription: Subscription;
   public root = environment.links.root;
+  private eventWatcherSubscription: Subscription;
+  public swiperIndex = 0;
+  public showImageSwiper: boolean;
 
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,
@@ -54,30 +56,6 @@ export class EventViewComponent implements OnInit, OnDestroy {
     this.eventWatcherSubscription.unsubscribe();
   }
 
-  private loadEvent(itId: string) {
-    const handle404 = () => {
-      this._router.navigate(['404']);
-    };
-
-    this.event$ = this._eventService.getEventById(itId).share();
-    this.eventWatcherSubscription = this.event$.subscribe(ev => {
-      this.buttonDisabled = false;
-      if (ev === null) {
-        handle404();
-      } else {
-        if (this.currentUser && ev.guestsIds) {
-          this.isGuest = ev.guestsIds.filter(id => id === this.currentUser.id).length > 0;
-        }
-        if (!ev.guestsIds) {
-          this.isGuest = false;
-        }
-
-      }
-    }, () => {
-      handle404();
-    });
-  }
-
   onJoin(userId: string, eventId: string) {
     this.buttonDisabled = true;
     this.joinSuccessAlert = false;
@@ -85,7 +63,7 @@ export class EventViewComponent implements OnInit, OnDestroy {
     this._eventService.join(userId, eventId).subscribe(() => {
       this.joinSuccessAlert = true;
       console.log(this.joinSuccessAlert);
- //     this.loadEvent(eventId);
+      //     this.loadEvent(eventId);
     }, () => {
       this.dangerAlert = true;
     });
@@ -116,6 +94,35 @@ export class EventViewComponent implements OnInit, OnDestroy {
 
   onEdit(eventId) {
     this._router.navigate(['/turak', eventId]);
+  }
+
+  private loadEvent(itId: string) {
+    const handle404 = () => {
+      this._router.navigate(['404']);
+    };
+
+    this.event$ = this._eventService.getEventById(itId).share();
+    this.eventWatcherSubscription = this.event$.subscribe(ev => {
+      this.buttonDisabled = false;
+      if (ev === null) {
+        handle404();
+      } else {
+        if (this.currentUser && ev.guestsIds) {
+          this.isGuest = ev.guestsIds.filter(id => id === this.currentUser.id).length > 0;
+        }
+        if (!ev.guestsIds) {
+          this.isGuest = false;
+        }
+
+      }
+    }, () => {
+      handle404();
+    });
+  }
+
+  clicked(index) {
+    this.swiperIndex = index;
+    this.showImageSwiper = true;
   }
 }
 

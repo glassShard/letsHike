@@ -23,7 +23,7 @@ import {LoginModalComponent} from './login-modal/login-modal.component';
     LoadingSpinnerComponent,
     OwnerButtonsComponent,
     FilterAndNewBarComponent,
-    LoginModalComponent
+    LoginModalComponent,
   ],
   exports: [
     NavbarComponent,

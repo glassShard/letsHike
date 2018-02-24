@@ -11,7 +11,8 @@ import {MomentModule} from 'angular2-moment';
 import 'moment/locale/hu';
 import {ReactiveFormsModule} from '@angular/forms';
 import {AlertModule} from 'ngx-bootstrap';
-import {ImgModule} from "../shared/img/img/img.module";
+import {ImgModule} from '../shared/img/img/img.module';
+import {ImageSwiperModule} from '../shared/swiper/image-swiper.module';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import {ImgModule} from "../shared/img/img/img.module";
     MomentModule,
     ReactiveFormsModule,
     AlertModule,
-    ImgModule
+    ImgModule,
+    ImageSwiperModule
   ],
   declarations: [
     EventComponent,
