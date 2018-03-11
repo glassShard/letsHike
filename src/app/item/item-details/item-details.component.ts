@@ -83,9 +83,10 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
           this.currentUser = user;
           const itId = this._route.snapshot.params['id'];
           if (itId) {
-            return this._itemService.getItemById(itId);
+            return this._itemService.getItemById(itId)
+              .do(res => console.log(res));
           } else {
-            return Observable.of(new EventModel());
+            return Observable.of(new ItemModel());
           }
         }
       }).subscribe((item: ItemModel) => {
@@ -111,7 +112,8 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
             this._router.navigate(['/cuccok/new']);
           }
         }
-      }));
+      })
+    );
 
     const fillForm = () => {
       this.form.patchValue({
