@@ -65,11 +65,6 @@ export class ImgComponent implements OnInit {
             id,
             this.whereTo,
             this._coverImg.replace(this._root, ''))
-            // .do(response  => {
-            //   if (response['error']) {
-            //     this.doIfFailed(this.errorCoverImg);
-            //   }
-            // })
             .flatMap(() => {
               return this._fileService.uploadImages(
                 id,
@@ -93,11 +88,6 @@ export class ImgComponent implements OnInit {
           id,
           this.whereTo,
           this._coverImg.replace(this._root, ''));
-          // .do(response => {
-          //   if (response['error']) {
-          //     this.doIfFailed(this.errorCoverImg);
-          //   }
-          // });
       }
     }
     if (this._stream) {

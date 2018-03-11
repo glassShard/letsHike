@@ -16,7 +16,6 @@ export class EventCardComponent implements OnInit {
 
   ngOnInit() {
     this.dafaultPic = this.categories.filter(cat => cat.category === this.tura.category)[0].picUrl;
-    console.log(this.categories.filter(cat => cat.category === this.tura.category)[0].picUrl);
   }
 
   onViewClick() {

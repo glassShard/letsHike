@@ -168,7 +168,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
 
   saveChanges() {
     if (this.avatar) {
-      this._subscriptions.push(this._userService.modify(this.currentUser)
+      this._subscriptions.push(this._userService.save(this.currentUser)
         .flatMap(() => {
           const formModel = this.prepareSave(this.currentUser.id);
           return this._fileService.uploadAvatar(this.currentUser.id, formModel);
@@ -178,7 +178,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
           this.doIfFailed(err);
         }));
     } else {
-      this._subscriptions.push(this._userService.modify(this.currentUser)
+      this._subscriptions.push(this._userService.save(this.currentUser)
         .subscribe(() => {
           this.doIfSuccess();
         }, err => {

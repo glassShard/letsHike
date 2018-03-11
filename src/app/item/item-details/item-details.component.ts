@@ -14,7 +14,7 @@ import {FileService} from '../../shared/file.service';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/concat';
 import {ImgComponent} from '../../shared/img/img/img.component';
-import {environment} from "../../../environments/environment";
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-item-details',
@@ -129,6 +129,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    let setButtonSubscription = new Subscription();
     this.clearError();
     delete(this.success);
     this.submitted = true;
@@ -145,6 +146,9 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
             ' próbáld újra.')
         )
       );
+    } else {
+      setButtonSubscription = this.form.statusChanges
+        .subscribe(res => this.submitted = (res !== 'VALID'));
     }
   }
 

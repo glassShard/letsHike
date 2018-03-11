@@ -12,7 +12,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
 import {Subscription} from 'rxjs/Subscription';
 import {ImgComponent} from '../../shared/img/img/img.component';
-import {environment} from "../../../environments/environment";
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-event-detail',
@@ -145,10 +145,12 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    let setButtonSubscription = new Subscription();
     this.clearError();
     delete(this.success);
     this.submitted = true;
     if (this.eventForm.valid) {
+      setButtonSubscription.unsubscribe();
       Object.assign(this.event, this.eventForm.value);
       const date = new Date(this.eventForm.get('date').value).getTime() / 1000;
       Object.assign(this.event, {date: date});
@@ -156,6 +158,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       this._subscriptions.push(this._eventService.save(this.event)
         .subscribe(
           (response: EventModel) => {
+            console.log(response);
             this.event.id = response.id;
             this._imgComponent.saveImages(this.event.id);
             // this._router.navigate(['/turak']);
@@ -164,8 +167,12 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           ' próbáld újra.')
         )
       );
+    } else {
+      setButtonSubscription = this.eventForm.statusChanges
+        .subscribe(res => this.submitted = (res !== 'VALID'));
     }
   }
+
   onDelete(eventId) {
     this._eventService.delete(eventId)
       .subscribe(

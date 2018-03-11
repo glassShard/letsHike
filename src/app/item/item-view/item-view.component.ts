@@ -29,12 +29,6 @@ export class ItemViewComponent implements OnInit {
         this.currentUser = null;
       }
     });
-
-    if (this._userService.isLoggedIn$) {
-      this._userService.getCurrentUser().subscribe(user => {
-        this.currentUser = user;
-      });
-    }
   }
 
   ngOnInit() {

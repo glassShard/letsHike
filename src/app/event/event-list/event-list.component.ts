@@ -41,6 +41,15 @@ export class EventListComponent implements OnInit {
     });
 
     this.eventsGrouppedBy2$ = this._eventService.getAllEvents()
+      .flatMap(rawEvent => {
+        return Observable.of(
+          rawEvent.sort((a, b) => {
+            const dateA = a.date;
+            const dateB = b.date;
+            return (dateA < dateB) ? -1 : (dateA > dateB) ? 1 : 0;
+          })
+        );
+      })
       .switchMap(events => {
         return this.category$
           .map(cat => {

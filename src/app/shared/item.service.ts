@@ -1,26 +1,26 @@
 import {Injectable} from '@angular/core';
 import {ItemModel} from './item-model';
 import {UserService} from './user.service';
-import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs/Observable';
-import {HttpClient} from '@angular/common/http';
 import {UserModel} from './user-model';
 import 'rxjs/add/observable/zip';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/combineLatest';
+import {AngularFireDatabase} from 'angularfire2/database';
 
 @Injectable()
 export class ItemService {
 
   constructor(private _userService: UserService,
-              private _http: HttpClient) {
+               private _afDb: AngularFireDatabase) {
   }
 
   getAllItems(): Observable<ItemModel[]> {
-    return this._http.get(`${environment.firebase.baseUrl}/items.json`)
-      .map(data => Object.values(data))
+    return this._afDb.list(`items`)
+  //    .map(items => items.map(item => new ItemModel(item)))
+  //    .map(data => Object.values(data))
       .map(itm => itm.map(im =>
         Observable.zip(
           Observable.of(im),
@@ -36,40 +36,40 @@ export class ItemService {
   }
 
   getItemById(id: string): Observable<ItemModel> {
-    return this._http
-      .get<ItemModel>(`${environment.firebase.baseUrl}/items/${id}.json`)
-      .flatMap(
-        item => Observable.combineLatest(
-          Observable.of(new ItemModel(item)),
-          this._userService.getUserById(item.creatorId),
-          (i: ItemModel, u: UserModel) => {
-            return {
-              ...i,
-              creator: u
-            };
-          }
-        )
-      );
+    return this._afDb.object(`items/${id}`)
+      .flatMap(item => {
+        if (item) {
+          return Observable.combineLatest(
+            Observable.of(new ItemModel(item)),
+            this._userService.getUserById(item.creatorId),
+            (i: ItemModel, u: UserModel) => {
+              return {
+                ...i,
+                creator: u
+              };
+            }
+          );
+        }
+      });
   }
 
   save(item: ItemModel) {
     item.creatorId = this._userService.currentUserId;
     delete item.creator;
     if (item.id) { // udpate ag
-      return this._http.put(`${environment.firebase.baseUrl}/items/${item.id}.json`, item);
+      return Observable.fromPromise(this._afDb.object(`/items/${item.id}`).update(item))
+        .flatMap(() => Observable.of(item))
+        .do(res => console.log(res));
     } else { // create ag
       Object.assign(item, {dateOfPublish: Math.floor(Date.now() / 1000)});
-      return this._http.post(`${environment.firebase.baseUrl}/items.json`, item)
-        .map((fbPostReturn: { name: string }) => fbPostReturn.name)
-        .do(fbid => console.log(fbid))
-        .switchMap(fbId => this._http.patch(
-          `${environment.firebase.baseUrl}/items/${fbId}.json`,
-          {id: fbId}
-        ));
-    }
+      return Observable.fromPromise(this._afDb.list('items').push(item))
+        .map(res => res.key)
+        .do(key => this._afDb.object(`items/${key}`).update({id: key}))
+        .flatMap((key) => this._afDb.object(`items/${key}`));
+     }
   }
 
   delete(itemId: string) {
-    return this._http.delete(`${environment.firebase.baseUrl}/items/${itemId}.json`);
+    return Observable.fromPromise(this._afDb.object(`/items/${itemId}`).set(null));
   }
 }

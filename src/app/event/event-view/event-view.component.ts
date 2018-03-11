@@ -113,7 +113,6 @@ export class EventViewComponent implements OnInit, OnDestroy {
         if (!ev.guestsIds) {
           this.isGuest = false;
         }
-
       }
     }, () => {
       handle404();

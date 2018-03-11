@@ -43,6 +43,15 @@ export class ItemListComponent implements OnInit {
     });
 
     this.itemsGrouppedBy2$ = this._itemService.getAllItems()
+      .flatMap(rawItems => {
+        return Observable.of(
+          rawItems.sort((a, b) => {
+            const dateA = a.dateOfPublish;
+            const dateB = b.dateOfPublish;
+            return (dateA > dateB) ? -1 : (dateA < dateB) ? 1 : 0;
+          })
+        );
+      })
       .switchMap(items => {
         return this.category$
           .map(cat => {

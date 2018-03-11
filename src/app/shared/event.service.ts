@@ -49,7 +49,6 @@ export class EventService {
   }
 
   getEventById(id: string): Observable<EventModel> {
-
     return new Observable(
       observer => {
         const dbEvent = firebase.database().ref(`events/${id}`);
@@ -95,43 +94,6 @@ export class EventService {
         });
       }
     );
-
-
-
-    // return this._http
-    //   .get<EventModel>(`${environment.firebase.baseUrl}/events/${id}.json`)
-    //   .flatMap(
-    //     event => {
-    //       if (event.guestsIds) {
-    //         event.guestsIds = Object.keys(event.guestsIds);
-    //         return Observable.combineLatest(
-    //           Observable.of(new EventModel(event)),
-    //           this._userService.getUserById(event.creatorId),
-    //           Observable.forkJoin(
-    //             event.guestsIds.map(user => this._userService.getUserById(user))
-    //           ),
-    //           (e: EventModel, u: UserModel, g: UserModel[]) => {
-    //             return {
-    //               ...e,
-    //               creator: u,
-    //               guests: g
-    //             };
-    //           }
-    //         );
-    //       } else {
-    //         return Observable.combineLatest(
-    //           Observable.of(new EventModel(event)),
-    //           this._userService.getUserById(event.creatorId),
-    //           (e: EventModel, u: UserModel) => {
-    //             return {
-    //               ...e,
-    //               creator: u
-    //             };
-    //           }
-    //         );
-    //       }
-    //     }
-    //   );
   }
 
   deleteJoin(user: string, event: string) {

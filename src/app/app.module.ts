@@ -21,6 +21,9 @@ import {CoreModule} from './core/core.module';
 import {FileService} from './shared/file.service';
 import {LoginModalComponent} from './core/login-modal/login-modal.component';
 import {ImageService} from './shared/image.service';
+import {AngularFireModule} from 'angularfire2';
+import {AngularFireDatabaseModule} from 'angularfire2/database';
+import {AngularFireAuthModule} from "angularfire2/auth";
 
 @NgModule({
   declarations: [
@@ -40,6 +43,9 @@ import {ImageService} from './shared/image.service';
     HttpClientModule,
     MomentModule,
     CoreModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
   providers: [
     EventService,

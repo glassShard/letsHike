@@ -19,35 +19,11 @@
         <div class="btn-group">
           <a class="nav-link" routerLink="/cuccok"
              routerLinkActive="active">Cuccok</a>
-          <span dropdown>
-            <a href dropdownToggle (click)="false" routerLinkActive="active"
-               class="nav-link dropdown-toggle dropdown-toggle-split"
-               data-toggle="dropdown" aria-haspopup="true"
-               aria-expanded="false">
-              <span class="sr-only">Toggle Dropdown</span>
-            </a>
-            <span *dropdownMenu class="dropdown-menu">
-              <a *ngFor="let item of itemCategories" class="dropdown-item"
-                 href="#">{{item.category}}</a>
-            </span>
-          </span>
         </div>
       </li>
       <li class="nav-item">
         <div class="btn-group">
           <a class="nav-link" routerLink="/turak" routerLinkActive="active">Túrák</a>
-          <span dropdown>
-            <a href dropdownToggle (click)="false" routerLinkActive="active"
-               class="nav-link dropdown-toggle dropdown-toggle-split"
-               data-toggle="dropdown" aria-haspopup="true"
-               aria-expanded="false">
-              <span class="sr-only">Toggle Dropdown</span>
-            </a>
-            <span *dropdownMenu class="dropdown-menu">
-              <a *ngFor="let event of eventCategories" class="dropdown-item"
-                 href="#">{{event.category}}</a>
-            </span>
-          </span>
         </div>
       </li>
       <li class="nav-item">
