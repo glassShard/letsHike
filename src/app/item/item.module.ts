@@ -13,6 +13,7 @@ import {CoreModule} from '../core/core.module';
 import {ItemCardModule} from '../item-card/item-card.module';
 import {PointReplacerModule} from '../shared/point-replacer.module';
 import {ImgModule} from '../shared/img/img/img.module';
+import {ImageSwiperModule} from '../shared/swiper/image-swiper.module';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import {ImgModule} from '../shared/img/img/img.module';
     CoreModule,
     ItemCardModule,
     PointReplacerModule,
-    ImgModule
+    ImgModule,
+    ImageSwiperModule
   ],
   declarations: [
     ItemComponent,

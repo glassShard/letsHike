@@ -88,6 +88,8 @@
         <div class="imagesPreviewContainer mt-2" *ngIf="event.images">
           <img *ngFor="let image of event.images.split(','); let i = index"
                src="{{root}}{{image}}"
+               title="{{event.title}}"
+               alt="{{event.title}}"
                (click)="clicked(i)"
                height="120">
         </div>

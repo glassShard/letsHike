@@ -44,9 +44,9 @@ export class EventViewComponent implements OnInit, OnDestroy {
       }).subscribe(user => this.currentUser = user)
     );
 
-    const itId = this._route.snapshot.params['id'];
-    if (itId) {
-      this.loadEvent(itId);
+    const evId = this._route.snapshot.params['id'];
+    if (evId) {
+      this.loadEvent(evId);
     } else {
       this.event$ = Observable.of(new EventModel());
     }
@@ -100,11 +100,11 @@ export class EventViewComponent implements OnInit, OnDestroy {
     this.showImageSwiper = true;
   }
 
-  private loadEvent(itId: string) {
+  private loadEvent(evId: string) {
     const handle404 = () => {
       this._router.navigate(['404']);
     };
-    this.event$ = this._eventService.getEventById(itId);
+    this.event$ = this._eventService.getEventById(evId);
     this._subscriptions.push(this.event$.subscribe(ev => {
       this.buttonDisabled = false;
       if (ev === null) {

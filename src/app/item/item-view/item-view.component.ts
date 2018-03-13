@@ -18,6 +18,8 @@ export class ItemViewComponent implements OnInit, OnDestroy {
   public item: ItemModel;
   public currentUser: UserModel;
   public root = environment.links.root;
+  public swiperIndex = 0;
+  public showImageSwiper: boolean;
   private _subscriptions: Subscription[] = [];
 
   constructor(private _route: ActivatedRoute,
@@ -64,5 +66,10 @@ export class ItemViewComponent implements OnInit, OnDestroy {
 
   onEdit(itemId) {
     this._router.navigate(['/cuccok', itemId]);
+  }
+
+  clicked(index) {
+    this.swiperIndex = index;
+    this.showImageSwiper = true;
   }
 }

@@ -159,6 +159,10 @@ footer {
   background-color: #fbfbfb;
 }
 
+.imagesPreviewContainer img {
+  cursor: pointer;
+}
+
 .fixedSwiper {
   position: fixed;
   top: 0;
