@@ -6,6 +6,7 @@ import {ItemService} from '../../shared/item.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {environment} from '../../../environments/environment';
 import {Subscription} from 'rxjs/Subscription';
+import {Observable} from 'rxjs/Observable';
 
 
 @Component({
@@ -17,33 +18,38 @@ export class ItemViewComponent implements OnInit, OnDestroy {
   public item: ItemModel;
   public currentUser: UserModel;
   public root = environment.links.root;
-  private _subscription = new Subscription();
+  private _subscriptions: Subscription[] = [];
 
   constructor(private _route: ActivatedRoute,
               private _itemService: ItemService,
               private _router: Router,
-              private _userService: UserService) {
-    _userService.isLoggedIn$.subscribe(isLoggedIn => {
-      if (isLoggedIn) {
-        this._userService.getCurrentUser()
-          .subscribe(user => this.currentUser = user);
-      } else {
-        this.currentUser = null;
-      }
-    });
-  }
+              private _userService: UserService) {}
 
   ngOnInit() {
+    this._subscriptions.push(this._userService.isLoggedIn$
+      .flatMap(isLoggedIn => {
+        if (isLoggedIn) {
+          return this._userService.getCurrentUser();
+        } else {
+          return Observable.of(null);
+        }
+      }).subscribe(user => {
+        this.currentUser = user;
+      })
+    );
+
     const itId = this._route.snapshot.params['id'];
     if (itId) {
-      this._subscription = this._itemService.getItemById(itId).subscribe(it => this.item = it);
+      this._subscriptions.push(this._itemService.getItemById(itId).subscribe(it => this.item = it));
     } else {
       this.item = new ItemModel();
     }
   }
 
   ngOnDestroy() {
-    this._subscription.unsubscribe();
+    this._subscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
   }
 
   onDelete(itemId) {

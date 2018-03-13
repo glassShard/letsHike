@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ItemModel} from '../../shared/item-model';
 import {ItemService} from '../../shared/item.service';
 import {CategoryService} from '../../shared/category.service';
@@ -10,13 +10,14 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/switchMap';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-item-list',
   templateUrl: './item-list.component.html',
   styleUrls: ['./item-list.component.css'],
 })
-export class ItemListComponent implements OnInit {
+export class ItemListComponent implements OnInit, OnDestroy {
 
   public itemsGrouppedBy2$: Observable<ItemModel[]>;
   public itemCategories;
@@ -25,22 +26,28 @@ export class ItemListComponent implements OnInit {
   public title = 'Cuccok';
   private stringFromSearch$ = new BehaviorSubject(null);
   private category$ = new BehaviorSubject(null);
+  private _subscriptions: Subscription[] = [];
 
   constructor(private _itemService: ItemService,
               private _categoryService: CategoryService,
-              private _userService: UserService) {
+              private _userService: UserService) {}
+
+  ngOnDestroy() {
+    this._subscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
   }
 
   ngOnInit() {
     this.itemCategories = this._categoryService.getItemCategories();
 
-    this._userService.isLoggedIn$.subscribe(isLoggedIn => {
+    this._subscriptions.push(this._userService.isLoggedIn$.subscribe(isLoggedIn => {
       if (isLoggedIn) {
         this.currentUserId = this._userService.currentUserId;
       } else {
         this.currentUserId = null;
       }
-    });
+    }));
 
     this.itemsGrouppedBy2$ = this._itemService.getAllItems()
       .flatMap(rawItems => {

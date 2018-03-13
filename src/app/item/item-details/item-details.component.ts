@@ -9,7 +9,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {priceValidator} from './item.validators';
 import {Subscription} from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
-import {EventModel} from '../../shared/event-model';
 import {FileService} from '../../shared/file.service';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/concat';
@@ -50,7 +49,6 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.form = this._fb.group(
       {
         title: ['', Validators.required],
@@ -70,7 +68,6 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     this._subscriptions.push(this._userService.isLoggedIn$
       .flatMap((isLoggedIn: boolean) => {
         if (isLoggedIn) {
-          console.log(isLoggedIn);
           return this._userService.getCurrentUser();
         } else {
           return Observable.of(null);
@@ -90,7 +87,6 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
           }
         }
       }).subscribe((item: ItemModel) => {
-        console.log(item);
         if (item === null) {
           if (this.currentUser.id) {
             this._router.navigate(['404']);
@@ -102,6 +98,8 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
           if (this.item.images) {
             this.uploadedImages = this.item.images.split(',')
               .map(imageUrl => `${this._root}${imageUrl}`);
+          } else {
+            this.item.images = '';
           }
           if (this.item.picUrl) {
             this.oldCoverImg = this.item.picUrl;
@@ -136,6 +134,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     delete(this.success);
     this.submitted = true;
     if (this.form.valid) {
+      console.log(this.item.images === undefined);
       Object.assign(this.item, this.form.value);
       console.log(this.form.value);
       this._subscriptions.push(this._itemService.save(this.item)

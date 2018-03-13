@@ -16,10 +16,9 @@ import UserInfo = firebase.UserInfo;
 @Injectable()
 export class UserService {
   isLoggedIn$ = new ReplaySubject<boolean>(1);
-
+  public currentUserId: string;
   private _user$ = new ReplaySubject<UserModel>(1);
   private _fbAuthData: any;
-  public currentUserId: string;
 
   constructor(private _router: Router,
               private _afAuth: AngularFireAuth,
@@ -82,7 +81,6 @@ export class UserService {
 
   changeEmail(email) {
     return Observable.fromPromise(this._afAuth.auth.currentUser.updateEmail(email));
-    // return Observable.fromPromise(firebase.auth().currentUser.updateEmail(email));
   }
 
   reAuth(password) {
