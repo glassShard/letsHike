@@ -6,9 +6,6 @@ import {Observable} from 'rxjs/Observable';
 import {UserService} from '../../shared/user.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/switchMap';
 import {Subscription} from 'rxjs/Subscription';
 
 @Component({

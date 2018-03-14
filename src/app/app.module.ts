@@ -8,7 +8,7 @@ import {ButtonsModule} from 'ngx-bootstrap/buttons';
 import {EventService} from './shared/event.service';
 import {ItemService} from './shared/item.service';
 import {UserService} from './shared/user.service';
-import {AlertModule, ModalModule} from 'ngx-bootstrap';
+import {AccordionModule, AlertModule, ModalModule} from 'ngx-bootstrap';
 import {LoggedInGuard} from './shared/logged-in.guard';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CategoryService} from './shared/category.service';
@@ -23,7 +23,7 @@ import {LoginModalComponent} from './core/login-modal/login-modal.component';
 import {ImageService} from './shared/image.service';
 import {AngularFireModule} from 'angularfire2';
 import {AngularFireDatabaseModule} from 'angularfire2/database';
-import {AngularFireAuthModule} from "angularfire2/auth";
+import {AngularFireAuthModule} from 'angularfire2/auth';
 
 @NgModule({
   declarations: [
@@ -36,6 +36,7 @@ import {AngularFireAuthModule} from "angularfire2/auth";
     CollapseModule.forRoot(),
     AlertModule.forRoot(),
     ModalModule.forRoot(),
+    AccordionModule.forRoot(),
     ReactiveFormsModule,
     BrowserModule,
     FormsModule,
