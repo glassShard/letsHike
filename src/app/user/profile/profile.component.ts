@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Renderer2} from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {UserModel} from '../../shared/user-model';
 import 'rxjs/add/operator/filter';
@@ -26,11 +26,15 @@ export class ProfileComponent implements OnInit {
   public itemCategories;
   private allEvents: Observable<EventModel[]>;
   public currentUserId: string;
+  public isCollapsed1 = true;
+  public isCollapsed2 = true;
+  public isCollapsed3 = true;
 
   constructor(private _userService: UserService,
               private _eventService: EventService,
               private _itemService: ItemService,
-              private _categoryService: CategoryService) {}
+              private _categoryService: CategoryService,
+              private _renderer: Renderer2) {}
 
 
   ngOnInit() {
@@ -103,6 +107,10 @@ export class ProfileComponent implements OnInit {
     this.eventCategories = this._categoryService.getEventCategories();
     this.itemCategories = this._categoryService.getItemCategories();
 
+  }
+
+  setHeight(el, height) {
+    this._renderer.setStyle(el, 'height', height + 'px');
   }
 }
 

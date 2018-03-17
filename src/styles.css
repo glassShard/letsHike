@@ -89,6 +89,10 @@ footer {
   background-color: rgb(230, 252, 192);
 }
 
+.acc-content .card-deck-container {
+  margin-bottom: 20px;
+}
+
 .profile-header {
   width: 100%;
   height: 200px;
@@ -121,6 +125,11 @@ footer {
   text-align: center;
 }
 
+.card-header h4 {
+  font-size: 22px;
+  font-weight: 400;
+}
+
 .invalid-category {
   border-color: #dc3545;
 }
@@ -144,7 +153,6 @@ footer {
 }
 
 .imgContainer img {
-
   height: 100%;
   width: auto;
 }
@@ -173,7 +181,7 @@ footer {
   cursor: pointer;
 }
 
-.cat-coll {
+.coll {
   display: block !important;
   overflow: hidden !important;
   -webkit-transition: height 600ms cubic-bezier(0.53, 0, 0.53, 1);

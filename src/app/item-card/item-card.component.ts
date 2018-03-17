@@ -4,6 +4,7 @@ import {
   OnInit, SimpleChanges
 } from '@angular/core';
 import {ItemModel} from '../shared/item-model';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-item-card',
@@ -15,6 +16,7 @@ export class ItemCardComponent implements OnInit {
   public defaultPic: string;
   @Input() cucc: ItemModel;
   @Input() currentUserId: string;
+
   constructor() { }
 
   ngOnInit() {

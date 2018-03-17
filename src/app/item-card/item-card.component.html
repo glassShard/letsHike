@@ -12,11 +12,11 @@
   <p class="card-text">{{cucc.shortDescription}}</p>
   <p><small>Közzétéve: {{cucc.dateOfPublish | amFromUnix |
     amDateFormat: 'LL'}}</small></p>
-  <a [routerLink]="['./view', cucc.id]"
+  <a [routerLink]="['../cuccok/view', cucc.id]"
      class="btn btn-lg btn-primary mt-1">
     Részletek</a>
     <a *ngIf="currentUserId && cucc.creatorId === currentUserId"
-       [routerLink]="['./', cucc.id]"
+       [routerLink]="['../cuccok/', cucc.id]"
        class="btn btn-lg btn-success mt-1"
        title="Módosít..."><i class="icon-pencil"></i></a>
 </div>

@@ -12,6 +12,7 @@ export const environment = {
     messagingSenderId: '638528513500'
   },
   links: {
-    root: 'http://localhost/turazzunk/'
+    root: 'http://localhost/turazzunk/',
+    home: 'localhost:4200'
   }
 };

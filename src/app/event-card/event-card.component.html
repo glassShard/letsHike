@@ -17,11 +17,11 @@
 
   <button class="btn btn-lg btn-primary mb-1"
           (click)="onViewClick()"
-          [routerLink]="['./view', tura.id]">
+          [routerLink]="['../turak/view', tura.id]">
     Részletek
   </button>
   <a *ngIf="currentUserId && tura.creatorId === currentUserId"
-     [routerLink]="['./', tura.id]"
+     [routerLink]="['../turak/', tura.id]"
      class="btn btn-lg btn-success mb-1"
      title="Módosít..."><i class="icon-pencil"
   ></i></a>
