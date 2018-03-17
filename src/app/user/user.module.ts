@@ -10,6 +10,7 @@ import {CoreModule} from '../core/core.module';
 import 'moment/locale/hu';
 import {MomentModule} from 'angular2-moment';
 import {EventCardModule} from '../event-card/event-card.module';
+import {ItemCardModule} from '../item-card/item-card.module';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import {EventCardModule} from '../event-card/event-card.module';
     ReactiveFormsModule,
     MomentModule,
     EventCardModule,
-    AccordionModule
+    AccordionModule,
+    ItemCardModule
   ],
   declarations: [
     ProfileComponent,

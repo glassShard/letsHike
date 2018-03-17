@@ -1,6 +1,6 @@
 import {
   Component, EventEmitter, Input, OnInit,
-  Output
+  Output, Renderer2
 } from '@angular/core';
 
 @Component({
@@ -19,7 +19,8 @@ export class FilterAndNewBarComponent implements OnInit {
 
   isCollapsed = true;
 
-  constructor() { }
+
+  constructor(private renderer: Renderer2) { }
 
   ngOnInit() {
   }
@@ -44,5 +45,9 @@ export class FilterAndNewBarComponent implements OnInit {
     } else {
       this.categoryButtonLabel = 'Mind';
     }
+  }
+
+  setHeight(el, height) {
+    this.renderer.setStyle(el, 'height', height + 'px');
   }
 }
