@@ -125,7 +125,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
       });
     };
 
-    this.itemCategories = this._categoryService.getItemCategories();
+    this._categoryService.getItemCategories().subscribe(res => this.itemCategories = res);
   }
 
   onSubmit() {

@@ -89,7 +89,7 @@ export class EventListComponent implements OnInit, OnDestroy {
           }, []);
       });
 
-    this.eventCategories = this._categoryService.getEventCategories();
+    this._categoryService.getEventCategories().subscribe(res => this.eventCategories = res);
 
     this._subscriptions.push(this._userService.isLoggedIn$.subscribe(isLoggedIn => {
       if (isLoggedIn) {

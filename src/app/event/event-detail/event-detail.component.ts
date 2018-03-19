@@ -110,6 +110,8 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           if (this.event.images) {
             this.uploadedImages = this.event.images.split(',')
               .map(imageUrl => `${this._root}${imageUrl}`);
+          } else {
+            this.event.images = null;
           }
           if (this.event.picUrl) {
             this.oldCoverImg = this.event.picUrl;
@@ -141,7 +143,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       });
     };
 
-    this.eventCategories = this._categoryService.getEventCategories();
+    this._categoryService.getEventCategories().subscribe(res => this.eventCategories = res);
   }
 
   onSubmit() {

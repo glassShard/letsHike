@@ -1,4 +1,5 @@
-<app-filter-and-new-bar [categories]="itemCategories"
+<app-filter-and-new-bar *ngIf="itemCategories"
+                        [categories]="itemCategories"
                         [title]="title"
                         [newButton]="newButton"
                         (searchField)="assignText($event.text)"
@@ -6,7 +7,7 @@
 ></app-filter-and-new-bar>
 
 <ng-container
-  *ngIf="(itemsGrouppedBy2$ | async)?.length; else loading">
+  *ngIf="(itemCategories && (itemsGrouppedBy2$ | async)?.length); else loading">
   <div class="container">
     <div class="row"
          *ngFor="let itg of itemsGrouppedBy2$ | async">

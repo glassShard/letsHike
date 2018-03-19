@@ -39,7 +39,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.itemCategories = this._categoryService.getItemCategories();
+    this._categoryService.getItemCategories().subscribe(res => this.itemCategories = res);
 
     this._subscriptions.push(this._userService.isLoggedIn$.subscribe(isLoggedIn => {
       if (isLoggedIn) {
