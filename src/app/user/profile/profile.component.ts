@@ -1,4 +1,4 @@
-import {Component, OnInit, Renderer2} from '@angular/core';
+import {Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {UserModel} from '../../shared/user-model';
 import 'rxjs/add/operator/filter';
@@ -10,7 +10,6 @@ import {EventModel} from '../../shared/event-model';
 import {EventService} from '../../shared/event.service';
 import {CategoryService} from '../../shared/category.service';
 import {ItemService} from '../../shared/item.service';
-
 
 @Component({
   selector: 'app-profile',
@@ -35,7 +34,6 @@ export class ProfileComponent implements OnInit {
               private _itemService: ItemService,
               private _categoryService: CategoryService,
               private _renderer: Renderer2) {}
-
 
   ngOnInit() {
     this.user$ = this._userService.getCurrentUser();
@@ -111,6 +109,14 @@ export class ProfileComponent implements OnInit {
 
   setHeight(el, height) {
     this._renderer.setStyle(el, 'height', height + 'px');
+  }
+
+  addSeen(eventId: string): void {
+    this._eventService.getEventByIdOnce(eventId)
+      .switchMap(ev => {
+        const seen = ev.seen ? ++ ev.seen : 1;
+        return this._eventService.addSeen(ev.id, seen);
+      }).subscribe();
   }
 }
 

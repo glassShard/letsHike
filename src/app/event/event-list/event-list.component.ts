@@ -101,12 +101,11 @@ export class EventListComponent implements OnInit, OnDestroy {
   }
 
   addSeen(eventId: string): void {
-    this._subscriptions.push(this._eventService.getEventByIdOnce(eventId)
-      .do(ev => console.log(ev.title))
+    this._eventService.getEventByIdOnce(eventId)
       .switchMap(ev => {
         const seen = ev.seen ? ++ ev.seen : 1;
         return this._eventService.addSeen(ev.id, seen);
-      }).subscribe());
+      }).subscribe();
   }
 
   assignText(text) {
