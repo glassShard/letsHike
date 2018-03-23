@@ -103,12 +103,16 @@
                  *ngFor="let evg of joinedEventsGrouppedBy2$ | async">
               <div class="col-lg-6 card-deck-container" *ngFor="let ev of evg">
                 <div class="card-deck card-deck-item-list">
-                  <app-event-card class="card card-max-width"
-                                  *ngFor="let e of ev"
-                                  [tura]="e"
-                                  [currentUserId]="currentUserId"
-                                  (addSeen)="addSeen($event.id)"
-                                  [categories]="eventCategories"></app-event-card>
+                  <ng-container *ngIf="eventCategories">
+                    <app-event-card
+                                    class="card card-max-width"
+                                    *ngFor="let e of ev"
+                                    [tura]="e"
+                                    [currentUserId]="currentUserId"
+                                    (addSeen)="addSeen($event.id)"
+                                    [categories]="eventCategories">
+                    </app-event-card>
+                  </ng-container>
                 </div>
               </div>
             </div>
@@ -147,13 +151,15 @@
                    *ngFor="let evg of myEventsGrouppedBy2$ | async">
                 <div class="col-lg-6 card-deck-container" *ngFor="let ev of evg">
                   <div class="card-deck card-deck-item-list">
-                    <app-event-card class="card card-max-width"
-                                    *ngFor="let e of ev"
-                                    [tura]="e"
-                                    [currentUserId]="currentUserId"
-                                    (addSeen)="addSeen($event.id)"
-                                    [categories]="eventCategories">
-                    </app-event-card>
+                    <ng-container *ngIf="eventCategories">
+                      <app-event-card class="card card-max-width"
+                                        *ngFor="let e of ev"
+                                        [tura]="e"
+                                        [currentUserId]="currentUserId"
+                                        (addSeen)="addSeen($event.id)"
+                                        [categories]="eventCategories">
+                      </app-event-card>
+                    </ng-container>
                   </div>
                 </div>
               </div>
@@ -194,15 +200,112 @@
                 <div class="col-lg-6 card-deck-container"
                      *ngFor="let it of itg">
                   <div class="card-deck card-deck-item-list">
-                    <app-item-card class="card card-max-width"
-                                   *ngFor="let i of it"
-                                   [cucc]="i"
-                                   [currentUserId]="currentUserId"
-                                   [categories]="itemCategories">
-                    </app-item-card>
+                    <ng-container *ngIf="itemCategories">
+                      <app-item-card
+                                     class="card card-max-width"
+                                     *ngFor="let i of it"
+                                     [cucc]="i"
+                                     [currentUserId]="currentUserId"
+                                     [categories]="itemCategories">
+                      </app-item-card>
+                    </ng-container>
                   </div>
                 </div>
               </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="accordion4" class="acc-content mt-3">
+    <div class="card">
+      <div class="card-header bg-mylight"
+           id="heading4"
+           data-toggle="collapse"
+           data-target="#collapse4"
+           aria-expanded="true"
+           aria-controls="collapse4"
+           (click)="isCollapsed4 = !isCollapsed4">
+        <h4>
+          Túrakategóriák, melyekről értesítést kérek
+        </h4>
+      </div>
+
+      <div id="collapse4"
+           class="collapse coll"
+           #el4
+           aria-labelledby="heading4"
+           data-parent="#accordion4"
+           [collapse]="isCollapsed4"
+           (collapsed)="setHeight(el4, 0)"
+           (expanded)="setHeight(el4, 0); setHeight(el4, el4.scrollHeight)">
+        <div class="card-body">
+          <ng-container
+            *ngIf="eventCategories">
+            <div class="row">
+              <div class="col-sm-6 col-md-3 col-lg-2"
+                   *ngFor="let category of eventCategories">
+                <div class="card categories text-center"
+                     (click)="category.checked = !category.checked;
+                              onCategoryClick('Events', category.category, category.checked)"
+                     [ngClass]="{'category-checked': category.checked}">
+                  <img class="card-img-top" [src]="category.picUrl"
+                       alt="Card image cap">
+                  <div class="card-body">
+                    <p>{{category.category}}</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="accordion5" class="acc-content mt-3">
+    <div class="card">
+      <div class="card-header bg-mylight"
+           id="heading5"
+           data-toggle="collapse"
+           data-target="#collapse5"
+           aria-expanded="true"
+           aria-controls="collapse5"
+           (click)="isCollapsed5 = !isCollapsed5">
+        <h4>
+          Cucc-kategóriák, melyekről értesítést kérek
+        </h4>
+      </div>
+
+      <div id="collapse5"
+           class="collapse coll"
+           #el5
+           aria-labelledby="heading5"
+           data-parent="#accordion5"
+           [collapse]="isCollapsed5"
+           (collapsed)="setHeight(el5, 0)"
+           (expanded)="setHeight(el5, 0); setHeight(el5, el5.scrollHeight)">
+        <div class="card-body">
+          <ng-container
+            *ngIf="itemCategories">
+            <div class="row">
+              <div class="col-sm-6 col-md-3 col-lg-2"
+                   *ngFor="let category of itemCategories">
+                <div class="card categories text-center"
+                     (click)="category.checked = !category.checked;
+                              onCategoryClick('Items', category.category, category.checked)"
+                     [ngClass]="{'category-checked': category.checked}">
+                  <img class="card-img-top" [src]="category.picUrl"
+                       alt="Card image cap">
+                  <div class="card-body">
+                    <p>{{category.category}}</p>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </ng-container>
         </div>

@@ -7,6 +7,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/first';
 import 'rxjs/add/observable/of';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
+import { merge } from 'rxjs/observable/merge';
 import * as firebase from 'firebase';
 import 'rxjs/add/observable/fromPromise';
 import {AngularFireAuth} from 'angularfire2/auth';
@@ -58,6 +59,28 @@ export class UserService {
 
   save(param: UserModel) {
     return Observable.fromPromise(this._afDb.object(`users/${param.id}`).set(param));
+  }
+
+  saveCategory(where: string, category: string, checked: boolean) {
+    if (checked) {
+      return merge(
+        Observable.fromPromise(
+          this._afDb.object(`users/${this.currentUserId}/fav${where}/${category}`).set(true)
+        ),
+        Observable.fromPromise(
+          this._afDb.object(`categories/${where}Categories/${category}/${this.currentUserId}`).set(true)
+        )
+      );
+    } else {
+      return merge(
+        Observable.fromPromise(
+          this._afDb.object(`users/${this.currentUserId}/fav${where}/${category}`).remove()
+        ),
+        Observable.fromPromise(
+          this._afDb.object(`categories/${where}Categories/${category}/${this.currentUserId}`).remove()
+        )
+      );
+    }
   }
 
   getUserById(fbId: string): Observable<UserModel> {

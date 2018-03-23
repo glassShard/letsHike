@@ -5,6 +5,8 @@ export class UserModel {
   dateOfBirth?: number;
   tel?: string;
   picUrl?: string;
+  favItems?: object;
+  favEvents?: object;
 
   constructor(param?: UserModel) {
     if (param) {

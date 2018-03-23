@@ -10,6 +10,7 @@ import {EventModel} from '../../shared/event-model';
 import {EventService} from '../../shared/event.service';
 import {CategoryService} from '../../shared/category.service';
 import {ItemService} from '../../shared/item.service';
+import {element} from 'protractor';
 
 @Component({
   selector: 'app-profile',
@@ -28,6 +29,10 @@ export class ProfileComponent implements OnInit {
   public isCollapsed1 = true;
   public isCollapsed2 = true;
   public isCollapsed3 = true;
+  public isCollapsed4 = true;
+  public isCollapsed5 = true;
+  public favItems: {};
+  public favEvents: {};
 
   constructor(private _userService: UserService,
               private _eventService: EventService,
@@ -102,9 +107,34 @@ export class ProfileComponent implements OnInit {
 
     this.myItemsGrouppedBy2$ = sortAndGroup('myItems');
 
-    this.eventCategories = this._categoryService.getEventCategories();
-    this.itemCategories = this._categoryService.getItemCategories();
-
+    this.user$.first()
+      .flatMap(user => {
+        this.favItems = user.favItems;
+        this.favEvents = user.favEvents;
+        return Observable.combineLatest(
+          this._categoryService.getEventCategories(),
+          this._categoryService.getItemCategories(),
+          (eCats, iCats) => {
+            const setChecked = (favSgs, sgCats) => {
+              let src: {checked: boolean};
+              if (favSgs) {
+                sgCats.map(sgCat => {
+                  if (Object.keys(favSgs).filter(favSg => favSg === sgCat.category).length > 0) {
+                    src = {checked: true};
+                  } else {
+                    src = {checked: false};
+                  }
+                  Object.assign(sgCat, src);
+                });
+                return sgCats;
+              } else {
+                return sgCats.map(sgCat => Object.assign(sgCat, {checked: false}));
+              }
+            };
+            this.eventCategories = setChecked(this.favEvents, eCats);
+            this.itemCategories = setChecked(this.favItems, iCats);
+          });
+      }).subscribe();
   }
 
   setHeight(el, height) {
@@ -117,6 +147,11 @@ export class ProfileComponent implements OnInit {
         const seen = ev.seen ? ++ ev.seen : 1;
         return this._eventService.addSeen(ev.id, seen);
       }).subscribe();
+  }
+
+  onCategoryClick(whereFrom, what, checked) {
+    console.log(what, checked);
+    this._userService.saveCategory(whereFrom, what, checked);
   }
 }
 

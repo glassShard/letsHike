@@ -62,7 +62,6 @@ export class EventListComponent implements OnInit, OnDestroy {
         // oldalbetöltéskor is kétszer futtatja a
         // console.logot két sorral ez alatt.
           .map(filteredText => {
-            console.log(filteredText);
             if (filteredText === null) {
               return events;
             } else {

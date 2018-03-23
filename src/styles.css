@@ -59,7 +59,11 @@ footer {
 
 .title-and-search {
   padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-bottom: 1.8rem;
+}
+
+.category-collection {
+  padding-top: 0.2rem;
 }
 
 .categories {
