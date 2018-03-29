@@ -13,6 +13,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {AlertModule} from 'ngx-bootstrap';
 import {ImgModule} from '../shared/img/img/img.module';
 import {ImageSwiperModule} from '../shared/swiper/image-swiper.module';
+import {ChatModule} from '../chat/chat.module';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import {ImageSwiperModule} from '../shared/swiper/image-swiper.module';
     ReactiveFormsModule,
     AlertModule,
     ImgModule,
-    ImageSwiperModule
+    ImageSwiperModule,
+    ChatModule
   ],
   declarations: [
     EventComponent,

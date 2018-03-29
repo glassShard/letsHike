@@ -26,6 +26,7 @@ export class EventViewComponent implements OnInit, OnDestroy {
   public swiperIndex = 0;
   public showImageSwiper: boolean;
   private _subscriptions: Subscription[] = [];
+  public showChat = false;
 
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,
@@ -120,6 +121,10 @@ export class EventViewComponent implements OnInit, OnDestroy {
     }, () => {
       handle404();
     }));
+  }
+
+  closeChat() {
+    this.showChat = false;
   }
 }
 

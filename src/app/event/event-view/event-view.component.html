@@ -1,4 +1,4 @@
-<ng-container *ngIf="event$ | async as event">
+<ng-container *ngIf="event$ | async as event; else loading">
   <div class="container title-and-search">
     <h1 class="display-4">{{event.title}}</h1>
   </div>
@@ -6,18 +6,21 @@
   <div class="container">
     <div class="row">
 
-        <div class="col-md-6">
-          <h3>{{event.category}}</h3>
-          <hr />
-          <h4>Feltöltötte: {{event.creator.nick}}</h4>
-          <h4>Tel: {{event.creator.tel}}</h4>
-          <br />
-          <h5>Túra indul: {{event.date | amFromUnix | amDateFormat:
-            'LL'}}</h5>
-          <h5>({{event.date | amFromUnix | amTimeAgo}})</h5>
-          <h5>Időtartam: {{event.days}} nap</h5>
-          <p><small>Közzétéve: {{event.dateOfPublish | amFromUnix | amDateFormat:
-            'LL'}}</small></p>
+      <div class="col-md-6">
+        <h3>{{event.category}}</h3>
+        <hr/>
+        <h4>Feltöltötte: {{event.creator.nick}}</h4>
+        <h4>Tel: {{event.creator.tel}}</h4>
+        <br/>
+        <h5>Túra indul: {{event.date | amFromUnix | amDateFormat:
+          'LL'}}</h5>
+        <h5>({{event.date | amFromUnix | amTimeAgo}})</h5>
+        <h5>Időtartam: {{event.days}} nap</h5>
+        <p>
+          <small>Közzétéve: {{event.dateOfPublish | amFromUnix | amDateFormat:
+            'LL'}}
+          </small>
+        </p>
           <p *ngIf="currentUser && event.guestsIds">Eddig ők jelentkeztek a
             túrára: <span
               *ngFor="let guest of event.guests let isLast = last">{{guest.nick}}{{isLast ? '' : ', '}}
@@ -55,24 +58,35 @@
         </alert>
       </div>
 
-      <div class="col-12 text-right"
-           *ngIf="currentUser && currentUser.id !== event.creatorId && !isGuest">
-        <button class="btn btn-small btn-primary"
+      <div class="col-12 text-right">
+        <button *ngIf="currentUser && currentUser.id !== event.creatorId && !isGuest"
+                class="btn btn-small btn-primary"
                 (click)="onJoin(currentUser.id, event.id)"
                 title="Jelentkezés a túrára"
                 [disabled]="buttonDisabled">
           <i class="icon-star"></i>Jelentkezem a túrára
         </button>
-      </div>
-      <div class="col-12 text-right"
-           *ngIf="currentUser && currentUser.id !== event.creatorId && isGuest">
-        <button class="btn btn-small btn-danger"
+        <button *ngIf="currentUser && currentUser.id !== event.creatorId && isGuest"
+                class="btn btn-small btn-danger"
                 (click)="onDeleteJoin(currentUser.id, event.id)"
                 title="Jelentkezés törlése"
                 [disabled]="buttonDisabled">
           <i class="icon-trash"></i> Törlöm a jelentkezésemet a túráról
         </button>
+        <button *ngIf="currentUser"
+                class="btn btn-small btn-primary"
+                (click)="showChat = !showChat"
+                title="Chat ablak kinyitása"
+                [disabled]="showChat">
+          <i class="icon-comment"></i> Chat
+        </button>
+        <button class="btn btn-small btn-primary"
+                *ngIf="!currentUser || (currentUser && currentUser.id !== event.creatorId)"
+                title="Levél a hirdetőnek">
+          <i class="icon-mail-1"></i> Levél a hirdetőnek
+        </button>
       </div>
+
       <app-owner-buttons class="col-12 text-right mb-3"
                          [currentUser]="currentUser"
                          [isOnEdit]="false"
@@ -104,4 +118,12 @@
               (hideImageSwiper)="showImageSwiper = false">
   </app-swiper>
 
+  <app-chat-window *ngIf="currentUser && showChat" [roomId]="event.id"
+                   (closeChatWindow)="closeChat()">
+  </app-chat-window>
+
 </ng-container>
+
+<ng-template #loading>
+  <app-loading-spinner></app-loading-spinner>
+</ng-template>

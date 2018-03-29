@@ -8,7 +8,6 @@ import {environment} from '../../../environments/environment';
 import {Subscription} from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
 
-
 @Component({
   selector: 'app-item-view',
   templateUrl: './item-view.component.html',
