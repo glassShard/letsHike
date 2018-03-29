@@ -1,0 +1,25 @@
+:host {
+  display: list-item;
+}
+
+li {
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  font-size: 14px;
+  border-bottom: 1px solid #cccccc;
+}
+
+li.left .chat-message {
+  margin-left: 60px;
+}
+
+.chat-message p {
+  margin: 0;
+  line-height: 1.2;
+}
+
+li img.user-image {
+  width: 48px;
+  height: 48px;
+  border: 1px solid lightgray;
+}

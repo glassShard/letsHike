@@ -156,3 +156,5 @@ export class ProfileComponent implements OnInit {
 }
 
 // TODO: profilkép módosítás utáni oldalbetöltéskor nem frissíti a képet
+// TODO: ezen az oldalon történő ki és belépésnél a favcat értékei rosszul
+// töltődnek be (nem frissülnek az új felhasználóra)

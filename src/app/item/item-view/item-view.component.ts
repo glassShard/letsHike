@@ -21,6 +21,7 @@ export class ItemViewComponent implements OnInit, OnDestroy {
   public swiperIndex = 0;
   public showImageSwiper: boolean;
   private _subscriptions: Subscription[] = [];
+  public showChat = false;
 
   constructor(private _route: ActivatedRoute,
               private _itemService: ItemService,
@@ -71,5 +72,9 @@ export class ItemViewComponent implements OnInit, OnDestroy {
   clicked(index) {
     this.swiperIndex = index;
     this.showImageSwiper = true;
+  }
+
+  closeChat() {
+    this.showChat = false;
   }
 }

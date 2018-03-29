@@ -24,11 +24,13 @@ import {ImageService} from './shared/image.service';
 import {AngularFireModule} from 'angularfire2';
 import {AngularFireDatabaseModule} from 'angularfire2/database';
 import {AngularFireAuthModule} from 'angularfire2/auth';
+import {ChatModule} from './chat/chat.module';
+import { ChatWindowComponent } from './chat/chat-window/chat-window.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ...AppRoutingModule.routableComponents,
+    ...AppRoutingModule.routableComponents
   ],
   imports: [
     BsDropdownModule.forRoot(),
@@ -46,7 +48,8 @@ import {AngularFireAuthModule} from 'angularfire2/auth';
     CoreModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    ChatModule
   ],
   providers: [
     EventService,

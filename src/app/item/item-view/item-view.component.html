@@ -1,4 +1,4 @@
-<ng-container *ngIf="item">
+<ng-container *ngIf="item; else loading">
   <div class="container title-and-search">
     <h1 class="display-4">{{item.title}}</h1>
   </div>
@@ -10,11 +10,13 @@
         <h2>Ár: {{item.price | number | pointReplacer}} Ft</h2>
         <hr />
         <h3>{{item.category}}</h3>
-        <h4>Feltöltötte: {{item.creator.nick}}</h4>
-        <h4>Tel: {{item.creator.tel}}</h4>
-        <h5>Közzétéve: {{item.dateOfPublish | amFromUnix | amDateFormat:
+        <h4 class="pt-2">Feltöltötte: {{item.creator.nick}}</h4>
+        <h4 class="pt-2">Tel: {{item.creator.tel}}</h4>
+        <h5 class="pt-2">Közzétéve: {{item.dateOfPublish | amFromUnix |
+          amDateFormat:
           'LL'}}</h5>
         <br />
+
       </div>
 
       <div class="col-md-6">
@@ -25,7 +27,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-3">
       <app-owner-buttons class="col-12 text-right mb-3"
                          [currentUser]="currentUser"
                          [isOnEdit]="false"
@@ -33,6 +35,23 @@
                          (delete)="onDelete($event.idFromButton)"
                          (edit)="onEdit($event.idFromButton)">
       </app-owner-buttons>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-12 text-right"
+           *ngIf="currentUser">
+        <button class="btn btn-small btn-primary"
+                (click)="showChat = !showChat"
+                title="Chat ablak kinyitása"
+                [disabled]="showChat">
+          <i class="icon-comment"></i> Chat
+        </button>
+        <button class="btn btn-small btn-primary"
+                *ngIf="!currentUser || (currentUser && currentUser.id !== item.creatorId)"
+                title="Levél a hirdetőnek">
+          <i class="icon-mail-1"></i> Levél a hirdetőnek
+        </button>
+      </div>
     </div>
 
     <div class="row">
@@ -56,5 +75,11 @@
               (hideImageSwiper)="showImageSwiper = false">
   </app-swiper>
 
+  <app-chat-window *ngIf="currentUser && showChat" [roomId]="item.id"
+                   (closeChatWindow)="closeChat()"></app-chat-window>
+
 </ng-container>
+<ng-template #loading>
+  <app-loading-spinner></app-loading-spinner>
+</ng-template>
 

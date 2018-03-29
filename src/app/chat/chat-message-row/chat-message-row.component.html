@@ -1,0 +1,22 @@
+<li class="left clearfix">
+            <span class="float-left">
+              <img *ngIf="msg.userPicUrl; else placeholderImg"
+                   class="user-image rounded-circle"
+                   [src]="msg.userPicUrl"
+                   alt="Profilkép">
+              <ng-template #placeholderImg>
+                <img src="assets/vector/user.svg"
+                     alt="Profilkép"
+                     class="user-image rounded-circle bg-mylight" />
+              </ng-template>
+            </span>
+  <div class="chat-message clearfix">
+    <div class="chat-message-header">
+      <strong>{{msg.userName}}</strong>
+      <small class="float-right text-muted">
+        <i class="icon-globe"></i>{{msg.created | amFromUnix | amTimeAgo}}
+      </small>
+    </div>
+    <p>{{msg.msg}}</p>
+  </div>
+</li>

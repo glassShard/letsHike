@@ -8,7 +8,7 @@ import {ItemModel} from '../../shared/item-model';
   templateUrl: './owner-buttons.component.html',
   styleUrls: ['./owner-buttons.component.css']
 })
-export class OwnerButtonsComponent implements OnInit {
+export class OwnerButtonsComponent {
   @Input() currentUser: UserModel;
   @Input() model: EventModel | ItemModel;
   @Input() isOnEdit: boolean;
@@ -17,12 +17,6 @@ export class OwnerButtonsComponent implements OnInit {
   @Output() edit = new EventEmitter();
   @Output() save = new EventEmitter();
   public showAlert = false;
-
-  constructor() {
-  }
-
-  ngOnInit() {
-  }
 
   onDelete(idFromButton) {
     this.delete.emit({idFromButton: idFromButton});

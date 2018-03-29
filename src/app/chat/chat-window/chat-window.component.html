@@ -1,0 +1,36 @@
+<div class="card">
+  <div class="card-header">
+    <div class="chat-header">
+      Chat
+      <div class="chatCloseBtn"
+           (click)="closeChat()"><i class="icon-exit"></i></div>
+    </div>
+  </div>
+  <div class="card-body" #cardBody>
+    <!--<ng-container *ngIf="chatMessages | async as chatMessages">-->
+    <ng-container
+      *ngIf="chatMessage$ | async as chatMessages; else loadingChat;">
+      <ng-container *ngIf="chatMessages.length > 0; else notFoundMessage">
+        <ul class="chat-messages-list float-right">
+          <app-chat-message-row [msg]="msg"
+                                *ngFor="let msg of chatMessages; trackBy: trackByMessages">
+          </app-chat-message-row>
+        </ul>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #loadingChat>
+      <app-loading-spinner></app-loading-spinner>
+    </ng-template>
+
+    <ng-template #notFoundMessage>
+      <strong class="text-muted">Nincs még üzenet</strong>
+    </ng-template>
+
+  </div>
+  <div class="card-footer">
+    <app-chat-message-send-form
+      [(reset)]="resetForm"
+      (newMessage)="onNewMessage($event)"></app-chat-message-send-form>
+  </div>
+</div>

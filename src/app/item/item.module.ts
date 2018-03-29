@@ -14,6 +14,7 @@ import {ItemCardModule} from '../item-card/item-card.module';
 import {PointReplacerModule} from '../shared/point-replacer.module';
 import {ImgModule} from '../shared/img/img/img.module';
 import {ImageSwiperModule} from '../shared/swiper/image-swiper.module';
+import {ChatModule} from '../chat/chat.module';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import {ImageSwiperModule} from '../shared/swiper/image-swiper.module';
     ItemCardModule,
     PointReplacerModule,
     ImgModule,
-    ImageSwiperModule
+    ImageSwiperModule,
+    ChatModule
   ],
   declarations: [
     ItemComponent,
