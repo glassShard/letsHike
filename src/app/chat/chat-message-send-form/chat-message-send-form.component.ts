@@ -61,6 +61,8 @@ export class ChatMessageSendFormComponent implements OnInit, OnChanges {
       'chat-message': [null, Validators.required]
     });
 
+    this.chatMessageInput.nativeElement.focus();
+
     this.form.get('chat-message')
       .valueChanges
       .distinctUntilChanged(

@@ -8,6 +8,8 @@ import {FilterAndNewBarComponent} from './filter-and-new-bar/filter-and-new-bar.
 import {AlertModule, CollapseModule, ModalModule} from 'ngx-bootstrap';
 import {RouterModule} from '@angular/router';
 import {LoginModalComponent} from './login-modal/login-modal.component';
+import {EmailComponent} from './email/email.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -15,7 +17,8 @@ import {LoginModalComponent} from './login-modal/login-modal.component';
     CollapseModule,
     ModalModule,
     AlertModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ],
   declarations: [
     NavbarComponent,
@@ -24,6 +27,7 @@ import {LoginModalComponent} from './login-modal/login-modal.component';
     OwnerButtonsComponent,
     FilterAndNewBarComponent,
     LoginModalComponent,
+    EmailComponent
   ],
   exports: [
     NavbarComponent,
@@ -31,7 +35,8 @@ import {LoginModalComponent} from './login-modal/login-modal.component';
     LoadingSpinnerComponent,
     OwnerButtonsComponent,
     FilterAndNewBarComponent,
-    LoginModalComponent
+    LoginModalComponent,
+    EmailComponent
   ]
 })
 export class CoreModule { }

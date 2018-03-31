@@ -1,8 +1,8 @@
-<div class="modal-header">
-  <h5 class="modal-title" *ngIf="modalTitle">{{modalTitle}}</h5>
+<div class="modal-header bg-mylight">
+  <h5 class="modal-title pl-3" *ngIf="modalTitle">{{modalTitle}}</h5>
   <button type="button" class="close" (click)="modalRef.hide()"
           aria-label="Close">
-    <span aria-hidden="true">&times;</span>
+    <span aria-hidden="true"><i class="icon-exit"></i></span>
   </button>
 </div>
 <div class="modal-body">
@@ -13,7 +13,7 @@
     <p>{{error}}</p>
   </alert>
 
-  <div class="form-group" *ngIf="needEmail">
+  <div class="form-group col-12" *ngIf="needEmail">
     <label for="loginEmail">Email:</label>
     <input type="email"
            class="form-control"
@@ -21,13 +21,13 @@
            aria-describedby="emailHelp"
            placeholder="Email címed..."
            #email>
-    <small id="emailHelp"
-           class="form-text text-muted">
-      Email címedet soha nem adjuk ki harmadik félnek.
-    </small>
+    <!--<small id="emailHelp"-->
+           <!--class="form-text text-muted">-->
+      <!--Email címedet soha nem adjuk ki harmadik félnek.-->
+    <!--</small>-->
   </div>
 
-  <div class="form-group">
+  <div class="form-group col-12">
     <label for="loginPassword">Jelszó</label>
     <input type="password"
            class="form-control"
@@ -35,7 +35,7 @@
            placeholder="Jelszavad..."
            #password>
   </div>
-  <div class="form-check" *ngIf="needRememberMe">
+  <div class="form-check col-12" *ngIf="needRememberMe">
     <input type="checkbox"
            class="form-check-input ml-0"
            id="loginRemember"
@@ -47,7 +47,7 @@
     </label>
   </div>
 
-  <div class="form-group mt-3 text-right">
+  <div class="form-group col-12 mt-3 text-right">
     <button type="button"
             [disabled]="disabled"
             (click)="onClick(password.value)"

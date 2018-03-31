@@ -45,7 +45,6 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked, AfterViewI
 
   ngOnInit() {
     this.chatMessage$ = this._chatService.getRoomMessages(this.roomId);
-
   }
 
   onNewMessage(newMessage: string) {

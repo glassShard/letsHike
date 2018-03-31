@@ -1,4 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  TemplateRef
+} from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {UserModel} from '../../shared/user-model';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -7,6 +13,7 @@ import {EventService} from '../../shared/event.service';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 import {environment} from '../../../environments/environment';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-event-view',
@@ -25,13 +32,21 @@ export class EventViewComponent implements OnInit, OnDestroy {
   public root = environment.links.root;
   public swiperIndex = 0;
   public showImageSwiper: boolean;
-  private _subscriptions: Subscription[] = [];
   public showChat = false;
+  public modalRef: BsModalRef;
+  public showEmailModal = false;
+  public recipientsEmail: string[] = [];
+  public emailModalTitle: string;
+  public creatorEmail: string;
+  public guestsEmail: string[];
+  private _subscriptions: Subscription[] = [];
 
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,
               private _router: Router,
-              private _userService: UserService) {
+              private _userService: UserService,
+              private _modalService: BsModalService,
+              private _changeDetection: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -101,6 +116,42 @@ export class EventViewComponent implements OnInit, OnDestroy {
     this.showImageSwiper = true;
   }
 
+  closeChat() {
+    this.showChat = false;
+  }
+
+  showEmailModalWindow(param: string, template: TemplateRef<any>) {
+    if (param === 'creator') {
+      this.emailModalTitle = 'Email a hirdetőnek';
+      this.recipientsEmail = [this.creatorEmail];
+    } else {
+      this.emailModalTitle = 'Levél a jelentkezőknek';
+      this.recipientsEmail = this.guestsEmail;
+    }
+    this.modalRef = this._modalService.show(template);
+  }
+
+  // showEmailModal(event) {
+  //   event.preventDefault();
+  //   // this._subscriptions.push(this._modalService.onHide
+  //   //   .subscribe(() => this._changeDetection.markForCheck()));
+  //   // this._subscriptions.push(this._modalService.onHide.subscribe(() => {
+  //   //   this.unsubscribe();
+  //   // }));
+  //   const currentEmail = this.currentUser ? this.currentUser.email : '';
+  //   console.log(currentEmail);
+  //   const initialState = {
+  //     emailModalTitle: 'Email a hirdetőnek',
+  //     'currentEmail': currentEmail
+  //   };
+  //
+  //   Object.assign(this.modalRef.content, initialState);
+  // }
+
+  closeModal() {
+    this.modalRef.hide();
+  }
+
   private loadEvent(evId: string) {
     const handle404 = () => {
       this._router.navigate(['404']);
@@ -117,14 +168,11 @@ export class EventViewComponent implements OnInit, OnDestroy {
         if (!ev.guestsIds) {
           this.isGuest = false;
         }
+        this.creatorEmail = ev.creator.email;
+        this.guestsEmail = ev.guests ? ev.guests.map(guest => guest.email) : [];
       }
     }, () => {
       handle404();
     }));
   }
-
-  closeChat() {
-    this.showChat = false;
-  }
 }
-

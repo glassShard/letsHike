@@ -1,0 +1,9 @@
+:host p {
+  line-height: 1.3;
+}
+
+.email-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}

@@ -25,12 +25,13 @@ import {AngularFireModule} from 'angularfire2';
 import {AngularFireDatabaseModule} from 'angularfire2/database';
 import {AngularFireAuthModule} from 'angularfire2/auth';
 import {ChatModule} from './chat/chat.module';
-import { ChatWindowComponent } from './chat/chat-window/chat-window.component';
+import {EmailComponent} from './core/email/email.component';
+import {EmailService} from './shared/email.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ...AppRoutingModule.routableComponents
+    ...AppRoutingModule.routableComponents,
   ],
   imports: [
     BsDropdownModule.forRoot(),
@@ -59,9 +60,11 @@ import { ChatWindowComponent } from './chat/chat-window/chat-window.component';
     LoggedInGuard,
     FileService,
     ImageService,
+    EmailService
   ],
   entryComponents: [
-    LoginModalComponent
+    LoginModalComponent,
+    EmailComponent
   ],
   bootstrap: [AppComponent]
 })

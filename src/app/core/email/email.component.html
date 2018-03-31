@@ -1,0 +1,84 @@
+  <div class="modal-header bg-mylight">
+    <div class="email-header">
+      <h5 class="modal-title pl-3" *ngIf="emailModalTitle">
+        {{emailModalTitle}}</h5>
+      <button type="button" class="close" (click)="close()"
+              aria-label="Close">
+        <span aria-hidden="true"><i class="icon-exit"></i></span>
+      </button>
+    </div>
+
+  </div>
+  <div class="modal-body">
+    <div class="form-group col-12">
+      <p class="text-danger">Következő üzenetedet nem őrizzük, hanem
+        közvetlenül a címzett(ek) postafiókjába továbbítjuk. Emiatt az email
+        címed a címzett(ek) számára elérhetővé válik, melyhez a küldés gomb
+        megnyomása esetén hozzájárulsz.</p>
+      <p class="text-muted">Ha nem szeretnéd email-címedet kiadni, használd
+        inkább a Chat funkciókat, melyeket belépés után érsz el.</p>
+    </div>
+    <div class="form-group col-12">
+      <alert type="danger"
+             [dismissible]="true"
+             (onClose)="clearError()"
+             *ngIf="error">
+        <p>{{error}}</p>
+      </alert>
+      <alert type="success"
+             [dismissOnTimeout]="3000"
+             (onClosed)="successClosed()"
+             *ngIf="success">
+        <p>{{error}}</p>
+      </alert>
+    </div>
+
+    <form [formGroup]="sendEmail" (ngSubmit)="onSubmit()">
+      <div class="form-group col-12">
+        <label for="email">Email-címed:</label>
+        <input type="email"
+               class="form-control"
+               id="email"
+               placeholder="Email-címed..."
+               formControlName="email"
+               value="{{currentEmail}}"
+               [ngClass]="{'is-invalid': submitted && sendEmail.get('email').invalid}">
+        <div class="invalid-feedback"
+             *ngIf="sendEmail.get('email').hasError('required')">Kérjük,
+          töltsd ki ezt a mezőt.
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="sendEmail.get('email').hasError('email')">Kérjük,
+          érvényes e-mail cmet adj meg.
+        </div>
+      </div>
+
+      <div class="form-group col-12">
+        <label for="message">Üzenet:</label>
+        <textarea class="form-control"
+                  type="text"
+                  id="message"
+                  placeholder="Üzeneted..."
+                  formControlName="message"
+                  [ngClass]="{'is-invalid': submitted && sendEmail.get('message').invalid}">
+      </textarea>
+        <div class="invalid-feedback"
+             *ngIf="sendEmail.get('message').hasError('required')">Kérjük,
+          töltsd ki ezt a mezőt
+        </div>
+      </div>
+
+      <div class="form-group mt-3 text-right col-12">
+        <button type="button"
+                [disabled]="disabled"
+                (click)="sendMail()"
+                class="btn btn-primary">
+          <i class="icon-paper-plane"></i> Elküld
+        </button>
+        <button type="button" class="btn btn-secondary"
+                (click)="close()"><i class="icon-exit"></i> Mégse
+        </button>
+      </div>
+    </form>
+  </div>
+

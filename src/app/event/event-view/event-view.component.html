@@ -6,7 +6,7 @@
   <div class="container">
     <div class="row">
 
-      <div class="col-md-6">
+      <div class="col-md-4">
         <h3>{{event.category}}</h3>
         <hr/>
         <h4>Feltöltötte: {{event.creator.nick}}</h4>
@@ -35,7 +35,7 @@
 
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-8">
           <h3>Leírás:</h3>
           <hr/>
           <p>{{event.description}}</p>
@@ -60,30 +60,38 @@
 
       <div class="col-12 text-right">
         <button *ngIf="currentUser && currentUser.id !== event.creatorId && !isGuest"
-                class="btn btn-small btn-primary"
+                class="btn btn-small btn-primary mb-1"
                 (click)="onJoin(currentUser.id, event.id)"
                 title="Jelentkezés a túrára"
                 [disabled]="buttonDisabled">
-          <i class="icon-star"></i>Jelentkezem a túrára
+          <i class="icon-star"></i> Jelentkezem a túrára
         </button>
         <button *ngIf="currentUser && currentUser.id !== event.creatorId && isGuest"
-                class="btn btn-small btn-danger"
+                class="btn btn-small btn-danger mb-1"
                 (click)="onDeleteJoin(currentUser.id, event.id)"
                 title="Jelentkezés törlése"
                 [disabled]="buttonDisabled">
-          <i class="icon-trash"></i> Törlöm a jelentkezésemet a túráról
+          <i class="icon-trash"></i> Törlöm a jelentkezésemet
         </button>
         <button *ngIf="currentUser"
-                class="btn btn-small btn-primary"
+                class="btn btn-small btn-primary mb-1"
                 (click)="showChat = !showChat"
                 title="Chat ablak kinyitása"
                 [disabled]="showChat">
           <i class="icon-comment"></i> Chat
         </button>
-        <button class="btn btn-small btn-primary"
+        <button class="btn btn-small btn-primary mb-1"
                 *ngIf="!currentUser || (currentUser && currentUser.id !== event.creatorId)"
+                (click)="showEmailModalWindow('creator', emailModal)"
                 title="Levél a hirdetőnek">
           <i class="icon-mail-1"></i> Levél a hirdetőnek
+        </button>
+        <button class="btn btn-small btn-primary mb-1"
+                *ngIf="currentUser && currentUser.id === event.creatorId && guestsEmail.length > 0"
+                (click)="showEmailModalWindow('guests', emailModal)"
+                title="Levél a jelentkezőknek">
+          <i class="icon-mail-1"></i> Levél a jelentkezőknek
+          ({{guestsEmail.length}})
         </button>
       </div>
 
@@ -122,8 +130,20 @@
                    (closeChatWindow)="closeChat()">
   </app-chat-window>
 
+  <ng-template #loading>
+    <app-loading-spinner></app-loading-spinner>
+  </ng-template>
+
+  <ng-template #emailModal>
+    <app-email [emailModalTitle]="emailModalTitle"
+               [currentEmail]="currentUser ? currentUser.email : ''"
+               [recipientsEmail]="recipientsEmail"
+               [subject]="event.title"
+               (closeModal)="closeModal()">
+    </app-email>
+  </ng-template>
+
 </ng-container>
 
-<ng-template #loading>
-  <app-loading-spinner></app-loading-spinner>
-</ng-template>
+
+
