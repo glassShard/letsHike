@@ -14,6 +14,7 @@ import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 import {environment} from '../../../environments/environment';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import 'rxjs/add/operator/share';
 
 @Component({
   selector: 'app-event-view',
@@ -34,7 +35,6 @@ export class EventViewComponent implements OnInit, OnDestroy {
   public showImageSwiper: boolean;
   public showChat = false;
   public modalRef: BsModalRef;
-  public showEmailModal = false;
   public recipientsEmail: string[] = [];
   public emailModalTitle: string;
   public creatorEmail: string;
@@ -45,8 +45,7 @@ export class EventViewComponent implements OnInit, OnDestroy {
               private _eventService: EventService,
               private _router: Router,
               private _userService: UserService,
-              private _modalService: BsModalService,
-              private _changeDetection: ChangeDetectorRef) {
+              private _modalService: BsModalService) {
   }
 
   ngOnInit() {
@@ -131,23 +130,6 @@ export class EventViewComponent implements OnInit, OnDestroy {
     this.modalRef = this._modalService.show(template);
   }
 
-  // showEmailModal(event) {
-  //   event.preventDefault();
-  //   // this._subscriptions.push(this._modalService.onHide
-  //   //   .subscribe(() => this._changeDetection.markForCheck()));
-  //   // this._subscriptions.push(this._modalService.onHide.subscribe(() => {
-  //   //   this.unsubscribe();
-  //   // }));
-  //   const currentEmail = this.currentUser ? this.currentUser.email : '';
-  //   console.log(currentEmail);
-  //   const initialState = {
-  //     emailModalTitle: 'Email a hirdetőnek',
-  //     'currentEmail': currentEmail
-  //   };
-  //
-  //   Object.assign(this.modalRef.content, initialState);
-  // }
-
   closeModal() {
     this.modalRef.hide();
   }
@@ -156,7 +138,7 @@ export class EventViewComponent implements OnInit, OnDestroy {
     const handle404 = () => {
       this._router.navigate(['404']);
     };
-    this.event$ = this._eventService.getEventById(evId);
+    this.event$ = this._eventService.getEventById(evId).share();
     this._subscriptions.push(this.event$.subscribe(ev => {
       this.buttonDisabled = false;
       if (ev === null) {

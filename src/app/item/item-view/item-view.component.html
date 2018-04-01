@@ -1,4 +1,4 @@
-<ng-container *ngIf="item; else loading">
+<ng-container *ngIf="item$ | async as item; else loading">
   <div class="container title-and-search">
     <h1 class="display-4">{{item.title}}</h1>
   </div>
@@ -38,6 +38,7 @@
         </button>
         <button class="btn btn-small btn-primary"
                 *ngIf="!currentUser || (currentUser && currentUser.id !== item.creatorId)"
+                (click)="showEmailModalWindow(emailModal)"
                 title="Levél a hirdetőnek">
           <i class="icon-mail-1"></i> Levél a hirdetőnek
         </button>
@@ -77,7 +78,17 @@
                    (closeChatWindow)="closeChat()">
   </app-chat-window>
 
+  <ng-template #emailModal>
+    <app-email [emailModalTitle]="emailModalTitle"
+               [currentEmail]="currentUser ? currentUser.email : ''"
+               [recipientsEmail]="recipientsEmail"
+               [subject]="item.title"
+               (closeModal)="closeModal()">
+    </app-email>
+  </ng-template>
+
 </ng-container>
+
 <ng-template #loading>
   <app-loading-spinner></app-loading-spinner>
 </ng-template>
