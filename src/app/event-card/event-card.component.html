@@ -17,7 +17,7 @@
 
   <button class="btn btn-lg btn-primary mb-1"
           (click)="onViewClick()"
-          [routerLink]="['../turak/view', tura.id]">
+          [routerLink]="['/turak/view', tura.id]">
     Részletek
   </button>
   <a *ngIf="currentUserId && tura.creatorId === currentUserId"

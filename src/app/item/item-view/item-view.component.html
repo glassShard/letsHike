@@ -6,12 +6,13 @@
   <div class="container">
     <div class="row">
 
-      <div class="col-md-6">
+      <div class="col-md-4">
         <h2>Ár: {{item.price | number | pointReplacer}} Ft</h2>
         <hr />
-        <h3>{{item.category}}</h3>
+        <h4>{{item.category}}</h4>
         <h4 class="pt-2">Feltöltötte: {{item.creator.nick}}</h4>
-        <h4 class="pt-2">Tel: {{item.creator.tel}}</h4>
+        <br />
+        <h5 class="pt-2">Tel: {{item.creator.tel}}</h5>
         <h5 class="pt-2">Közzétéve: {{item.dateOfPublish | amFromUnix |
           amDateFormat:
           'LL'}}</h5>
@@ -19,7 +20,7 @@
 
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-8">
         <h2>Leírás:</h2>
         <hr/>
         <p>{{item.shortDescription}}</p>

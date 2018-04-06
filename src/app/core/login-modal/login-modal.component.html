@@ -6,12 +6,16 @@
   </button>
 </div>
 <div class="modal-body">
-  <p>{{text}}</p>
+  <div class="form-group col-12">
+    <p>{{text}}</p>
+  </div>
 
-  <alert type="danger" [dismissible]="true" (onClose)="clearError()"
-         *ngIf="error">
-    <p>{{error}}</p>
-  </alert>
+  <div class="form-group col-12">
+    <alert type="danger" [dismissible]="true" (onClose)="clearError()"
+           *ngIf="error">
+      <p>{{error}}</p>
+    </alert>
+  </div>
 
   <div class="form-group col-12" *ngIf="needEmail">
     <label for="loginEmail">Email:</label>

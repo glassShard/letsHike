@@ -10,7 +10,6 @@ import {EventModel} from '../../shared/event-model';
 import {EventService} from '../../shared/event.service';
 import {CategoryService} from '../../shared/category.service';
 import {ItemService} from '../../shared/item.service';
-import {element} from 'protractor';
 
 @Component({
   selector: 'app-profile',

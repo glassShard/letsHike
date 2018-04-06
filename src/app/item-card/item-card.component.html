@@ -12,7 +12,7 @@
   <p class="card-text">{{cucc.shortDescription}}</p>
   <p><small>Közzétéve: {{cucc.dateOfPublish | amFromUnix |
     amDateFormat: 'LL'}}</small></p>
-  <a [routerLink]="['../cuccok/view', cucc.id]"
+  <a [routerLink]="['/cuccok/view', cucc.id]"
      class="btn btn-lg btn-primary mt-1">
     Részletek</a>
     <a *ngIf="currentUserId && cucc.creatorId === currentUserId"

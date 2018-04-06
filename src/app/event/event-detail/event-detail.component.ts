@@ -92,7 +92,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           this.currentUser = user;
           const evId = this._route.snapshot.params['id'];
           if (evId) {
-            return this._eventService.getEventById(evId);
+            return this._eventService.getEventById(evId, 'event-detail 95');
           } else {
             return Observable.of(new EventModel());
           }

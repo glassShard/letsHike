@@ -10,7 +10,7 @@ const routes: Routes = [
   {path: '', component: ItemComponent, children: [
       {path: '', component: ItemListComponent},
       {path: 'new', component: ItemDetailsComponent, canActivate: [LoggedInGuard]},
-      {path: ':id', component: ItemDetailsComponent, canActivate: [LoggedInGuard]},
+
       {path: 'view/:id', component: ItemViewComponent}
     ]},
 ];

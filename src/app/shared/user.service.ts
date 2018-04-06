@@ -18,6 +18,7 @@ import UserInfo = firebase.UserInfo;
 export class UserService {
   isLoggedIn$ = new ReplaySubject<boolean>(1);
   public currentUserId: string;
+  public currentUserId$ = new ReplaySubject<string>(1);
   private _user$ = new ReplaySubject<UserModel>(1);
   private _fbAuthData: any;
 
@@ -28,14 +29,15 @@ export class UserService {
       user => {
         if (user != null) {
           this.currentUserId = user.uid;
+          this.currentUserId$.next(user.uid);
           this.getUserById(user.uid).subscribe(remoteUser => {
-            console.log(remoteUser);
             this._user$.next(remoteUser);
             this.isLoggedIn$.next(true);
           });
         } else {
           this._user$.next(null);
           this.currentUserId = null;
+          this.currentUserId$.next(null);
           this.isLoggedIn$.next(false);
         }
       }
@@ -116,4 +118,7 @@ export class UserService {
     return Observable.fromPromise(this._afAuth.auth.currentUser.reauthenticateWithCredential(credential));
   }
 
+  getAllUsers(): Observable<UserModel[]> {
+    return this._afDb.list(`users`);
+  }
 }

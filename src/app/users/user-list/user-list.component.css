@@ -1,0 +1,18 @@
+.img-holder {
+  padding: 15% 20% 10% 20%;
+}
+
+img {
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,.125);
+}
+
+.users {
+  margin-left: -10px;
+  margin-right: -10px;
+  margin-bottom: 10px;
+}
+
+.users .card-body {
+  padding: 5px 5px 15px 5px;
+}

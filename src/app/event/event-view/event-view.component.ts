@@ -79,7 +79,6 @@ export class EventViewComponent implements OnInit, OnDestroy {
     this.dangerAlert = false;
     this._subscriptions.push(this._eventService.join(userId, eventId).subscribe(() => {
       this.joinSuccessAlert = true;
-      console.log(this.joinSuccessAlert);
     }, () => {
       this.dangerAlert = true;
     }));
@@ -138,8 +137,9 @@ export class EventViewComponent implements OnInit, OnDestroy {
     const handle404 = () => {
       this._router.navigate(['404']);
     };
-    this.event$ = this._eventService.getEventById(evId).share();
-    this._subscriptions.push(this.event$.subscribe(ev => {
+    this.event$ = this._eventService.getEventById(evId, 'event-view 142');
+    this._subscriptions.push(this._eventService.getEventById(evId, 'event-view 143').subscribe(ev => {
+      console.log('ev: ', ev);
       this.buttonDisabled = false;
       if (ev === null) {
         handle404();

@@ -1,0 +1,207 @@
+<ng-container *ngIf="currentUser; else notLoggedIn">
+  <ng-container *ngIf="watchedUser$ | async as user; else loading">
+    <div class="container title-and-search">
+      <h1 class="display-4">{{user.nick}}</h1>
+    </div>
+
+    <div class="container">
+
+      <div class="profile-header bg-mylight mb-3">
+        <div class="profile-avatar">
+          <ng-container *ngIf="user.picUrl; else defaultPic">
+            <img src="{{user.picUrl}}"
+                 title="avatar"
+                 alt="avatar">
+          </ng-container>
+          <ng-template #defaultPic>
+            <img src="../assets/vector/user.svg"
+                 title="avatar"
+                 alt="avatar">
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-md-2 col-lg-3"></div>
+        <div class="col-md-8 col-lg-6 border pt-4">
+          <div class="row">
+            <div class="col-sm-4">
+              <h5>Születési idő:</h5>
+            </div>
+            <div class="col-sm-8">
+              <p>{{user.dateOfBirth ? (user.dateOfBirth | amFromUnix |
+                amDateFormat: 'LL') : 'Nincs kitöltve'}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <h5>Telefonszám:</h5>
+            </div>
+            <div class="col-sm-8">
+              <p>{{user.tel ? user.tel : 'Nincs kitöltve'}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <h5>Kedvenc túrakategóriái:</h5>
+            </div>
+            <div class="col-sm-8">
+              <p  class="mb-0"
+                  *ngFor="let favEv of favEvents">{{favEvents ?
+                favEv : 'Nincs kitöltve'}}</p>
+            </div>
+          </div>
+
+          <div class="form-group row text-right mt-4">
+            <div class="col-sm-12">
+              <button class="btn-small btn btn-primary">
+                <i class="icon-comment"></i> Üzenet
+              </button>
+              <button class="btn-small btn btn-primary"
+                      (click)="showEmailModalWindow(emailModal)">
+                <i class="icon-paper-plane"></i> E-mail
+              </button>
+            </div>
+          </div>
+
+
+        </div>
+
+
+        <div class="col-md-2 col-lg-3"></div>
+
+      </div>
+
+      <div id="accordion2" class="acc-content mt-3">
+        <div class="card">
+          <div class="card-header bg-mylight"
+               id="heading2"
+               data-toggle="collapse"
+               data-target="#collapse2"
+               aria-expanded="true"
+               aria-controls="collapse2"
+               (click)="isCollapsed2 = !isCollapsed2">
+            <h4>
+              Hirdetett túrái
+              <span *ngIf="watchedUserEventsGrouppedBy2$"> ({{eventsNum}})</span>
+            </h4>
+          </div>
+
+          <div id="collapse2"
+               class="collapse coll"
+               #el2
+               aria-labelledby="heading2"
+               data-parent="#accordion2"
+               [collapse]="isCollapsed2"
+               (collapsed)="setHeight(el2, 0)"
+               (expanded)="setHeight(el2, 0); setHeight(el2, el2.scrollHeight)">
+            <div class="card-body">
+              <ng-container
+                *ngIf="(watchedUserEventsGrouppedBy2$ | async); else loading">
+                <ng-container
+                  *ngIf="(watchedUserEventsGrouppedBy2$ | async)?.length; else emptyEvents">
+                  <div class="row"
+                       *ngFor="let evg of watchedUserEventsGrouppedBy2$ | async">
+                    <div class="col-lg-6 card-deck-container"
+                         *ngFor="let ev of evg">
+                      <div class="card-deck card-deck-item-list">
+                        <ng-container *ngIf="eventCategories">
+                          <app-event-card class="card card-max-width"
+                                          *ngFor="let e of ev"
+                                          [tura]="e"
+                                          [currentUserId]="currentUser.id"
+                                          (addSeen)="addSeen($event.id)"
+                                          [categories]="eventCategories">
+                          </app-event-card>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion3" class="acc-content mt-3">
+        <div class="card">
+          <div class="card-header bg-mylight"
+               id="heading3"
+               data-toggle="collapse"
+               data-target="#collapse3"
+               aria-expanded="true"
+               aria-controls="collapse3"
+               (click)="isCollapsed3 = !isCollapsed3">
+            <h4>
+              Hirdetett cuccai
+              <span *ngIf="watchedUserItemsGrouppedBy2$"> ({{itemsNum}})</span>
+            </h4>
+          </div>
+
+          <div id="collapse3"
+               class="collapse coll"
+               #el3
+               aria-labelledby="heading3"
+               data-parent="#accordion3"
+               [collapse]="isCollapsed3"
+               (collapsed)="setHeight(el3, 0)"
+               (expanded)="setHeight(el3, 0); setHeight(el3, el3.scrollHeight)">
+            <div class="card-body">
+              <ng-container
+                *ngIf="(watchedUserItemsGrouppedBy2$ | async); else loading">
+                <ng-container
+                  *ngIf="(watchedUserItemsGrouppedBy2$ | async)?.length; else emptyItems">
+                  <div class="row"
+                       *ngFor="let itg of watchedUserItemsGrouppedBy2$ | async">
+                    <div class="col-lg-6 card-deck-container"
+                         *ngFor="let it of itg">
+                      <div class="card-deck card-deck-item-list">
+                        <ng-container *ngIf="itemCategories">
+                          <app-item-card
+                            class="card card-max-width"
+                            *ngFor="let i of it"
+                            [cucc]="i"
+                            [currentUserId]="currentUserId"
+                            [categories]="itemCategories">
+                          </app-item-card>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </ng-container>
+  </ng-container>
+
+<ng-template #loading>
+  <app-loading-spinner></app-loading-spinner>
+</ng-template>
+<ng-template #emptyEvents>
+  <p >Nincsenek túrák</p>
+</ng-template>
+<ng-template #emptyItems>
+  <p>Nincsenek cuccok</p>
+</ng-template>
+<ng-template #emailModal>
+  <app-email [emailModalTitle]="emailModalTitle"
+             [currentEmail]="currentUser ? currentUser.email : ''"
+             [recipientsEmail]="recipientsEmail"
+             [subject]="'Levél a Túrázzunk!-ról'"
+             (closeModal)="closeModal()">
+  </app-email>
+</ng-template>
+<ng-template #notLoggedIn>
+  <div class="text-center">
+    <h4 class="mt-4 mb-4">A felhasználói profilok megtekintéséhez be kell
+      jelentkezni!</h4>
+  </div>
+</ng-template>
+

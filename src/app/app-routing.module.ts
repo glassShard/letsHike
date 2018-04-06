@@ -6,8 +6,7 @@ import {UsersComponent} from './users/users.component';
 
 const routes: Routes = [
   {path: 'kezdolap', component: HomeComponent},
-  {path: 'tobbiek', component: UsersComponent},
-
+  {path: 'tobbiek', loadChildren: 'app/users/users.module#UsersModule'},
   {path: 'turak', loadChildren: 'app/event/event.module#EventModule'},
   {path: 'cuccok', loadChildren: 'app/item/item.module#ItemModule'},
   {path: 'user', loadChildren: 'app/user/user.module#UserModule'},
@@ -24,7 +23,6 @@ const routes: Routes = [
 export class AppRoutingModule {
   static routableComponents = [
     HomeComponent,
-    UsersComponent,
     PageNotFoundComponent
   ];
 }
