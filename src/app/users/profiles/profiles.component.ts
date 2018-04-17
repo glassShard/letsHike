@@ -17,6 +17,8 @@ import {ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/share';
 import {Subscription} from 'rxjs/Subscription';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {ChatListModel} from '../../chat/model/chat-list.model';
+import {OpenChatListService} from '../../shared/open-chat-list.service';
 
 @Component({
   selector: 'app-profiles',
@@ -34,9 +36,7 @@ export class ProfilesComponent implements OnInit, OnDestroy {
   public eventsNum: number;
   public itemsNum: number;
   public currentUser: UserModel;
-  public watchedUserId: string;
-  private _watchedUserNick: string;
-  private _watchedUserEmail: string;
+  private watchedUser: UserModel;
   public isCollapsed2 = true;
   public isCollapsed3 = true;
   public favEvents: string[] = [];
@@ -51,7 +51,8 @@ export class ProfilesComponent implements OnInit, OnDestroy {
               private _itemService: ItemService,
               private _categoryService: CategoryService,
               private _renderer: Renderer2,
-              private _modalService: BsModalService) {}
+              private _modalService: BsModalService,
+              private _openChatListService: OpenChatListService) {}
 
   ngOnDestroy() {
     this.unsubscribe(this._subscriptions);
@@ -73,9 +74,10 @@ export class ProfilesComponent implements OnInit, OnDestroy {
     const userId = this._route.snapshot.params['id'];
     this.watchedUser$ = this._userService.getUserById(userId).share();
     this._subscriptions.push(this.watchedUser$.subscribe(user => {
-      this.watchedUserId = user.id;
-      this._watchedUserEmail = user.email;
-      this._watchedUserNick = user.nick;
+      this.watchedUser = user;
+      // this.watchedUserId = user.id;
+      // this._watchedUserEmail = user.email;
+      // this._watchedUserNick = user.nick;
       this.favEvents = user.favEvents ? Object.keys(user.favEvents) : ['Nincs' +
       ' kitöltve'];
     }));
@@ -90,7 +92,7 @@ export class ProfilesComponent implements OnInit, OnDestroy {
       let sorted;
       if (param === 'userEvents') {
         filtered = this.allEvents$
-          .map(events => events.filter(event => event.creatorId === this.watchedUserId))
+          .map(events => events.filter(event => event.creatorId === this.watchedUser.id))
           .do(events => this.eventsNum = events.length);
         sorted = filtered
           .flatMap(rawEvent => {
@@ -104,7 +106,7 @@ export class ProfilesComponent implements OnInit, OnDestroy {
           });
       } else if (param === 'userItems') {
         sorted = this._itemService.getAllItems()
-          .map(items => items.filter(item => item.creatorId === this.watchedUserId))
+          .map(items => items.filter(item => item.creatorId === this.watchedUser.id))
           .do(items => this.itemsNum = items.length)
           .flatMap(rawItems => {
             return Observable.of(
@@ -153,13 +155,24 @@ export class ProfilesComponent implements OnInit, OnDestroy {
   }
 
   showEmailModalWindow(template: TemplateRef<any>) {
-    this.emailModalTitle = `Email ${this._watchedUserNick} részére`;
-    this.recipientsEmail = [this._watchedUserEmail];
+    this.emailModalTitle = `Email ${this.watchedUser.nick} részére`;
+    this.recipientsEmail = [this.watchedUser.email];
     this.modalRef = this._modalService.show(template);
   }
 
   closeModal() {
     this.modalRef.hide();
+  }
+
+  openChat() {
+    // const watchedUserPicUrl = this.watchedUser.picUrl ?
+    // this.watchedUser.picUrl : '../assets/vector/user.svg';
+    const friend = new ChatListModel({
+      $id: this.watchedUser.id,
+      nick: this.watchedUser.nick,
+      picUrl: this.watchedUser.picUrl
+    });
+    this._openChatListService.setOpenChat(friend);
   }
 
   unsubscribe(subscriptions: Subscription[]) {

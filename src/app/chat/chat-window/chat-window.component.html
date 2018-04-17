@@ -1,9 +1,10 @@
 <div class="card">
-  <div class="card-header">
+  <div class="card-header bg-mylight">
     <div class="chat-header">
-      Chat
+      {{title}}
       <div class="chatCloseBtn"
-           (click)="closeChat()"><i class="icon-exit"></i></div>
+           (click)="closeChat(id)"
+           *ngIf="closeable"><i class="icon-exit"></i></div>
     </div>
   </div>
   <div class="card-body" #cardBody>

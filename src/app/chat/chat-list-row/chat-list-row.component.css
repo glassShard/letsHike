@@ -1,0 +1,23 @@
+:host {
+  display: list-item;
+  width: 100%;
+  padding: .4em;
+  border-bottom: 1px solid #cccccc;
+  cursor: pointer !important;
+}
+
+:host(.focused) {
+  background-color: rgba(192,192,190, .3);
+}
+
+.user-image {
+  width: 28px;
+  height: 28px;
+}
+
+strong {
+  margin-left: 50px;
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+}

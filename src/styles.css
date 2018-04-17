@@ -35,6 +35,21 @@ h2 {
   align-items: stretch;
 }
 
+.chatCloseBtn {
+  color: #bebebe;
+  cursor: pointer;
+  transition: all .5s;
+}
+
+.chatCloseBtn:hover {
+  color: #212529;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+}
+
 .my-jumbotron {
   background-color: transparent;
   margin-bottom: 0;

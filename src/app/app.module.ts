@@ -27,6 +27,8 @@ import {AngularFireAuthModule} from 'angularfire2/auth';
 import {ChatModule} from './chat/chat.module';
 import {EmailComponent} from './core/email/email.component';
 import {EmailService} from './shared/email.service';
+import {ChatService} from './chat/chat.service';
+import {OpenChatListService} from './shared/open-chat-list.service';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import {EmailService} from './shared/email.service';
     LoggedInGuard,
     FileService,
     ImageService,
-    EmailService
+    EmailService,
+    ChatService,
+    OpenChatListService
   ],
   entryComponents: [
     LoginModalComponent,

@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -23,14 +23,15 @@ import 'rxjs/add/operator/skip';
 
 export class ChatMessageSendFormComponent implements OnInit, OnChanges {
   form: FormGroup;
-  invalidChatMessageInput = false;
+  public invalidChatMessageInput = false;
   @ViewChild('chatMessageInput') chatMessageInput: ElementRef;
   @Output() newMessage = new EventEmitter<string>();
   @Input() reset = false;
   @Output() resetChange = new EventEmitter<boolean>();
   private _disabled = false;
 
-  constructor(private _fb: FormBuilder) {
+  constructor(private _fb: FormBuilder,
+              private _cdr: ChangeDetectorRef) {
   }
 
   get disabled(): boolean {
@@ -71,12 +72,16 @@ export class ChatMessageSendFormComponent implements OnInit, OnChanges {
         }
       )
       .skip(1)
-      .subscribe(msg => this.invalidChatMessageInput = false);
+      .subscribe(msg => {
+        this.invalidChatMessageInput = false;
+        this._cdr.detectChanges();
+      });
   }
 
   sendMessage() {
     if (this.form.invalid) {
       this.invalidChatMessageInput = true;
+      this._cdr.detectChanges();
       this.chatMessageInput.nativeElement.focus();
     } else {
       this._disabled = true;

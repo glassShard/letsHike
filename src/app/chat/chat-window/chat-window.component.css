@@ -1,23 +1,43 @@
 :host {
-  display: block;
+  display: inline-block;
+  margin-left: 4px;
   width: 100%;
-  max-width: 300px;
+  max-width: 280px;
   height: 100%;
   max-height: 350px;
+}
+
+:host:first-child {
+  margin-left: 0;
+}
+
+:host(.floating) {
+  display: block;
   position: fixed;
   bottom: 4px;
   right: 4px;
   z-index: 100;
-
 }
+
 :host > .card {
   height: 100%;
+  max-height: 350px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.card > .card-header {
+  font-size: 14px;
+  padding: 5px 10px;
 }
 
 .card > .card-body {
   overflow-y: auto;
   /*height: calc(450px - 49px - 49px);*/
-  padding: 15px;
+  padding: 10px;
+}
+
+.card-footer {
+  padding: 10px;
 }
 
 .chat-messages-list {
@@ -27,18 +47,5 @@
   width: 100%;
 }
 
-.chatCloseBtn {
-  color: #bebebe;
-  cursor: pointer;
-  transition: all .5s;
-}
 
-.chatCloseBtn:hover {
-  color: #212529;
-}
-
-.chat-header {
-  display: flex;
-  justify-content: space-between;
-}
 

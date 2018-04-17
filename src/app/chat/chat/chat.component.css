@@ -1,0 +1,9 @@
+:host {
+  position: fixed;
+  bottom: 4px;
+  left: 4px;
+  display: flex;
+  flex-direction: row;
+  width: auto;
+  height: auto;
+}

@@ -1,4 +1,3 @@
 <router-outlet></router-outlet>
 <app-footer class="mt-auto"></app-footer>
-<app-chat></app-chat>
-
+<app-chat *ngIf="isLoggedIn$ | async"></app-chat>

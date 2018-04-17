@@ -126,7 +126,12 @@
               (hideImageSwiper)="showImageSwiper = false">
   </app-swiper>
 
-  <app-chat-window *ngIf="currentUser && showChat" [roomId]="event.id"
+  <app-chat-window *ngIf="currentUser && showChat"
+                   [roomId]="event.id"
+                   [title]="'Chat'"
+                   [closeable]="true"
+                   [floating]="true"
+                   [new]="false"
                    (closeChatWindow)="closeChat()">
   </app-chat-window>
 

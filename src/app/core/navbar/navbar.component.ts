@@ -1,9 +1,13 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {
+  ChangeDetectorRef, Component, EventEmitter, OnInit,
+  Output
+} from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {CategoryService} from '../../shared/category.service';
 import {LoginModalComponent} from '../login-modal/login-modal.component';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {Subscription} from 'rxjs/Subscription';
+import {OpenChatListService} from "../../shared/open-chat-list.service";
 
 @Component({
   selector: 'app-navbar',
@@ -20,7 +24,8 @@ export class NavbarComponent implements OnInit {
   constructor(public userService: UserService,
               private _categoryService: CategoryService,
               private _modalService: BsModalService,
-              private _changeDetection: ChangeDetectorRef) {
+              private _changeDetection: ChangeDetectorRef,
+              private _openChatListService: OpenChatListService) {
   }
 
   ngOnInit() {
@@ -50,6 +55,12 @@ export class NavbarComponent implements OnInit {
     };
     this.modalRef = this._modalService.show(LoginModalComponent);
     Object.assign(this.modalRef.content, initialState);
+  }
+
+  showChatList(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this._openChatListService.setOpenChatList(true);
   }
 
   unsubscribe() {

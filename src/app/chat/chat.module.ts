@@ -8,6 +8,7 @@ import { ChatMessageSendFormComponent } from './chat-message-send-form/chat-mess
 import {MomentModule} from 'angular2-moment';
 import { ChatListComponent } from './chat-list/chat-list.component';
 import {ChatComponent} from './chat/chat.component';
+import { ChatListRowComponent } from './chat-list-row/chat-list-row.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import {ChatComponent} from './chat/chat.component';
     ChatWindowComponent,
     ChatMessageRowComponent,
     ChatMessageSendFormComponent,
-    ChatListComponent
+    ChatListComponent,
+    ChatListRowComponent
   ],
   exports: [
     ChatWindowComponent,

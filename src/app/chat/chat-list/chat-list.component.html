@@ -1,3 +1,23 @@
-<p>
-  chat-list works!
-</p>
+<div class="card">
+  <div class="card-header chat-header bg-mylight">
+    Ismerősök
+    <div class="chatCloseBtn"
+         (click)="closeChatList()">
+      <i class="icon-exit"></i>
+    </div>
+  </div>
+  <div class="card-body">
+    <ng-container
+      *ngIf="friendList$ |async as friendList; else loading">
+      <ul class="friend-list">
+        <app-chat-list-row *ngFor="let friend of friendList"
+                           [friend]="friend"
+        (select)="onSelectFriend($event)"></app-chat-list-row>
+      </ul>
+    </ng-container>
+    <ng-template #loading>
+      <app-loading-spinner [loaderHeight]="60"
+                           [loaderWidth]="60"></app-loading-spinner>
+    </ng-template>
+  </div>
+</div>
