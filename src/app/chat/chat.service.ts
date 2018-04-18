@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {UserService} from '../shared/user.service';
 import {Observable} from 'rxjs/Observable';
 import {ChatMessageModel} from './model/chat.model';
@@ -8,6 +8,7 @@ import 'rxjs/add/operator/switchMap';
 import {ChatListModel} from './model/chat-list.model';
 import 'rxjs/add/operator/first';
 import {ChatCallModel} from './model/chat-call.model';
+import 'rxjs/add/operator/merge';
 
 @Injectable()
 export class ChatService {
@@ -23,7 +24,6 @@ export class ChatService {
         if (user) {
           return new Observable<boolean>(
             observer => {
-              console.log(`${ChatService.PATH}/${roomId}`);
               const room = this._afDb.list(`${ChatService.PATH}/${roomId}`);
               const picUrl = user.picUrl ? user.picUrl : '';
               room.push(
@@ -56,6 +56,17 @@ export class ChatService {
       });
   }
 
+  addFriend(friend: ChatListModel) {
+    return this._userService.getCurrentUser().first()
+      .switchMap(user => {
+        return Observable.fromPromise(this._afDb.object(`chat_friend_list/${user.id}/${friend.$id}`)
+          .set({nick: friend.nick, picUrl: friend.picUrl}))
+          .merge(Observable.fromPromise(this._afDb.object(`chat_friend_list/${friend.$id}/${user.id}`)
+            .set({nick: user.nick, picUrl: user.picUrl}))
+          );
+      });
+  }
+
   getFriendList(): Observable<ChatListModel[]> {
     return this._userService.getCurrentUser()
       .first()
@@ -73,7 +84,11 @@ export class ChatService {
         this._afDb.object(`chat_wait/${friend.$id}/${user.id}`)
           .set({
             'roomId': roomId,
-            'friend': new ChatListModel({$id: user.id, picUrl: user.picUrl, nick: user.nick})
+            'friend': new ChatListModel({
+              $id: user.id,
+              picUrl: user.picUrl,
+              nick: user.nick
+            })
           });
       });
   }
@@ -87,7 +102,8 @@ export class ChatService {
               new ChatCallModel(Object.assign(call, {
                 $id: call.$key,
                 friend: new ChatListModel(Object.assign(call.friend, {
-                  $id: call.$key})
+                    $id: call.$key
+                  })
                 )
               }))
             )
@@ -104,14 +120,12 @@ export class ChatService {
   }
 
   checkRoomAgain(roomId) {
-    this._afDb.object(`${ChatService.PATH}/room/chat_list/${roomId}`)
-      .subscribe(room => {
+    return this._afDb.object(`${ChatService.PATH}/room/chat_list/${roomId}`)
+      .switchMap(room => {
         if (room.$exists()) {
-          console.log('van id');
-          return true;
+          return Observable.of(false);
         } else {
-          console.log('nincs id');
-          return false;
+          return Observable.of(true);
         }
       });
   }

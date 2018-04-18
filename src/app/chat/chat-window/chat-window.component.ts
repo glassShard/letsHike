@@ -13,6 +13,8 @@ import {Observable} from 'rxjs/Observable';
 import {ChatService} from '../chat.service';
 import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/delay';
+import "rxjs/add/operator/switchMap";
+import "rxjs/add/observable/concat";
 
 @Component({
   selector: 'app-chat-window',
@@ -30,6 +32,7 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked, AfterViewI
   @ViewChild('cardBody') cardBody: ElementRef;
   private shouldScroll = true;
   @Output() closeChatWindow = new EventEmitter<void>();
+  @Output() addFriend = new EventEmitter<string>();
   @Input() @HostBinding('class.floating') floating = true;
 
   constructor(private _chatService: ChatService,
@@ -71,23 +74,34 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked, AfterViewI
   onNewMessage(newMessage: string) {
     if (this.new === true) {
       console.log(this.roomId);
-      const idArray = this.roomId.replace('chat_list/', '')
-        .split('-');
-      const newId = `${idArray[1]}-${idArray[0]}`;
-      console.log(newId);
-      this._chatService.checkRoomAgain(newId);
-    }
+      this._chatService.checkRoomAgain(this.roomId)
+        .switchMap(isNew => {
+          if (isNew) {
+            console.log('newRoom');
+            this.addFriend.emit();
+          }
+          return this._chatService.addMessage(`room/${this.roomId}`, newMessage);
+        }).subscribe(res => {
+          if (res) {
+            this.resetForm = true;
+            this._cdr.detectChanges();
+          } else {
+            alert('hiba a chat üzenet küldése közben');
+          }
+        });
+      } else {
+        this._chatService.addMessage(`room/${this.roomId}`, newMessage)
+          .subscribe(res => {
+            if (res) {
+              this.resetForm = true;
+              this._cdr.detectChanges();
+            } else {
+              alert('hiba a chat üzenet küldése közben');
+            }
+          });
+      }
 
-    this._chatService.addMessage(`room/${this.roomId}`, newMessage)
-      .subscribe(res => {
-        if (res) {
-          console.log(res);
-          this.resetForm = true;
-          this._cdr.detectChanges();
-        } else {
-          alert('hiba a chat üzenet küldése közben');
-        }
-      });
+
   }
 
   trackByMessages(index: number, model: ChatMessageModel) {

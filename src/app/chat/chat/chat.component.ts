@@ -89,23 +89,42 @@ export class ChatComponent implements OnInit, OnDestroy {
   onSelectFriend(friend: ChatListModel) {
     this._userService.getCurrentUser().first()
       .subscribe(user => {
-        let roomId = `${user.id}-${friend.$id}`;
+        const roomId = user.id > friend.$id ? `${friend.$id}-${user.id}` : `${user.id}-${friend.$id}`;
         this._afDb.object(`chat/room/chat_list/${roomId}`)
           .subscribe(room => {
-            if (room.$exists()) {
-              this.openChat({
-                title: friend.nick, 'roomId': roomId,
-                closeable: true, 'friend': friend, new: false
-              });
-            } else {
-              roomId = `${friend.$id}-${user.id}`;
-              this.openChat({
-                title: friend.nick, 'roomId': roomId,
-                closeable: true, 'friend': friend, new: true
-              });
-            }
+            const isNew = !room.$exists();
+            this.openChat({
+              title: friend.nick, 'roomId': roomId,
+              closeable: true, 'friend': friend, new: isNew
+            });
           });
-
       });
+
+    //   let roomId = `${user.id}-${friend.$id}`;
+      //   this._afDb.object(`chat/room/chat_list/${roomId}`)
+      //     .subscribe(room => {
+      //       if (room.$exists()) {
+      //         this.openChat({
+      //           title: friend.nick, 'roomId': roomId,
+      //           closeable: true, 'friend': friend, new: false
+      //         });
+      //       } else {
+      //         roomId = `${friend.$id}-${user.id}`;
+      //         this.openChat({
+      //           title: friend.nick, 'roomId': roomId,
+      //           closeable: true, 'friend': friend, new: true
+      //         });
+      //       }
+      //     });
+      //
+      // });
+  }
+
+  addFriend(roomId) {
+    console.log('addFriend in chat.component is running');
+    const windows = this.windows$.getValue();
+    const window = windows.find(element => element.roomId === roomId);
+      this._chatService.addFriend(window.friend)
+        .subscribe(response => console.log(response));
   }
 }
