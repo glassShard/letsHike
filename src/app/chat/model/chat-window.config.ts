@@ -6,5 +6,5 @@ export interface  ChatWindowConfig {
   roomId: string;
   closeable?: boolean;
   friend: ChatListModel;
-  new?: boolean;
+  isNewFriend?: boolean;
 }

@@ -18,33 +18,45 @@ export class ChatService {
               private _afDb: AngularFireDatabase) {
   }
 
-  addMessage(roomId: string, msg: string): Observable<boolean> {
+  addMessage(roomId: string, msg: string, friend: ChatListModel): Observable<boolean> {
     return this._userService.getCurrentUser()
       .switchMap(user => {
         if (user) {
-          return new Observable<boolean>(
-            observer => {
-              const room = this._afDb.list(`${ChatService.PATH}/${roomId}`);
-              const picUrl = user.picUrl ? user.picUrl : '';
-              room.push(
-                new ChatMessageModel({
-                  $id: null,
-                  'msg': msg,
-                  userId: user.id,
-                  userName: user.nick,
-                  userPicUrl: picUrl,
-                  created: moment().unix()
-                })
-              ).then(() => {
-                observer.next(true);
-                observer.complete();
-              }, error => {
-                observer.next(false);
-                observer.error(error);
-                observer.complete();
-              });
-            }
-          );
+          let modifyObs;
+          if (friend != null) {
+            modifyObs = Observable.fromPromise(this._afDb.object(`chat_friend_list/${friend.$id}/${user.id}`)
+              .update({
+                newMessage: true,
+                created: moment().unix()
+              }));
+          } else {
+            modifyObs = Observable.of(null);
+          }
+          return modifyObs.switchMap(() => {
+            return new Observable<boolean>(
+              observer => {
+                const room = this._afDb.list(`${ChatService.PATH}/${roomId}`);
+                const picUrl = user.picUrl ? user.picUrl : '';
+                room.push(
+                  new ChatMessageModel({
+                    $id: null,
+                    'msg': msg,
+                    userId: user.id,
+                    userName: user.nick,
+                    userPicUrl: picUrl,
+                    created: moment().unix()
+                  })
+                ).then(() => {
+                  observer.next(true);
+                  observer.complete();
+                }, error => {
+                  observer.next(false);
+                  observer.error(error);
+                  observer.complete();
+                });
+              }
+            );
+          });
         }
       });
   }
@@ -60,9 +72,9 @@ export class ChatService {
     return this._userService.getCurrentUser().first()
       .switchMap(user => {
         return Observable.fromPromise(this._afDb.object(`chat_friend_list/${user.id}/${friend.$id}`)
-          .set({nick: friend.nick, picUrl: friend.picUrl}))
+          .set({nick: friend.nick, picUrl: friend.picUrl, newMessage: false}))
           .merge(Observable.fromPromise(this._afDb.object(`chat_friend_list/${friend.$id}/${user.id}`)
-            .set({nick: user.nick, picUrl: user.picUrl}))
+            .set({nick: user.nick, picUrl: user.picUrl, newMessage: true, created: moment().unix()}))
           );
       });
   }
@@ -72,6 +84,11 @@ export class ChatService {
       .first()
       .switchMap(user => {
         return this._afDb.list(`chat_friend_list/${user.id}`)
+          .map(rawFriends => rawFriends.sort((a, b) => {
+            const dateA = a.created;
+            const dateB = b.created;
+            return (dateA > dateB) ? -1 : (dateA < dateB) ? 1 : 0;
+          }))
           .map(friends => friends.map(
             friend => new ChatListModel(Object.assign(friend, {$id: friend.$key}))
           ));
@@ -128,5 +145,9 @@ export class ChatService {
           return Observable.of(true);
         }
       });
+  }
+
+  sendTimeStampToFriendList() {
+
   }
 }

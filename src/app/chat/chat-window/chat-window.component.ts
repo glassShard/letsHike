@@ -4,7 +4,7 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ElementRef, EventEmitter, HostBinding,
-  Input,
+  Input, OnDestroy,
   OnInit, Output,
   ViewChild
 } from '@angular/core';
@@ -13,30 +13,45 @@ import {Observable} from 'rxjs/Observable';
 import {ChatService} from '../chat.service';
 import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/delay';
-import "rxjs/add/operator/switchMap";
-import "rxjs/add/observable/concat";
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/observable/concat';
+import {ChatListModel} from '../model/chat-list.model';
+import {TimerObservable} from 'rxjs/observable/TimerObservable';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-chat-window',
   templateUrl: './chat-window.component.html',
   styleUrls: ['./chat-window.component.css'],
 })
-export class ChatWindowComponent implements OnInit, AfterViewChecked, AfterViewInit {
+export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit {
   @Input() id: string;
   @Input() roomId: string;
   @Input() title: string;
   @Input() closeable = true;
-  @Input() new = true;
+  @Input() isNewFriend = true;
+  @Input() friend: ChatListModel;
   resetForm = false;
   chatMessage$: Observable<ChatMessageModel[]>;
   @ViewChild('cardBody') cardBody: ElementRef;
   private shouldScroll = true;
   @Output() closeChatWindow = new EventEmitter<void>();
   @Output() addFriend = new EventEmitter<string>();
+  @Output() addNewMessageFlag = new EventEmitter<ChatListModel>();
+  @Output() sendTick = new EventEmitter<string>();
   @Input() @HostBinding('class.floating') floating = true;
+  sendTickSubscription: Subscription;
 
   constructor(private _chatService: ChatService,
               private _cdr: ChangeDetectorRef) {
+    this.sendTickSubscription = new TimerObservable(1000, 1000)
+      .subscribe(tick => {
+        this.sendTick.emit();
+    });
+  }
+
+  ngOnDestroy() {
+    this.sendTickSubscription.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -58,10 +73,10 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked, AfterViewI
   ngOnInit() {
     this.chatMessage$ = this._chatService.getRoomMessages(`room/${this.roomId}`);
     this.chatMessage$.first().delay(300).subscribe(messages => {
-      if (this.new === true) {
+      if (this.isNewFriend === true) {
         if (messages.length > 0) {
-          this.new = false;
-          console.log(this.new);
+          this.isNewFriend = false;
+          console.log(this.isNewFriend);
         }
       }
       this.shouldScroll = true;
@@ -72,15 +87,13 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked, AfterViewI
   }
 
   onNewMessage(newMessage: string) {
-    if (this.new === true) {
-      console.log(this.roomId);
+    if (this.isNewFriend === true) {
       this._chatService.checkRoomAgain(this.roomId)
-        .switchMap(isNew => {
-          if (isNew) {
-            console.log('newRoom');
+        .switchMap(isNewFriend => {
+          if (isNewFriend) {
             this.addFriend.emit();
           }
-          return this._chatService.addMessage(`room/${this.roomId}`, newMessage);
+          return this._chatService.addMessage(`room/${this.roomId}`, newMessage, null);
         }).subscribe(res => {
           if (res) {
             this.resetForm = true;
@@ -90,13 +103,13 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked, AfterViewI
           }
         });
       } else {
-        this._chatService.addMessage(`room/${this.roomId}`, newMessage)
+        this._chatService.addMessage(`room/${this.roomId}`, newMessage, this.friend)
           .subscribe(res => {
             if (res) {
               this.resetForm = true;
               this._cdr.detectChanges();
             } else {
-              alert('hiba a chat üzenet küldése közben');
+              alert('hiba az üzenet küldése közben');
             }
           });
       }

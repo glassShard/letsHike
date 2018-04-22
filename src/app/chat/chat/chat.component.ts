@@ -13,6 +13,8 @@ import {UserService} from '../../shared/user.service';
 import {AngularFireDatabase} from 'angularfire2/database';
 import {OpenChatListService} from '../../shared/open-chat-list.service';
 import {Subscription} from 'rxjs/Subscription';
+import {Observable} from 'rxjs/Observable';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-chat',
@@ -87,44 +89,58 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   onSelectFriend(friend: ChatListModel) {
+    let roomId: string;
+    let currentUserId: string;
     this._userService.getCurrentUser().first()
-      .subscribe(user => {
-        const roomId = user.id > friend.$id ? `${friend.$id}-${user.id}` : `${user.id}-${friend.$id}`;
-        this._afDb.object(`chat/room/chat_list/${roomId}`)
-          .subscribe(room => {
-            const isNew = !room.$exists();
-            this.openChat({
-              title: friend.nick, 'roomId': roomId,
-              closeable: true, 'friend': friend, new: isNew
-            });
-          });
-      });
+      .switchMap(user => {
+        currentUserId = user.id;
+        roomId = user.id > friend.$id ? `${friend.$id}-${user.id}` : `${user.id}-${friend.$id}`;
+        return this._afDb.object(`chat_friend_list/${user.id}/${friend.$id}`).first() ;
+      })
+      .switchMap(ref => {
+        console.log(ref);
+        if (ref.$exists()) {
+          return Observable.fromPromise(this._afDb.object(`chat_friend_list/${currentUserId}/${friend.$id}`)
+            .update({'newMessage': false}));
+        } else {
+          return Observable.of(null);
+        }
+      })
+      .switchMap(() => this._afDb.object(`chat/room/chat_list/${roomId}`))
+      .subscribe(room => {
 
-    //   let roomId = `${user.id}-${friend.$id}`;
-      //   this._afDb.object(`chat/room/chat_list/${roomId}`)
-      //     .subscribe(room => {
-      //       if (room.$exists()) {
-      //         this.openChat({
-      //           title: friend.nick, 'roomId': roomId,
-      //           closeable: true, 'friend': friend, new: false
-      //         });
-      //       } else {
-      //         roomId = `${friend.$id}-${user.id}`;
-      //         this.openChat({
-      //           title: friend.nick, 'roomId': roomId,
-      //           closeable: true, 'friend': friend, new: true
-      //         });
-      //       }
-      //     });
-      //
-      // });
+        const isNewFriend = !room.$exists();
+        this.openChat({
+          title: friend.nick, 'roomId': roomId,
+          closeable: true, 'friend': friend, 'isNewFriend': isNewFriend
+        });
+      });
+  }
+
+  sendTick(friendId) {
+    let currentUserId: string;
+    this._userService.getCurrentUser().first()
+      .switchMap(user => {
+        currentUserId = user.id;
+        return this._afDb.object(`chat_friend_list/${user.id}/${friendId}`).first();
+      })
+      .switchMap(ref => {
+        if (ref.$exists()) {
+          return Observable.fromPromise(this._afDb.object(`chat_friend_list/${currentUserId}/${friendId}`)
+            .update({'windowOpen': moment().unix()}));
+        } else {
+          return Observable.of(null);
+        }
+      }).subscribe();
   }
 
   addFriend(roomId) {
     console.log('addFriend in chat.component is running');
-    const windows = this.windows$.getValue();
-    const window = windows.find(element => element.roomId === roomId);
+    const window = this.windows$.getValue().find(element => element.roomId === roomId);
       this._chatService.addFriend(window.friend)
         .subscribe(response => console.log(response));
   }
+
+  // this._chatService.checkRoomAgain(`chat_friend_list/${user.id}/${this.friend.$id}`)
+
 }

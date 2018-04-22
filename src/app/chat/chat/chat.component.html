@@ -1,13 +1,15 @@
 <div>
   <app-chat-window
-    *ngFor="let config of windows$ | async"
-    [id]="config.id"
-    [roomId]="config.roomId"
-    [title]="config.title"
-    [closeable]="config.closeable"
-    [new]="config.new"
-    (closeChatWindow)="removeChat(config.id)"
-    (addFriend)="addFriend(config.roomId)"
+    *ngFor="let window of windows$ | async"
+    [id]="window.id"
+    [roomId]="window.roomId"
+    [title]="window.title"
+    [closeable]="window.closeable"
+    [isNewFriend]="window.isNewFriend"
+    [friend]="window.friend"
+    (closeChatWindow)="removeChat(window.id)"
+    (addFriend)="addFriend(window.roomId)"
+    (sendTick)="sendTick(window.friend.$id)"
     [floating]="false">
   </app-chat-window>
   <!--class="col-sm col-md-3 align-self-end"-->

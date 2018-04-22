@@ -67,6 +67,10 @@ h2 {
   background-color: rgb(230, 252, 192)
 }
 
+.bg-bluelight {
+  background-color: rgba(218, 227, 251, 0.7);
+}
+
 .nav-button {
   display: block;
   padding: .5rem 1rem;

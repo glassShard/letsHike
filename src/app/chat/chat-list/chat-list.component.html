@@ -12,6 +12,7 @@
       <ul class="friend-list">
         <app-chat-list-row *ngFor="let friend of friendList"
                            [friend]="friend"
+                           [ngClass]="{'bg-bluelight': friend.newMessage}"
         (select)="onSelectFriend($event)"></app-chat-list-row>
       </ul>
     </ng-container>
