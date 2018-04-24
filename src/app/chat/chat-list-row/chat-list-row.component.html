@@ -1,5 +1,13 @@
 <span class="float-left">
-  <img alt="Felhasználó profilképe" class="user-image rounded-circle bg-mylight"
-       [src]="friend.picUrl">
+  <img alt="Felhasználó profilképe" title="Felhasználó profilképe"
+       class="user-image rounded-circle bg-mylight"
+       [src]="friend.picUrl"
+       *ngIf="friend.picUrl; else defaultPic">
+  <ng-template #defaultPic>
+    <img src="../../assets/vector/user.svg"
+         class="user-image rounded-circle bg-mylight"
+         title="Felhasználó profilképe"
+         alt="Felhasználó profilképe">
+  </ng-template>
  </span>
 <strong>{{friend.nick}}</strong>

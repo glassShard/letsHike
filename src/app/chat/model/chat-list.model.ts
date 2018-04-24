@@ -2,6 +2,8 @@ export class ChatListModel {
   $id: string;
   nick: string;
   picUrl: string;
+  newMessage?: boolean;
+  windowOpen?: number;
 
   constructor (data?: ChatListModel) {
     if (data != null) {

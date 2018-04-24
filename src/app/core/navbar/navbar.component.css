@@ -1,0 +1,24 @@
+.sign-container {
+  position: relative;
+}
+
+.sign {
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: white;
+  background-color: #f60;
+  top: 0;
+  right: 0;
+  position: absolute;
+}
+
+.sign-text {
+  line-height: 0;
+  margin: 0;
+  padding: 0;
+}

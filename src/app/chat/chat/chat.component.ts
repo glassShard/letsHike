@@ -61,11 +61,13 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   openChat(config: ChatWindowConfig) {
-    console.log(config);
+    console.log('open chat eleje');
     const windows = this.windows$.getValue();
     if (windows.find(element => element.roomId === `chat_list/${config.roomId}`) == null) {
+      console.log('még nincs ilyen room nyitva');
       if (config.id === undefined) {
-        this._chatService.addChatWait(config.roomId, config.friend);
+        console.log('még nincs ilyen id, ezért adunk');
+       // this._chatService.addChatWait(config.roomId, config.friend);
         config.id = `${config.roomId}${new Date().getTime()}`;
       }
       if (config.closeable == null) {
@@ -76,6 +78,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       windows.push(config);
       this.windows$.next(windows);
     }
+    console.log('open chat vége');
   }
 
   removeChat(id: string) {
@@ -89,6 +92,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   onSelectFriend(friend: ChatListModel) {
+    console.log(friend);
     let roomId: string;
     let currentUserId: string;
     this._userService.getCurrentUser().first()
@@ -98,17 +102,15 @@ export class ChatComponent implements OnInit, OnDestroy {
         return this._afDb.object(`chat_friend_list/${user.id}/${friend.$id}`).first() ;
       })
       .switchMap(ref => {
-        console.log(ref);
         if (ref.$exists()) {
           return Observable.fromPromise(this._afDb.object(`chat_friend_list/${currentUserId}/${friend.$id}`)
-            .update({'newMessage': false}));
+            .update({'newMessage': false})) ;
         } else {
           return Observable.of(null);
         }
       })
-      .switchMap(() => this._afDb.object(`chat/room/chat_list/${roomId}`))
+      .switchMap(() => this._afDb.object(`chat/room/chat_list/${roomId}`).first())
       .subscribe(room => {
-
         const isNewFriend = !room.$exists();
         this.openChat({
           title: friend.nick, 'roomId': roomId,

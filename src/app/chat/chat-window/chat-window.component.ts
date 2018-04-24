@@ -1,11 +1,15 @@
 import {
   AfterViewChecked,
   AfterViewInit,
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectorRef,
   Component,
-  ElementRef, EventEmitter, HostBinding,
-  Input, OnDestroy,
-  OnInit, Output,
+  ElementRef,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
   ViewChild
 } from '@angular/core';
 import {ChatMessageModel} from '../model/chat.model';
@@ -34,32 +38,32 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked,
   resetForm = false;
   chatMessage$: Observable<ChatMessageModel[]>;
   @ViewChild('cardBody') cardBody: ElementRef;
-  private shouldScroll = true;
   @Output() closeChatWindow = new EventEmitter<void>();
   @Output() addFriend = new EventEmitter<string>();
   @Output() addNewMessageFlag = new EventEmitter<ChatListModel>();
   @Output() sendTick = new EventEmitter<string>();
   @Input() @HostBinding('class.floating') floating = true;
-  sendTickSubscription: Subscription;
+  subscriptions: Subscription[] = [];
+  private shouldScroll = true;
 
   constructor(private _chatService: ChatService,
               private _cdr: ChangeDetectorRef) {
-    this.sendTickSubscription = new TimerObservable(1000, 1000)
+    this.subscriptions.push(new TimerObservable(1000, 1000)
       .subscribe(tick => {
         this.sendTick.emit();
-    });
+      }));
   }
 
   ngOnDestroy() {
-    this.sendTickSubscription.unsubscribe();
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
   ngAfterViewInit(): void {
-    this.chatMessage$.subscribe(() => {
+    this.subscriptions.push(this.chatMessage$.subscribe(() => {
       this.shouldScroll = true;
       this._cdr.detectChanges();
       this.ngAfterViewChecked();
-    });
+    }));
     this._cdr.detach();
   }
 
@@ -73,48 +77,49 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked,
   ngOnInit() {
     this.chatMessage$ = this._chatService.getRoomMessages(`room/${this.roomId}`);
     this.chatMessage$.first().delay(300).subscribe(messages => {
-      if (this.isNewFriend === true) {
-        if (messages.length > 0) {
-          this.isNewFriend = false;
-          console.log(this.isNewFriend);
+        if (this.isNewFriend === true) {
+          if (messages.length > 0) {
+            this.isNewFriend = false;
+            console.log(this.isNewFriend);
+          }
         }
-      }
-      this.shouldScroll = true;
-      this._cdr.detectChanges();
-      this.ngAfterViewChecked();
+        this.shouldScroll = true;
+        this._cdr.detectChanges();
+        this.ngAfterViewChecked();
       }
     );
   }
 
-  onNewMessage(newMessage: string) {
+  onNewMessage(message: string) {
+    console.log('roomId: ', this.roomId);
+    console.log('message: ', message);
+    console.log('this.friend: ', this.friend);
+    let newFriendObs: Observable<any>;
     if (this.isNewFriend === true) {
-      this._chatService.checkRoomAgain(this.roomId)
+      newFriendObs = this._chatService.checkRoomAgain(this.roomId)
         .switchMap(isNewFriend => {
+          let needAddFriendObs: Observable<any>;
           if (isNewFriend) {
-            this.addFriend.emit();
-          }
-          return this._chatService.addMessage(`room/${this.roomId}`, newMessage, null);
-        }).subscribe(res => {
-          if (res) {
-            this.resetForm = true;
-            this._cdr.detectChanges();
+            needAddFriendObs = this._chatService.addFriend(this.friend);
+            this.isNewFriend = false;
           } else {
-            alert('hiba a chat üzenet küldése közben');
+            needAddFriendObs = Observable.of(null);
           }
+          return needAddFriendObs;
         });
-      } else {
-        this._chatService.addMessage(`room/${this.roomId}`, newMessage, this.friend)
-          .subscribe(res => {
-            if (res) {
-              this.resetForm = true;
-              this._cdr.detectChanges();
-            } else {
-              alert('hiba az üzenet küldése közben');
-            }
-          });
-      }
-
-
+    } else {
+      newFriendObs = Observable.of(null);
+    }
+    newFriendObs
+      .switchMap(() => this._chatService.addMessage(`room/${this.roomId}`, message, this.friend))
+      .subscribe(res => {
+        if (res) {
+          this.resetForm = true;
+          this._cdr.detectChanges();
+        } else {
+          alert('hiba az üzenet küldése közben');
+        }
+      });
   }
 
   trackByMessages(index: number, model: ChatMessageModel) {

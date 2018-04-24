@@ -8,6 +8,7 @@ import {LoginModalComponent} from '../login-modal/login-modal.component';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {Subscription} from 'rxjs/Subscription';
 import {OpenChatListService} from "../../shared/open-chat-list.service";
+import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'app-navbar',
@@ -20,6 +21,7 @@ export class NavbarComponent implements OnInit {
   private _subscriptions: Subscription[] = [];
   public modalRef: BsModalRef;
   public isCollapsed = true;
+  public newMessagesLength$: Observable<number>;
 
   constructor(public userService: UserService,
               private _categoryService: CategoryService,
@@ -31,6 +33,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.itemCategories = this._categoryService.getItemCategories();
     this.eventCategories = this._categoryService.getEventCategories();
+    this.newMessagesLength$ = this._openChatListService.getNewMessagesLength();
   }
 
   logout(event) {
