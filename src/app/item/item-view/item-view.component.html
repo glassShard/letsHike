@@ -77,7 +77,7 @@
 
   <app-chat-window *ngIf="currentUser && showChat"
                    [roomId]="item.id"
-                   [new]="false"
+                   [isNewFriend]="false"
                    (closeChatWindow)="closeChat()"
                    [title]="'Chat'">
   </app-chat-window>

@@ -7,8 +7,8 @@ import {AngularFireDatabase} from 'angularfire2/database';
 import 'rxjs/add/operator/switchMap';
 import {ChatListModel} from './model/chat-list.model';
 import 'rxjs/add/operator/first';
-import {ChatCallModel} from './model/chat-call.model';
 import 'rxjs/add/operator/merge';
+import 'rxjs/add/operator/distinctUntilChanged';
 
 @Injectable()
 export class ChatService {
@@ -24,8 +24,10 @@ export class ChatService {
     return this._userService.getCurrentUser().first()
       .switchMap(user => {
         if (user) {
-          const picUrl = user.picUrl ? user.picUrl : '';
-          return Observable.fromPromise(this._afDb.list(`${ChatService.PATH}/${roomId}`).push(
+          const addMessageObs = new Observable<boolean>(
+            observer => {
+              const picUrl = user.picUrl ? user.picUrl : '';
+              this._afDb.list(`${ChatService.PATH}/${roomId}`).push(
                 new ChatMessageModel({
                   $id: null,
                   'msg': msg,
@@ -34,9 +36,22 @@ export class ChatService {
                   userPicUrl: picUrl,
                   'created': created
                 })
-              )
-          )
-            .switchMap(messageSent => {
+              ).then(() => {
+                console.log('then onResolve ág eleje');
+                observer.next(true);
+                observer.complete();
+                console.log('then onResolve ág vége');
+              }, error => {
+                observer.next(false);
+                observer.error(error);
+                observer.complete();
+              });
+            }
+          );
+          return addMessageObs
+          .switchMap(messageSent => {
+            console.log('üzenet elküldve: ', messageSent);
+            if (messageSent) {
               return this._afDb.object(`chat_friend_list/${friend.$id}/${user.id}`).first()
                 .switchMap(friendRef => {
                   let updateNewMessageObs: Observable<boolean>;
@@ -63,82 +78,15 @@ export class ChatService {
                   }
                   return updateNewMessageObs;
                 });
-            });
+            } else { // ha nem sikerült az üzenetet elküldeni
+              return Observable.of(false);
+            }
+          });
         }  else { // ha nincs user
           return Observable.of(false);
         }
       });
   }
-
-  // addMessage(roomId: string, msg: string, friend: ChatListModel): Observable<boolean> {
-  //   let newMessage: boolean;
-  //   const created = moment().unix();
-  //   return this._userService.getCurrentUser().first()
-  //     .switchMap(user => {
-  //       if (user) {
-  //         const addMessageObs = new Observable<boolean>(
-  //           observer => {
-  //             const picUrl = user.picUrl ? user.picUrl : '';
-  //             this._afDb.list(`${ChatService.PATH}/${roomId}`).push(
-  //               new ChatMessageModel({
-  //                 $id: null,
-  //                 'msg': msg,
-  //                 userId: user.id,
-  //                 userName: user.nick,
-  //                 userPicUrl: picUrl,
-  //                 'created': created
-  //               })
-  //             ).then(() => {
-  //               console.log('then onResolve ág eleje');
-  //               observer.next(true);
-  //               observer.complete();
-  //               console.log('then onResolve ág vége');
-  //             }, error => {
-  //               observer.next(false);
-  //               observer.error(error);
-  //               observer.complete();
-  //             });
-  //           }
-  //         );
-  //         return addMessageObs
-  //         .switchMap(messageSent => {
-  //           console.log('üzenet elküldve: ', messageSent);
-  //           if (messageSent) {
-  //             return this._afDb.object(`chat_friend_list/${friend.$id}/${user.id}`).first()
-  //               .switchMap(friendRef => {
-  //                 let updateNewMessageObs: Observable<boolean>;
-  //                 if (friendRef.$exists) {
-  //                   console.log(friendRef.windowOpen, moment().unix());
-  //                   newMessage = created > friendRef.windowOpen;
-  //                   updateNewMessageObs = new Observable<boolean>(observer => {
-  //                     this._afDb.object(`chat_friend_list/${friend.$id}/${user.id}`)
-  //                       .update({
-  //                         'newMessage': newMessage,
-  //                         'created': created
-  //                       })
-  //                       .then(() => {
-  //                         observer.next(true);
-  //                         observer.complete();
-  //                       }, error => {
-  //                         observer.next(false);
-  //                         observer.error(error);
-  //                         observer.complete();
-  //                       });
-  //                   });
-  //                 } else {
-  //                   updateNewMessageObs = Observable.of(false);
-  //                 }
-  //                 return updateNewMessageObs;
-  //               });
-  //           } else { // ha nem sikerült az üzenetet elküldeni
-  //             return Observable.of(false);
-  //           }
-  //         });
-  //       }  else { // ha nincs user
-  //         return Observable.of(false);
-  //       }
-  //     });
-  // }
 
   getRoomMessages(roomId: string): Observable<ChatMessageModel[]> {
     return this._afDb.list(`${ChatService.PATH}/${roomId}`)
@@ -165,59 +113,39 @@ export class ChatService {
       .first()
       .switchMap(user => {
         return this._afDb.list(`chat_friend_list/${user.id}`)
-          .map(rawFriends => rawFriends.sort((a, b) => {
-            const dateA = a.created;
-            const dateB = b.created;
-            return (dateA > dateB) ? -1 : (dateA < dateB) ? 1 : 0;
-          }))
+          .distinctUntilChanged((a: ChatListModel[], b: ChatListModel[]) => {
+            if (a.length === b.length) {
+              const compare = function (friend, index) {
+                return !(friend.nick === this[index].nick &&
+                  friend.picUrl === this[index].picUrl &&
+                  friend.created === this[index].created &&
+                  friend.newMessage === this[index].newMessage);
+              };
+              const filtered = a.filter(compare, b);
+              return filtered.length === 0;
+            } else {
+              return false; // ha azt akarom, hogy lefusson, akkor false
+            }
+          })
+          .do((list) => console.log(list))
+          .map(rawFriends => {
+            const compare = (a, b) => {
+              const dateA = a.created;
+              const dateB = b.created;
+              return (dateA > dateB) ? -1 : (dateA < dateB) ? 1 : 0;
+            };
+            return rawFriends.filter(friend => friend.newMessage)
+              .sort(compare)
+              .concat(rawFriends.filter(friend => !friend.newMessage)
+                .sort(compare));
+          })
           .map(friends => friends.map(
             friend => new ChatListModel(Object.assign(friend, {$id: friend.$key}))
           ));
       });
   }
 
-  addChatWait(roomId: string, friend: ChatListModel): void {
-    this._userService.getCurrentUser().first()
-      .subscribe(user => {
-        this._afDb.object(`chat_wait/${friend.$id}/${user.id}`)
-          .set({
-            'roomId': roomId,
-            'friend': new ChatListModel({
-              $id: user.id,
-              picUrl: user.picUrl,
-              nick: user.nick
-            })
-          });
-      });
-  }
-
-  getChatCallWatcher(): Observable<ChatCallModel[]> {
-    return this._userService.getCurrentUser().first()
-      .switchMap(user =>
-        this._afDb.list(`chat_wait/${user.id}`)
-          .map(calls =>
-            calls.map(call =>
-              new ChatCallModel(Object.assign(call, {
-                $id: call.$key,
-                friend: new ChatListModel(Object.assign(call.friend, {
-                    $id: call.$key
-                  })
-                )
-              }))
-            )
-          )
-      );
-  }
-
-  removeWatcher(id: string) {
-    this._userService.getCurrentUser().first()
-      .delay(1000)
-      .subscribe(user => {
-        this._afDb.object(`chat_wait/${user.id}/${id}`).remove().then();
-      });
-  }
-
-  checkRoomAgain(roomId: string): Observable<boolean> {
+   checkRoomAgain(roomId: string): Observable<boolean> {
     return this._afDb.object(`${ChatService.PATH}/room/chat_list/${roomId}`).first()
       .switchMap(room => {
         if (room.$exists()) {

@@ -32,18 +32,18 @@ export class ChatComponent implements OnInit, OnDestroy {
               private _afDb: AngularFireDatabase,
               private _openChatListService: OpenChatListService,
               private _cdr: ChangeDetectorRef) {
-    this._chatService.getChatCallWatcher().subscribe(data => {
-      if (data != null && data.length > 0) {
-        data.forEach(call => {
-          this.openChat({
-            title: call.friend.nick,
-            roomId: call.roomId,
-            friend: call.friend
-          });
-          this._chatService.removeWatcher(call.friend.$id);
-        });
-      }
-    });
+    // this._chatService.getChatCallWatcher().subscribe(data => {
+    //   if (data != null && data.length > 0) {
+    //     data.forEach(call => {
+    //       this.openChat({
+    //         title: call.friend.nick,
+    //         roomId: call.roomId,
+    //         friend: call.friend
+    //       });
+    //       this._chatService.removeWatcher(call.friend.$id);
+    //     });
+    //   }
+    // });
   }
 
   ngOnInit() {

@@ -7,15 +7,15 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {ChatListModel} from '../chat/model/chat-list.model';
 import {Subject} from 'rxjs/Subject';
 import {ChatService} from '../chat/chat.service';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class OpenChatListService {
   private openChatList = new BehaviorSubject<boolean>(false);
   private openChat = new Subject<ChatListModel>();
-  public newMessagesLength = new Subject<number>();
+  public newMessagesLength = new ReplaySubject<number>(1);
 
   constructor(private _chatService: ChatService) {
-    console.log('newMessagesLength: ');
     this._chatService.getFriendList().subscribe(list => {
       this.newMessagesLength.next(list.filter(model => model.newMessage).length);
     });

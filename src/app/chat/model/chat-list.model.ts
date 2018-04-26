@@ -4,6 +4,7 @@ export class ChatListModel {
   picUrl: string;
   newMessage?: boolean;
   windowOpen?: number;
+  created?: number;
 
   constructor (data?: ChatListModel) {
     if (data != null) {

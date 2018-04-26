@@ -1,11 +1,14 @@
 <div class="container">
   <a class="navbar-brand" href="#"></a>
-  <button class="navbar-toggler" type="button"
+  <button class="navbar-toggler sign-container" type="button"
           (click)="isCollapsed = !isCollapsed" data-toggle="collapse"
           data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false"
           aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
+    <div class="sign" *ngIf="newMessagesLength$ | async as length">
+      <span class="sign-text">{{length}}</span>
+    </div>
   </button>
 
   <div [collapse]="isCollapsed" class="collapse navbar-collapse"
@@ -48,8 +51,8 @@
         <li class="nav-item sign-container">
           <a class="nav-link" href="#" (click)="showChatList($event)"
              routerLinkActive="active">Üzenetek</a>
-          <div class="sign" *ngIf="newMessagesLength$ | async as length">
-            <span class="sign-text">{{length}}</span>
+          <div class="sign">
+            <span class="sign-text">{{newMessagesLength$ | async}}</span>
           </div>
         </li>
         <li class="nav-item">
