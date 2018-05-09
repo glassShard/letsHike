@@ -4,6 +4,7 @@
                         [newButton]="newButton"
                         (searchField)="assignText($event.text)"
                         (choosenCategory)="chooseCategory($event.category)"
+                        [currentUser]="currentUser$ | async"
 ></app-filter-and-new-bar>
 
 <ng-container
@@ -16,7 +17,7 @@
           <app-item-card class="card card-max-width"
                          *ngFor="let i of it"
                          [cucc]="i"
-                         [currentUserId]="currentUserId"
+                         [currentUserId]="(currentUser$ | async) === null ? null : (currentUser$ | async).id"
                          [categories]="itemCategories">
           </app-item-card>
         </div>

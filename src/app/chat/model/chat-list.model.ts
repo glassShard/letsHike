@@ -5,6 +5,7 @@ export class ChatListModel {
   newMessage?: boolean;
   windowOpen?: number;
   created?: number;
+  sendEmail?: boolean;
 
   constructor (data?: ChatListModel) {
     if (data != null) {

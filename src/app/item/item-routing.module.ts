@@ -9,7 +9,7 @@ import {LoggedInGuard} from '../shared/logged-in.guard';
 const routes: Routes = [
   {path: '', component: ItemComponent, children: [
       {path: '', component: ItemListComponent},
-      {path: 'new', component: ItemDetailsComponent, canActivate: [LoggedInGuard]},
+      {path: 'new', component: ItemDetailsComponent},
 
       {path: 'view/:id', component: ItemViewComponent}
     ]},

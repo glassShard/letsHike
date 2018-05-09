@@ -6,6 +6,10 @@
   cursor: pointer !important;
 }
 
+:host:last-child {
+  border-bottom: none;
+}
+
 :host(.focused) {
   background-color: rgba(150, 222, 42, 1);;
   color: white;

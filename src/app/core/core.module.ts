@@ -10,6 +10,7 @@ import {RouterModule} from '@angular/router';
 import {LoginModalComponent} from './login-modal/login-modal.component';
 import {EmailComponent} from './email/email.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import {VerifyEmailModule} from "../verify-email/verify-email.module";
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import {ReactiveFormsModule} from '@angular/forms';
     ModalModule,
     AlertModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    VerifyEmailModule
   ],
   declarations: [
     NavbarComponent,

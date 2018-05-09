@@ -9,6 +9,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import 'rxjs/add/operator/mergeMap';
 import {FileService} from '../../shared/file.service';
 import {Subscription} from 'rxjs/Subscription';
+import {PasswordMatchValidator} from '../password.match.validator';
+import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'app-registration',
@@ -29,7 +31,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
               private _fileService: FileService) {
     this._subscription = this._userService.isLoggedIn$.subscribe(isLoggedIn => {
       if (isLoggedIn) {
-        this._userService.logout();
+        this._router.navigate(['/user']);
       }
     });
   }
@@ -63,6 +65,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         dateOfBirth: null,
         tel: '',
         avatar: null,
+      }, {
+        validator: PasswordMatchValidator.PasswordMatch
       }
     );
     this.user = new UserModel;
@@ -84,9 +88,10 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-
+    let setButtonSubscription = new Subscription();
+    this.submitted = true;
     if (this.form.valid) {
-      this.submitted = true;
+
       let userId = '';
       const password = this.form.get('password').value;
 
@@ -96,21 +101,23 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       this.user.dateOfBirth = !(this.form.get('dateOfBirth').value === null)
         ? new Date(this.form.get('dateOfBirth').value).getTime() / 1000 : null;
       this.user.tel = this.form.get('tel').value;
-
+      let stream: Observable<any>;
       if (this.avatar) {
-        this._userService.register(this.user, password)
+        stream = this._userService.register(this.user, password)
           .flatMap(user => {
             const formModel = this.prepareSave(user.id);
             userId = user.id;
             return this._fileService.uploadAvatar(userId, formModel);
-          }).subscribe(data => {
-            console.log(data);
-          },
-          err => console.warn(err));
+          });
+
       } else {
-        this._userService.register(this.user, password)
-          .subscribe(data => console.log(data), err => console.warn(err));
+        stream = this._userService.register(this.user, password);
       }
+      stream.subscribe(data => console.log(data),
+        err => console.warn(err));
+    } else {
+      setButtonSubscription = this.form.statusChanges
+        .subscribe(res => this.submitted = (res !== 'VALID'));
     }
   }
 

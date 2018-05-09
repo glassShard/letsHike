@@ -8,6 +8,8 @@ import {ChatListModel} from '../chat/model/chat-list.model';
 import {Subject} from 'rxjs/Subject';
 import {ChatService} from '../chat/chat.service';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {UserService} from './user.service';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class OpenChatListService {
@@ -15,10 +17,18 @@ export class OpenChatListService {
   private openChat = new Subject<ChatListModel>();
   public newMessagesLength = new ReplaySubject<number>(1);
 
-  constructor(private _chatService: ChatService) {
-    this._chatService.getFriendList().subscribe(list => {
-      this.newMessagesLength.next(list.filter(model => model.newMessage).length);
-    });
+  constructor(private _chatService: ChatService,
+              private _userService: UserService) {
+    this._userService.isLoggedIn$
+      .switchMap(isLoggedIn => isLoggedIn ? this._chatService.getFriendList() :
+        Observable.of(null))
+      .subscribe(list => {
+        if (list != null) {
+          this.newMessagesLength.next(list.filter(model => model.newMessage).length);
+        } else {
+          this.newMessagesLength.next(0);
+        }
+      });
   }
 
   getOpenChatList() {

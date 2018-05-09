@@ -15,7 +15,7 @@
                id="nick"
                formControlName="nick"
                placeholder="Ezen a néven látnak majd a többiek..."
-               [ngClass]="{'is-invalid': submitted && form.get('nick').invalid}">
+               [ngClass]="{'is-invalid': disabled && form.get('nick').invalid}">
         <div class="invalid-feedback"
              *ngIf="form.get('nick').hasError('required')">
           A felhasználónév kitöltése kötelező
@@ -32,7 +32,7 @@
              id="email"
              formControlName="email"
              placeholder="Email..."
-             [ngClass]="{'is-invalid': submitted && form.get('email').invalid}">
+             [ngClass]="{'is-invalid': disabled && form.get('email').invalid}">
       <div class="invalid-feedback"
            *ngIf="form.get('email').hasError('required')">
         Kérjük, add meg az email címedet

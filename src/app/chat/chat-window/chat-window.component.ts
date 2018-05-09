@@ -130,3 +130,6 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked,
     this.closeChatWindow.emit();
   }
 }
+
+// TODO: cloud functionnal törölni az archivált vagy törölt eventek és
+// itemek chatszobáját.

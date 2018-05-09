@@ -7,6 +7,7 @@ import {UserService} from '../../shared/user.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/do';
 import {Subscription} from 'rxjs/Subscription';
+import {UserModel} from '../../shared/user-model';
 
 @Component({
   selector: 'app-event-list',
@@ -16,7 +17,7 @@ import {Subscription} from 'rxjs/Subscription';
 export class EventListComponent implements OnInit, OnDestroy {
 
   public eventCategories;
-  public currentUserId: string;
+  public currentUser$: Observable<UserModel>;
   public eventsGrouppedBy2$: Observable<EventModel[][]>;
   public newButton = 'Új túra';
   public title = 'Túrák';
@@ -92,9 +93,9 @@ export class EventListComponent implements OnInit, OnDestroy {
 
     this._subscriptions.push(this._userService.isLoggedIn$.subscribe(isLoggedIn => {
       if (isLoggedIn) {
-        this.currentUserId = this._userService.currentUserId;
+        this.currentUser$ = this._userService.getCurrentUser();
       } else {
-        this.currentUserId = null;
+        this.currentUser$ = Observable.of(null);
       }
     }));
   }

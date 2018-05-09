@@ -10,20 +10,21 @@ import {EventModel} from '../../shared/event-model';
 import {EventService} from '../../shared/event.service';
 import {CategoryService} from '../../shared/category.service';
 import {ItemService} from '../../shared/item.service';
+import {Subscription} from 'rxjs/Subscription';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   user$: Observable<UserModel>;
   public joinedEventsGrouppedBy2$: Observable<EventModel[][]>;
   public myEventsGrouppedBy2$: Observable<EventModel[][]>;
   public myItemsGrouppedBy2$: Observable<EventModel[][]>;
   public eventCategories;
   public itemCategories;
-  private allEvents: Observable<EventModel[]>;
   public currentUserId: string;
   public isCollapsed1 = true;
   public isCollapsed2 = true;
@@ -32,14 +33,36 @@ export class ProfileComponent implements OnInit {
   public isCollapsed5 = true;
   public favItems: {};
   public favEvents: {};
+  public alert = true;
+  public error = false;
+  public info = false;
+  public disabled = false;
+  private allEvents: Observable<EventModel[]>;
+  private _subscriptions: Subscription[] = [];
 
   constructor(private _userService: UserService,
               private _eventService: EventService,
               private _itemService: ItemService,
               private _categoryService: CategoryService,
-              private _renderer: Renderer2) {}
+              private _renderer: Renderer2,
+              private _router: Router) {
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.forEach(subscription => {
+      subscription.unsubscribe();
+    });
+  }
 
   ngOnInit() {
+    this._subscriptions.push(this._userService.isLoggedIn$
+      .subscribe(isLoggedIn => {
+        if (!isLoggedIn) {
+          this._router.navigate(['/kezdolap']);
+        }
+      })
+    );
+
     this.user$ = this._userService.getCurrentUser();
     this.currentUserId = this._userService.currentUserId;
 
@@ -51,8 +74,7 @@ export class ProfileComponent implements OnInit {
       if (param === 'joined' || param === 'myEvents') {
         if (param === 'joined') {
           filtered = this.allEvents
-            .map(events => events.filter(event => event.guestsIds && event.guestsIds.hasOwnProperty(this.currentUserId)))
-            .do(res => console.log(res));
+            .map(events => events.filter(event => event.guestsIds && event.guestsIds.hasOwnProperty(this.currentUserId)));
         }
         if (param === 'myEvents') {
           filtered = this.allEvents
@@ -115,7 +137,7 @@ export class ProfileComponent implements OnInit {
           this._categoryService.getItemCategories(),
           (eCats, iCats) => {
             const setChecked = (favSgs, sgCats) => {
-              let src: {checked: boolean};
+              let src: { checked: boolean };
               if (favSgs) {
                 sgCats.map(sgCat => {
                   if (Object.keys(favSgs).filter(favSg => favSg === sgCat.category).length > 0) {
@@ -143,7 +165,7 @@ export class ProfileComponent implements OnInit {
   addSeen(eventId: string): void {
     this._eventService.getEventByIdOnce(eventId)
       .switchMap(ev => {
-        const seen = ev.seen ? ++ ev.seen : 1;
+        const seen = ev.seen ? ++ev.seen : 1;
         return this._eventService.addSeen(ev.id, seen);
       }).subscribe();
   }
@@ -152,8 +174,19 @@ export class ProfileComponent implements OnInit {
     console.log(what, checked);
     this._userService.saveCategory(whereFrom, what, checked);
   }
+
+  verifyEmail() {
+    this.disabled = true;
+    this._userService.verifyEmail().subscribe(res => {
+      this.alert = false;
+      this.info = true;
+      this.error = false;
+    }, err => {
+      this.error = true;
+      this.disabled = false;
+    });
+  }
 }
 
 // TODO: profilkép módosítás utáni oldalbetöltéskor nem frissíti a képet
-// TODO: ezen az oldalon történő ki és belépésnél a favcat értékei rosszul
-// töltődnek be (nem frissülnek az új felhasználóra)
+// TODO: login modalban az email box kapja meg az aktiválást

@@ -59,87 +59,85 @@ export class ProfilesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    const userId = this._route.snapshot.params['id'];
+    this.watchedUser$ = this._userService.getUserById(userId).share();
+
     this._subscriptions.push(this._userService.isLoggedIn$
-      .flatMap(isLoggedIn => {
+      .switchMap(isLoggedIn => {
         if (isLoggedIn) {
           return this._userService.getCurrentUser();
         } else {
           return Observable.of(null);
         }
-      }).subscribe(user => {
-        this.currentUser = user;
+      })
+      .switchMap(currentUser => {
+        this.currentUser = currentUser;
+        return this.watchedUser$;
+      })
+      .subscribe(user => {
+        this.watchedUser = user;
+        this.favEvents = user.favEvents ? Object.keys(user.favEvents) : ['Nincs' +
+        ' kitöltve'];
+
+        this._categoryService.getItemCategories().subscribe(res => this.itemCategories = res);
+        this._categoryService.getEventCategories().subscribe(res => this.eventCategories = res);
+
+        this.allEvents$ = this._eventService.getAllEvents();
+
+        const sortAndGroup = (param) => {
+          let filtered;
+          let sorted;
+          if (param === 'userEvents') {
+            filtered = this.allEvents$
+              .map(events => events.filter(event => event.creatorId === this.watchedUser.id))
+              .do(events => this.eventsNum = events.length);
+            sorted = filtered
+              .flatMap(rawEvent => {
+                return Observable.of(
+                  rawEvent.sort((a, b) => {
+                    const dateA = a.date;
+                    const dateB = b.date;
+                    return (dateA < dateB) ? -1 : (dateA > dateB) ? 1 : 0;
+                  })
+                );
+              });
+          } else if (param === 'userItems') {
+            sorted = this._itemService.getAllItems()
+              .map(items => items.filter(item => item.creatorId === this.watchedUser.id))
+              .do(items => this.itemsNum = items.length)
+              .flatMap(rawItems => {
+                return Observable.of(
+                  rawItems.sort((a, b) => {
+                    const dateA = a.dateOfPublish;
+                    const dateB = b.dateOfPublish;
+                    return (dateA > dateB) ? -1 : (dateA < dateB) ? 1 : 0;
+                  })
+                );
+              });
+          }
+          return sorted
+            .map(data => {
+              return data.reduce((acc, curr: EventModel, ind: number) => {
+                if (ind % 2 === 0) {
+                  acc.push([]);
+                }
+                acc[acc.length - 1].push(curr);
+                return acc;
+              }, [])
+                .reduce((acc, curr, ind) => {
+                  if (ind % 2 === 0) {
+                    acc.push([]);
+                  }
+                  acc[acc.length - 1].push(curr);
+                  return acc;
+                }, []);
+            });
+        };
+
+        this.watchedUserEventsGrouppedBy2$ = sortAndGroup('userEvents');
+        this.watchedUserItemsGrouppedBy2$ = sortAndGroup('userItems');
       })
     );
-
-    const userId = this._route.snapshot.params['id'];
-    this.watchedUser$ = this._userService.getUserById(userId).share();
-    this._subscriptions.push(this.watchedUser$.subscribe(user => {
-      this.watchedUser = user;
-      // this.watchedUserId = user.id;
-      // this._watchedUserEmail = user.email;
-      // this._watchedUserNick = user.nick;
-      this.favEvents = user.favEvents ? Object.keys(user.favEvents) : ['Nincs' +
-      ' kitöltve'];
-    }));
-
-    this._categoryService.getItemCategories().subscribe(res => this.itemCategories = res);
-    this._categoryService.getEventCategories().subscribe(res => this.eventCategories = res);
-
-    this.allEvents$ = this._eventService.getAllEvents();
-
-    const sortAndGroup = (param) => {
-      let filtered;
-      let sorted;
-      if (param === 'userEvents') {
-        filtered = this.allEvents$
-          .map(events => events.filter(event => event.creatorId === this.watchedUser.id))
-          .do(events => this.eventsNum = events.length);
-        sorted = filtered
-          .flatMap(rawEvent => {
-            return Observable.of(
-              rawEvent.sort((a, b) => {
-                const dateA = a.date;
-                const dateB = b.date;
-                return (dateA < dateB) ? -1 : (dateA > dateB) ? 1 : 0;
-              })
-            );
-          });
-      } else if (param === 'userItems') {
-        sorted = this._itemService.getAllItems()
-          .map(items => items.filter(item => item.creatorId === this.watchedUser.id))
-          .do(items => this.itemsNum = items.length)
-          .flatMap(rawItems => {
-            return Observable.of(
-              rawItems.sort((a, b) => {
-                const dateA = a.dateOfPublish;
-                const dateB = b.dateOfPublish;
-                return (dateA > dateB) ? -1 : (dateA < dateB) ? 1 : 0;
-              })
-            );
-          });
-      }
-      return sorted
-        .map(data => {
-          return data.reduce((acc, curr: EventModel, ind: number) => {
-            if (ind % 2 === 0) {
-              acc.push([]);
-            }
-            acc[acc.length - 1].push(curr);
-            return acc;
-          }, [])
-            .reduce((acc, curr, ind) => {
-              if (ind % 2 === 0) {
-                acc.push([]);
-              }
-              acc[acc.length - 1].push(curr);
-              return acc;
-            }, []);
-        });
-    };
-
-    this.watchedUserEventsGrouppedBy2$ = sortAndGroup('userEvents');
-
-    this.watchedUserItemsGrouppedBy2$ = sortAndGroup('userItems');
   }
 
   setHeight(el, height) {
@@ -165,8 +163,6 @@ export class ProfilesComponent implements OnInit, OnDestroy {
   }
 
   openChat() {
-    // const watchedUserPicUrl = this.watchedUser.picUrl ?
-    // this.watchedUser.picUrl : '../assets/vector/user.svg';
     const friend = new ChatListModel({
       $id: this.watchedUser.id,
       nick: this.watchedUser.nick,
@@ -180,3 +176,4 @@ export class ProfilesComponent implements OnInit, OnDestroy {
   }
 }
 
+// TODO: a hirdetett túrákat és cuccokat kiszervezni, és betenni ugyanazt a saját profilba is.

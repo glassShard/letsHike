@@ -1,0 +1,48 @@
+<div class="modal-header bg-alert">
+  <div class="verifyEmail-header">
+    <h5 class="modal-title pl-3">
+      Nem megerősített email cím</h5>
+    <button type="button" class="close" (click)="modalRef.hide()"
+            aria-label="Close">
+      <span aria-hidden="true"><i class="icon-exit"></i></span>
+    </button>
+  </div>
+
+</div>
+<div class="modal-body">
+  <div class="form-group col-12">
+    <p class="text-danger">Ezt a funkciót nem használhatod, mert email címed még nem
+      ellenőrzött.</p>
+    <p>Az ellenőrzés csak pár perc!</p>
+    <p>Kérj a lenti gombbal ellenőrző linket, majd az
+      email címedre küldött levélben kattints rá.
+    </p>
+  </div>
+  <div class="form-group col-12">
+    <alert type="danger"
+           [dismissible]="true"
+           *ngIf="error"
+           (onClose)="error = false">
+      <br />
+      <p>Hiba történt a link kiküldése során. Kérjük, próbáld újra!</p>
+    </alert>
+    <alert type="success"
+           [dismissOnTimeout]="3000"
+           *ngIf="success"
+           (onClosed)="modalRef.hide()">
+      <p>A megerősítő linket elküldtük email-címedre.</p>
+    </alert>
+  </div>
+
+  <div class="form-group mt-3 text-right col-12">
+    <button type="button"
+            [disabled]="disabled"
+            (click)="verifyEmail()"
+            class="btn btn-primary">
+      <i class="icon-paper-plane"></i> Kérem a linket!
+    </button>
+    <button type="button" class="btn btn-secondary"
+            (click)="modalRef.hide()"><i class="icon-exit"></i> Mégse
+    </button>
+  </div>
+</div>

@@ -32,18 +32,48 @@ export class ChatComponent implements OnInit, OnDestroy {
               private _afDb: AngularFireDatabase,
               private _openChatListService: OpenChatListService,
               private _cdr: ChangeDetectorRef) {
-    // this._chatService.getChatCallWatcher().subscribe(data => {
-    //   if (data != null && data.length > 0) {
-    //     data.forEach(call => {
-    //       this.openChat({
-    //         title: call.friend.nick,
-    //         roomId: call.roomId,
-    //         friend: call.friend
-    //       });
-    //       this._chatService.removeWatcher(call.friend.$id);
+    // this._chatService.tryCloud()
+    //   .subscribe(data => {
+    //     let filteredRelations;
+    //     console.log(data);
+    //     const relations = [];
+    //
+    //     data.forEach(user => {
+    //       const userId = user.$key;
+    //       relations.push(Object.keys(user).map(friendId => {
+    //         user[friendId].friend = friendId;
+    //         user[friendId].user = userId;
+    //         return user[friendId];
+    //       }));
     //     });
-    //   }
-    // });
+    //
+    //     const reducedRelations = relations.reduce((acc, curr) => {
+    //       curr.map(elem => {
+    //         acc.push(elem);
+    //       });
+    //       return acc;
+    //     }, []);
+    //
+    //     filteredRelations = reducedRelations.filter(elem => {
+    //       return elem.newMessage && elem.sendEmail;
+    //     });
+    //     this._userService.getAllUsers().first().subscribe(list => {
+    //       console.log(list);
+    //       const modifiedRelations = filteredRelations.map(relation => {
+    //         const toUser = list.filter(user => user.id === relation.user);
+    //         if (toUser) {
+    //           relation.userEmail = toUser[0].email;
+    //           relation.userNick = toUser[0].nick;
+    //         } else {
+    //           relation = null;
+    //         }
+    //         return relation;
+    //       });
+    //
+    //       console.log(modifiedRelations);
+    //     });
+    //   });
+
   }
 
   ngOnInit() {
@@ -104,7 +134,9 @@ export class ChatComponent implements OnInit, OnDestroy {
       .switchMap(ref => {
         if (ref.$exists()) {
           return Observable.fromPromise(this._afDb.object(`chat_friend_list/${currentUserId}/${friend.$id}`)
-            .update({'newMessage': false})) ;
+            .update({
+              'newMessage': false,
+              sendEmail: false})) ;
         } else {
           return Observable.of(null);
         }

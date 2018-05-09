@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {BsModalRef} from 'ngx-bootstrap';
 import {UserService} from '../../shared/user.service';
 

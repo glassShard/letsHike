@@ -71,6 +71,19 @@ h2 {
   background-color: rgba(218, 227, 251, 0.7);
 }
 
+.bg-orangelight {
+  background-color: #ffc10724;
+}
+
+.bg-alert {
+  background-color: #f8d7da;
+}
+
+.alert {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
 .nav-button {
   display: block;
   padding: .5rem 1rem;
@@ -125,6 +138,7 @@ footer {
   width: 100%;
   height: 200px;
   padding: 20px 0;
+  border-radius: .25rem;
 }
 
 .profile-avatar {

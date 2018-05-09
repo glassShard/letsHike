@@ -11,6 +11,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/switchMap';
 import {Subscription} from 'rxjs/Subscription';
+import {UserModel} from '../../shared/user-model';
 
 @Component({
   selector: 'app-item-list',
@@ -21,7 +22,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
   public itemsGrouppedBy2$: Observable<ItemModel[]>;
   public itemCategories;
-  public currentUserId: string;
+  public currentUser$: Observable<UserModel>;
   public newButton = 'Új cucc';
   public title = 'Cuccok';
   private stringFromSearch$ = new BehaviorSubject(null);
@@ -43,9 +44,9 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
     this._subscriptions.push(this._userService.isLoggedIn$.subscribe(isLoggedIn => {
       if (isLoggedIn) {
-        this.currentUserId = this._userService.currentUserId;
+        this.currentUser$ = this._userService.getCurrentUser();
       } else {
-        this.currentUserId = null;
+        this.currentUser$ = Observable.of(null);
       }
     }));
 

@@ -10,9 +10,9 @@
   <div class="profile-header bg-mylight mb-3">
     <div class="profile-avatar">
       <ng-container *ngIf="user.picUrl; else defaultPic">
-      <img src="{{user.picUrl}}"
-           title="avatar"
-           alt="avatar">
+        <img src="{{user.picUrl}}"
+             title="avatar"
+             alt="avatar">
       </ng-container>
       <ng-template #defaultPic>
         <img src="../assets/vector/user.svg"
@@ -23,23 +23,51 @@
   </div>
 
   <div class="row">
-
+    <div class="col-12">
+      <alert type="danger" *ngIf="!user.emailVerified && alert"
+             [dismissible]="true">
+        <br/>
+        <p>Email címed még nem ellenőrizött, így a szolgáltatásokat csak korlátozottan tudod
+          használni. Nem tölthetsz fel új túrát, cuccot, és emailt sem küldhetsz. Az ellenőrzés csak
+          pár perc! Kérj az alábbi gombbal ellenőrző linket, majd az
+          email címedre küldött levélben kattints rá.</p>
+        <div class="text-right">
+          <button type="button"
+                  (click)="verifyEmail()"
+                  [disabled]="disabled"
+                  class="btn btn-primary">
+            <i class="icon-paper-plane"></i> Kérem a linket!
+          </button>
+        </div>
+      </alert>
+      <alert type="info" *ngIf="info"
+             [dismissOnTimeout]="3000" (onClosed)="info=false">
+        <p>Az ellenőrző linket sikeresen kiküldtük email címedre.</p>
+      </alert>
+      <alert type="danger" *ngIf="error"
+             [dismissible]="true" (onClosed)="error=false">
+        <p>A link kiküldése sikertelen volt. Kérjük, próbáld újra!</p>
+      </alert>
+    </div>
     <div class="col-md-2 col-lg-3"></div>
     <div class="col-md-8 col-lg-6 border pt-4">
+
       <div class="row">
-          <div class="col-sm-4">
-            <h5>Felhasználónév:</h5>
-          </div>
-          <div class="col-sm-8">
-            <p>{{user.nick}}</p>
-          </div>
+        <div class="col-sm-4">
+          <h5>Felhasználónév:</h5>
+        </div>
+        <div class="col-sm-8">
+          <p>{{user.nick}}</p>
+        </div>
       </div>
       <div class="row">
         <div class="col-sm-4">
           <h5>E-mail cím:</h5>
         </div>
         <div class="col-sm-8">
-          <p>{{user.email}}</p>
+          <p [ngClass]="{'text-danger': !user.emailVerified, 'text-success': user.emailVerified}">
+            {{user.email}}
+          </p>
         </div>
       </div>
       <div class="row">
@@ -64,7 +92,7 @@
         <div class="col-sm-12">
           <button type="submit"
                   class="btn btn-primary" routerLink="/user/edit">
-            Módosítás
+            <i class="icon-pencil"></i> Módosítás
           </button>
         </div>
       </div>
@@ -105,12 +133,12 @@
                 <div class="card-deck card-deck-item-list">
                   <ng-container *ngIf="eventCategories">
                     <app-event-card
-                                    class="card card-max-width"
-                                    *ngFor="let e of ev"
-                                    [tura]="e"
-                                    [currentUserId]="currentUserId"
-                                    (addSeen)="addSeen($event.id)"
-                                    [categories]="eventCategories">
+                      class="card card-max-width"
+                      *ngFor="let e of ev"
+                      [tura]="e"
+                      [currentUserId]="currentUserId"
+                      (addSeen)="addSeen($event.id)"
+                      [categories]="eventCategories">
                     </app-event-card>
                   </ng-container>
                 </div>
@@ -153,11 +181,11 @@
                   <div class="card-deck card-deck-item-list">
                     <ng-container *ngIf="eventCategories">
                       <app-event-card class="card card-max-width"
-                                        *ngFor="let e of ev"
-                                        [tura]="e"
-                                        [currentUserId]="currentUserId"
-                                        (addSeen)="addSeen($event.id)"
-                                        [categories]="eventCategories">
+                                      *ngFor="let e of ev"
+                                      [tura]="e"
+                                      [currentUserId]="currentUserId"
+                                      (addSeen)="addSeen($event.id)"
+                                      [categories]="eventCategories">
                       </app-event-card>
                     </ng-container>
                   </div>
@@ -202,11 +230,11 @@
                   <div class="card-deck card-deck-item-list">
                     <ng-container *ngIf="itemCategories">
                       <app-item-card
-                                     class="card card-max-width"
-                                     *ngFor="let i of it"
-                                     [cucc]="i"
-                                     [currentUserId]="currentUserId"
-                                     [categories]="itemCategories">
+                        class="card card-max-width"
+                        *ngFor="let i of it"
+                        [cucc]="i"
+                        [currentUserId]="currentUserId"
+                        [categories]="itemCategories">
                       </app-item-card>
                     </ng-container>
                   </div>
@@ -318,3 +346,4 @@
 <ng-template #loading>
   <app-loading-spinner></app-loading-spinner>
 </ng-template>
+

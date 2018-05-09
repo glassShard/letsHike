@@ -7,6 +7,7 @@ export class UserModel {
   picUrl?: string;
   favItems?: object;
   favEvents?: object;
+  emailVerified?: boolean;
 
   constructor(param?: UserModel) {
     if (param) {

@@ -29,6 +29,7 @@ import {EmailComponent} from './core/email/email.component';
 import {EmailService} from './shared/email.service';
 import {ChatService} from './chat/chat.service';
 import {OpenChatListService} from './shared/open-chat-list.service';
+import {VerifyEmailComponent} from "./verify-email/verify-email.component";
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import {OpenChatListService} from './shared/open-chat-list.service';
   ],
   entryComponents: [
     LoginModalComponent,
-    EmailComponent
+    EmailComponent,
+    VerifyEmailComponent
   ],
   bootstrap: [AppComponent]
 })

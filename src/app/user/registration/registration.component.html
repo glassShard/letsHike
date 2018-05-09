@@ -33,7 +33,6 @@
                formControlName="password"
                placeholder="Jelszó..."
                [ngClass]="{'is-invalid': submitted && form.get('password').invalid}">
-        {{form.get('password').value}} {{form.get('password').invalid}}
         <div class="invalid-feedback"
              *ngIf="form.get('password').hasError('required')">
           A jelszó kitöltése kötelező
@@ -42,10 +41,6 @@
              *ngIf="form.get('password').hasError('minLength') || form.get('password').hasError('maxLength')">
           A "Jelszó újra" mező minimális hossza 6 maximális hossza 15 karakter
         </div>
-        <!--<div class="invalid-feedback"-->
-             <!--*ngIf="form.get('passwordAgain').hasError('passwordMatch')">-->
-          <!--A két jelszó nem egyezik-->
-        <!--</div>-->
       </div>
       <div class="form-group col-md-4">
         <label for="passwordAgain">Jelszó újra:</label>
@@ -63,10 +58,10 @@
              *ngIf="form.get('passwordAgain').hasError('minLength') || form.get('passwordAgain').hasError('maxLength')">
           A "Jelszó újra" mező minimális hossza 6 maximális hossza 15 karakter
         </div>
-        <!--<div class="invalid-feedback"-->
-             <!--*ngIf="form.get('passwordAgain').hasError('passwordMatch')">-->
-          <!--A két jelszó nem egyezik-->
-        <!--</div>-->
+        <div class="invalid-feedback"
+             *ngIf="form.get('passwordAgain').hasError('validatePasswordMatch')">
+          A két jelszó nem egyezik
+        </div>
       </div>
     </div>
     <div class="form-row">

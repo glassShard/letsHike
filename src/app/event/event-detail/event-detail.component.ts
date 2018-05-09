@@ -100,7 +100,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       }).subscribe((event: EventModel) => {
         console.log(event);
         if (event === null) {
-          if (this.currentUser.id) {
+          if (this.currentUser) {
             this._router.navigate(['404']);
           } else {
             this._router.navigate(['/turak']);
@@ -119,7 +119,11 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           if (this.event.creatorId === this.currentUser.id) {
             fillForm();
           } else {
-            this._router.navigate(['/turak/new']);
+            if (this.currentUser.emailVerified) {
+              this._router.navigate(['/turak/new']);
+            } else {
+              this._router.navigate(['/turak']);
+            }
           }
         }
       }));

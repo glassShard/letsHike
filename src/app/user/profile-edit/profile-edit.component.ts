@@ -57,10 +57,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const handle404 = () => {
-      this._router.navigate(['404']);
-    };
-
     this.form = this._fb.group(
       {
         nick: ['', Validators.compose([
@@ -93,10 +89,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
           nick: user.nick,
           tel: user.tel
         });
-        console.log(this.userOldDatas);
         this.fillForm();
       } else {
-        this._router.navigate(['./registration']);
+        this._router.navigate(['/kezdolap']);
       }
     }));
   }
@@ -147,6 +142,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    let setButtonSubscription = new Subscription();
     this.disabled = true;
     delete(this.error);
     if (this.form.valid) {
@@ -156,6 +152,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       this.currentUser.tel = this.form.get('tel').value;
       this.currentUser.dateOfBirth = !(this.form.get('dateOfBirth').value === null)
         ? new Date(this.form.get('dateOfBirth').value).getTime() / 1000 : null;
+      delete this.currentUser.emailVerified;
 
       if (this.currentUser.email === this.userOldDatas.email) {
         this.saveChanges();
@@ -163,6 +160,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         this.show();
       }
       // this._router.navigate(['/user']);
+    } else {
+      setButtonSubscription = this.form.statusChanges
+        .subscribe(res => this.disabled = (res !== 'VALID'));
     }
   }
 
@@ -220,8 +220,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   }
 
   show() {
-    this._subscriptions.push(this._modalService.onHide
-      .subscribe(() => this._changeDetection.markForCheck()));
     this._subscriptions.push(this._modalService.onHide.subscribe(() => {
       console.log(this.modalRef.content.authFailed);
       if (this.modalRef.content.authFailed) {
@@ -237,6 +235,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
             console.warn(error2);
           }));
       }
+      return this._changeDetection.markForCheck();
     }));
     const initialState = {
       modalTitle: 'Belépési adatok',
@@ -250,6 +249,38 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     this.modalRef = this._modalService.show(LoginModalComponent);
     Object.assign(this.modalRef.content, initialState);
   }
+
+  // show() {
+  //   this._subscriptions.push(this._modalService.onHide
+  //     .subscribe(() => this._changeDetection.markForCheck()));
+  //   this._subscriptions.push(this._modalService.onHide.subscribe(() => {
+  //     console.log(this.modalRef.content.authFailed);
+  //     if (this.modalRef.content.authFailed) {
+  //       this._saveFailed = true;
+  //       this.disabled = false;
+  //       this.error = 'Az adatokat a hibás autentikáció miatt nem mentettük.' +
+  //         ' Kérjük, próbáld újra.';
+  //     } else {
+  //       this._subscriptions.push(this._userService.changeEmail(this.currentUser.email)
+  //         .subscribe(() => this.saveChanges(), error2 => {
+  //           this.error = 'Hiba történt az email mentése során. Kérjük,' +
+  //             ' próbáld újra.';
+  //           console.warn(error2);
+  //         }));
+  //     }
+  //   }));
+  //   const initialState = {
+  //     modalTitle: 'Belépési adatok',
+  //     text: 'Az e-mail cím megváltoztatásához kérjük, erősítsd' +
+  //     ' meg, hogy tényleg Te vagy:',
+  //     needRememberMe: false,
+  //     needEmail: false,
+  //     closeBtnName: 'Mehet',
+  //     isReAuth: true
+  //   };
+  //   this.modalRef = this._modalService.show(LoginModalComponent);
+  //   Object.assign(this.modalRef.content, initialState);
+  // }
 
 }
 

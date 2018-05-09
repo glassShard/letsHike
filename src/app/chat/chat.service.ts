@@ -56,13 +56,14 @@ export class ChatService {
                 .switchMap(friendRef => {
                   let updateNewMessageObs: Observable<boolean>;
                   if (friendRef.$exists) {
-                    console.log(friendRef.windowOpen, moment().unix());
+ //                   console.log(friendRef.windowOpen, moment().unix());
                     newMessage = created > friendRef.windowOpen;
                     updateNewMessageObs = new Observable<boolean>(observer => {
                       this._afDb.object(`chat_friend_list/${friend.$id}/${user.id}`)
                         .update({
                           'newMessage': newMessage,
-                          'created': created
+                          'created': created,
+                          sendEmail: newMessage
                         })
                         .then(() => {
                           observer.next(true);
@@ -127,7 +128,6 @@ export class ChatService {
               return false; // ha azt akarom, hogy lefusson, akkor false
             }
           })
-          .do((list) => console.log(list))
           .map(rawFriends => {
             const compare = (a, b) => {
               const dateA = a.created;
@@ -145,7 +145,7 @@ export class ChatService {
       });
   }
 
-   checkRoomAgain(roomId: string): Observable<boolean> {
+  checkRoomAgain(roomId: string): Observable<boolean> {
     return this._afDb.object(`${ChatService.PATH}/room/chat_list/${roomId}`).first()
       .switchMap(room => {
         if (room.$exists()) {
@@ -155,4 +155,8 @@ export class ChatService {
         }
       });
   }
+
+  // tryCloud() {
+  //   return this._afDb.list('chat_friend_list').first();
+  // }
 }

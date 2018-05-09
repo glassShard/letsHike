@@ -88,7 +88,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
         }
       }).subscribe((item: ItemModel) => {
         if (item === null) {
-          if (this.currentUser.id) {
+          if (this.currentUser) {
             this._router.navigate(['404']);
           } else {
             this._router.navigate(['/cuccok']);
@@ -107,7 +107,11 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
           if (this.item.creatorId === this.currentUser.id) {
             fillForm();
           } else {
-            this._router.navigate(['/cuccok/new']);
+            if (this.currentUser.emailVerified) {
+              this._router.navigate(['/cuccok/new']);
+            } else {
+              this._router.navigate(['/cuccok']);
+            }
           }
         }
       })
