@@ -31,15 +31,19 @@
                class="form-control"
                id="password"
                formControlName="password"
-               placeholder="Jelszó..."
+               placeholder="6-15 kisbetű, nagybetű vagy szám..."
                [ngClass]="{'is-invalid': submitted && form.get('password').invalid}">
         <div class="invalid-feedback"
              *ngIf="form.get('password').hasError('required')">
-          A jelszó kitöltése kötelező
+          Az "Jelszó" kitöltése kötelező
         </div>
         <div class="invalid-feedback"
-             *ngIf="form.get('password').hasError('minLength') || form.get('password').hasError('maxLength')">
-          A "Jelszó újra" mező minimális hossza 6 maximális hossza 15 karakter
+             *ngIf="form.get('password').hasError('minlength') || form.get('password').hasError('maxlength')">
+          A "Jelszó" mező minimális hossza 6, maximális hossza 15 karakter.
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="form.get('password').hasError('pattern')">
+          A "Jelszó" csak kis- és nagybetűket, valamint számokat tartalmazhat.
         </div>
       </div>
       <div class="form-group col-md-4">
@@ -48,19 +52,23 @@
                class="form-control"
                id="passwordAgain"
                formControlName="passwordAgain"
-               placeholder="Jelszó újra..."
+               placeholder="Mint az előbb..."
                [ngClass]="{'is-invalid': submitted && form.get('passwordAgain').invalid}">
         <div class="invalid-feedback"
              *ngIf="form.get('passwordAgain').hasError('required')">
-          A "Jelszó újra" kitöltése kötelező
+          Az "Jelszó újra" kitöltése kötelező
         </div>
         <div class="invalid-feedback"
-             *ngIf="form.get('passwordAgain').hasError('minLength') || form.get('passwordAgain').hasError('maxLength')">
-          A "Jelszó újra" mező minimális hossza 6 maximális hossza 15 karakter
+             *ngIf="form.get('passwordAgain').hasError('minlength') || form.get('passwordAgain').hasError('maxlength')">
+          A "Jelszó újra" mező minimális hossza 6, maximális hossza 15 karakter.
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="form.get('passwordAgain').hasError('pattern')">
+          A "Jelszó újra" csak kis- és nagybetűket, valamint számokat tartalmazhat.
         </div>
         <div class="invalid-feedback"
              *ngIf="form.get('passwordAgain').hasError('validatePasswordMatch')">
-          A két jelszó nem egyezik
+          A két jelszó nem egyezik.
         </div>
       </div>
     </div>
@@ -99,7 +107,8 @@
                id="tel"
                formControlName="tel"
                placeholder="Telefonszámod...">
-        <small class="form-text text-muted">Ha kitöltöd, adatlapodon, valamint hirdetés feladása esetén a termék oldalán kattintás után láthatóvá tesszük. Ha nem adod meg, de hirdetést adsz fel, csak a tagok fognak tudni veled kapcsolatba lépni, ezért javasoljuk, hogy hirdetés-feladás esetén mindenképpen töltsd ki!</small>
+        <small class="form-text text-muted">Ha kitöltöd, adatlapodon, valamint hirdetés feladása
+          esetén a termék, illetve túra oldalán láthatóvá tesszük.</small>
       </div>
     </div>
     <div class="form-row">

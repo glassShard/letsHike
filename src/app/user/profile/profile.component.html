@@ -28,7 +28,9 @@
              [dismissible]="true">
         <br/>
         <p>Email címed még nem ellenőrizött, így a szolgáltatásokat csak korlátozottan tudod
-          használni. Nem tölthetsz fel új túrát, cuccot, és emailt sem küldhetsz. Az ellenőrzés csak
+          használni. Nem tölthetsz fel új túrát, cuccot, és emailt sem küldhetsz a tagoknak,
+          valamint nem jelentkezhetsz túrákra. Az
+          ellenőrzés csak
           pár perc! Kérj az alábbi gombbal ellenőrző linket, majd az
           email címedre küldött levélben kattints rá.</p>
         <div class="text-right">
@@ -42,11 +44,11 @@
       </alert>
       <alert type="info" *ngIf="info"
              [dismissOnTimeout]="3000" (onClosed)="info=false">
-        <p>Az ellenőrző linket sikeresen kiküldtük email címedre.</p>
+        <p class="mb-0">Az ellenőrző linket sikeresen kiküldtük email címedre.</p>
       </alert>
       <alert type="danger" *ngIf="error"
              [dismissible]="true" (onClosed)="error=false">
-        <p>A link kiküldése sikertelen volt. Kérjük, próbáld újra!</p>
+        <p class="mb-0">A link kiküldése sikertelen volt. Kérjük, próbáld újra!</p>
       </alert>
     </div>
     <div class="col-md-2 col-lg-3"></div>

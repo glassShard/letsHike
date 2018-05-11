@@ -52,33 +52,36 @@ export class ChatService {
           .switchMap(messageSent => {
             console.log('üzenet elküldve: ', messageSent);
             if (messageSent) {
-              return this._afDb.object(`chat_friend_list/${friend.$id}/${user.id}`).first()
-                .switchMap(friendRef => {
-                  let updateNewMessageObs: Observable<boolean>;
-                  if (friendRef.$exists) {
- //                   console.log(friendRef.windowOpen, moment().unix());
-                    newMessage = created > friendRef.windowOpen;
-                    updateNewMessageObs = new Observable<boolean>(observer => {
-                      this._afDb.object(`chat_friend_list/${friend.$id}/${user.id}`)
-                        .update({
-                          'newMessage': newMessage,
-                          'created': created,
-                          sendEmail: newMessage
-                        })
-                        .then(() => {
-                          observer.next(true);
-                          observer.complete();
-                        }, error => {
-                          observer.next(false);
-                          observer.error(error);
-                          observer.complete();
-                        });
-                    });
-                  } else {
-                    updateNewMessageObs = Observable.of(false);
-                  }
-                  return updateNewMessageObs;
-                });
+              if (friend !== null) {
+                return this._afDb.object(`chat_friend_list/${friend.$id}/${user.id}`).first()
+                  .switchMap(friendRef => {
+                    let updateNewMessageObs: Observable<boolean>;
+                    if (friendRef.$exists) {
+                      newMessage = created > friendRef.windowOpen;
+                      updateNewMessageObs = new Observable<boolean>(observer => {
+                        this._afDb.object(`chat_friend_list/${friend.$id}/${user.id}`)
+                          .update({
+                            'newMessage': newMessage,
+                            'created': created,
+                            sendEmail: newMessage
+                          })
+                          .then(() => {
+                            observer.next(true);
+                            observer.complete();
+                          }, error => {
+                            observer.next(false);
+                            observer.error(error);
+                            observer.complete();
+                          });
+                      });
+                    } else {
+                      updateNewMessageObs = Observable.of(false);
+                    }
+                    return updateNewMessageObs;
+                  });
+              } else {
+                return Observable.of(true);
+              }
             } else { // ha nem sikerült az üzenetet elküldeni
               return Observable.of(false);
             }

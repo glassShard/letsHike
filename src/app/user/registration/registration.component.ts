@@ -10,7 +10,7 @@ import 'rxjs/add/operator/mergeMap';
 import {FileService} from '../../shared/file.service';
 import {Subscription} from 'rxjs/Subscription';
 import {PasswordMatchValidator} from '../password.match.validator';
-import {Observable} from "rxjs/Observable";
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-registration',
@@ -80,8 +80,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       const reader = new FileReader();
       reader.readAsDataURL(files);
       reader.onload = (ev) => {
-        console.log(ev);
-        console.log(ev.target);
         this.avatar = reader.result;
       };
     }

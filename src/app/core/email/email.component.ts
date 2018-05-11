@@ -48,7 +48,6 @@ export class EmailComponent implements OnInit {
     let setButton = new Subscription();
     this.clearError();
     this.submitted = true;
-    console.log(this.sendEmail.valid);
     if (this.sendEmail.valid) {
       setButton.unsubscribe();
       const recipients = this.recipientsEmail.join();

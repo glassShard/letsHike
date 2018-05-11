@@ -1,5 +1,5 @@
 import {
-  ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild
+  ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild
 } from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {UserModel} from '../../shared/user-model';
@@ -12,6 +12,8 @@ import {Observable} from 'rxjs/Observable';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {LoginModalComponent} from '../../core/login-modal/login-modal.component';
 import {ImageService} from '../../shared/image.service';
+import {ChangePasswordComponent} from "../change-password/change-password.component";
+import {VerifyEmailComponent} from "../../verify-email/verify-email.component";
 
 @Component({
   selector: 'app-profile-edit',
@@ -32,9 +34,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   public avatar: any;
   @ViewChild('fileInput') fileInput: ElementRef;
   private subscription: Subscription;
-  public modalRef: BsModalRef;
+  public modalRefLogin: BsModalRef;
+  public modalRefPassword: BsModalRef;
   private _saveFailed: boolean;
   private _subscriptions: Subscription[] = [];
+  private _loginModalSubscription: Subscription;
   public disabled = false;
   public error: string;
 
@@ -220,9 +224,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   }
 
   show() {
-    this._subscriptions.push(this._modalService.onHide.subscribe(() => {
-      console.log(this.modalRef.content.authFailed);
-      if (this.modalRef.content.authFailed) {
+    this._loginModalSubscription = this._modalService.onHide.subscribe(() => {
+      console.log(this.modalRefLogin.content.authFailed);
+      if (this.modalRefLogin.content.authFailed) {
         this._saveFailed = true;
         this.disabled = false;
         this.error = 'Az adatokat a hibás autentikáció miatt nem mentettük.' +
@@ -235,8 +239,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
             console.warn(error2);
           }));
       }
+      this._loginModalSubscription.unsubscribe();
       return this._changeDetection.markForCheck();
-    }));
+    });
     const initialState = {
       modalTitle: 'Belépési adatok',
       text: 'Az e-mail cím megváltoztatásához kérjük, erősítsd' +
@@ -246,41 +251,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       closeBtnName: 'Mehet',
       isReAuth: true
     };
-    this.modalRef = this._modalService.show(LoginModalComponent);
-    Object.assign(this.modalRef.content, initialState);
+    this.modalRefLogin = this._modalService.show(LoginModalComponent);
+    Object.assign(this.modalRefLogin.content, initialState);
   }
 
-  // show() {
-  //   this._subscriptions.push(this._modalService.onHide
-  //     .subscribe(() => this._changeDetection.markForCheck()));
-  //   this._subscriptions.push(this._modalService.onHide.subscribe(() => {
-  //     console.log(this.modalRef.content.authFailed);
-  //     if (this.modalRef.content.authFailed) {
-  //       this._saveFailed = true;
-  //       this.disabled = false;
-  //       this.error = 'Az adatokat a hibás autentikáció miatt nem mentettük.' +
-  //         ' Kérjük, próbáld újra.';
-  //     } else {
-  //       this._subscriptions.push(this._userService.changeEmail(this.currentUser.email)
-  //         .subscribe(() => this.saveChanges(), error2 => {
-  //           this.error = 'Hiba történt az email mentése során. Kérjük,' +
-  //             ' próbáld újra.';
-  //           console.warn(error2);
-  //         }));
-  //     }
-  //   }));
-  //   const initialState = {
-  //     modalTitle: 'Belépési adatok',
-  //     text: 'Az e-mail cím megváltoztatásához kérjük, erősítsd' +
-  //     ' meg, hogy tényleg Te vagy:',
-  //     needRememberMe: false,
-  //     needEmail: false,
-  //     closeBtnName: 'Mehet',
-  //     isReAuth: true
-  //   };
-  //   this.modalRef = this._modalService.show(LoginModalComponent);
-  //   Object.assign(this.modalRef.content, initialState);
-  // }
-
+  changePassword() {
+    this.modalRefPassword = this._modalService.show(ChangePasswordComponent);
+  }
 }
 

@@ -10,7 +10,7 @@ import {RouterModule} from '@angular/router';
 import {LoginModalComponent} from './login-modal/login-modal.component';
 import {EmailComponent} from './email/email.component';
 import {ReactiveFormsModule} from '@angular/forms';
-import {VerifyEmailModule} from "../verify-email/verify-email.module";
+import {VerifyEmailModule} from '../verify-email/verify-email.module';
 
 @NgModule({
   imports: [
@@ -19,8 +19,7 @@ import {VerifyEmailModule} from "../verify-email/verify-email.module";
     ModalModule,
     AlertModule,
     RouterModule,
-    ReactiveFormsModule,
-    VerifyEmailModule
+    ReactiveFormsModule
   ],
   declarations: [
     NavbarComponent,

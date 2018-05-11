@@ -111,8 +111,16 @@ export class UserService {
       );
   }
 
-  changeEmail(email) {
-    return Observable.fromPromise(this._afAuth.auth.currentUser.updateEmail(email));
+  changeEmail(newEmail) {
+    return Observable.fromPromise(this._afAuth.auth.currentUser.updateEmail(newEmail));
+  }
+
+  changePassword(newPassword) {
+    return Observable.fromPromise(this._afAuth.auth.currentUser.updatePassword(newPassword));
+  }
+
+  sendForgottenPasswordLink(email) {
+    return Observable.fromPromise(this._afAuth.auth.sendPasswordResetEmail(email));
   }
 
   reAuth(password) {

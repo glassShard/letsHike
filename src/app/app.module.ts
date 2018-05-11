@@ -29,7 +29,10 @@ import {EmailComponent} from './core/email/email.component';
 import {EmailService} from './shared/email.service';
 import {ChatService} from './chat/chat.service';
 import {OpenChatListService} from './shared/open-chat-list.service';
-import {VerifyEmailComponent} from "./verify-email/verify-email.component";
+import {VerifyEmailComponent} from './verify-email/verify-email.component';
+import {ChangePasswordComponent} from './user/change-password/change-password.component';
+import {VerifyEmailModule} from './verify-email/verify-email.module';
+import {ChangePasswordModule} from './user/change-password/change-password.module';
 
 @NgModule({
   declarations: [
@@ -53,7 +56,9 @@ import {VerifyEmailComponent} from "./verify-email/verify-email.component";
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    ChatModule
+    ChatModule,
+    VerifyEmailModule,
+    ChangePasswordModule
   ],
   providers: [
     EventService,
@@ -70,7 +75,8 @@ import {VerifyEmailComponent} from "./verify-email/verify-email.component";
   entryComponents: [
     LoginModalComponent,
     EmailComponent,
-    VerifyEmailComponent
+    VerifyEmailComponent,
+    ChangePasswordComponent
   ],
   bootstrap: [AppComponent]
 })

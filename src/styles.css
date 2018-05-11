@@ -279,11 +279,27 @@ footer {
   }
 }
 
+.alert-dismissible {
+  padding-right: 4rem;
+}
+
 .text-primary {
   color: rgb(19, 68, 204);
 }
 
-a:hover {
+.btn-text-like {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  color: rgb(19, 68, 204);
+  -webkit-transition: color 0.5s;
+  -moz-transition: color 0.5s;
+  -ms-transition: color 0.5s;
+  -o-transition: color 0.5s;
+  transition: color 0.5s;
+}
+
+a:hover, .btn-text-like:hover {
   color: rgb(14, 50, 151);
 }
 

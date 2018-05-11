@@ -8,6 +8,9 @@ import {UserService} from '../../shared/user.service';
   styleUrls: ['./login-modal.component.css']
 })
 export class LoginModalComponent implements OnInit {
+  forgottenSuccess = false;
+  forgottenError: string;
+  forgottenDisabled = false;
   modalTitle: string;
   closeBtnName: string;
   needRememberMe: boolean;
@@ -16,6 +19,7 @@ export class LoginModalComponent implements OnInit {
   isReAuth: boolean;
   error: string;
   authFailed = true;
+  forgotten = false;
   @ViewChild('email') email: ElementRef;
   @ViewChild('rememberMe') rememberMe: ElementRef;
   disabled = false;
@@ -63,5 +67,27 @@ export class LoginModalComponent implements OnInit {
 
   clearError() {
     delete(this.error);
+  }
+
+  forgottenPassword() {
+    this.forgotten = true;
+  }
+
+  onForgotten(email) {
+    this.forgottenDisabled = true;
+    this.forgottenError = null;
+    this._userService.sendForgottenPasswordLink(email)
+      .subscribe(res => {
+        this.forgottenSuccess = true;
+      }, error => {
+        this.forgottenSuccess = false;
+        this.forgottenDisabled = false;
+        console.log(error);
+        if (error.code === 'auth/user-not-found') {
+          this.forgottenError = 'Ezzel az email címmel nincs regisztrált felhasználónk.';
+        } else {
+          this.forgottenError = 'A linket nem sikerült elküldeni. Kérjük, próbáld újra.';
+        }
+      });
   }
 }

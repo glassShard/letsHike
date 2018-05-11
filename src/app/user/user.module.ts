@@ -3,10 +3,7 @@ import {CommonModule} from '@angular/common';
 import {UserRoutingModule} from './user-routing.module';
 import {ProfileComponent} from './profile/profile.component';
 import {ProfileEditComponent} from './profile-edit/profile-edit.component';
-import {
-  AccordionModule, AlertModule, CollapseModule,
-  ModalModule
-} from 'ngx-bootstrap';
+import {AlertModule, CollapseModule, ModalModule} from 'ngx-bootstrap';
 import {RegistrationComponent} from './registration/registration.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {CoreModule} from '../core/core.module';

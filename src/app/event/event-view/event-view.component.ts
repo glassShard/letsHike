@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
@@ -15,6 +14,7 @@ import {Subscription} from 'rxjs/Subscription';
 import {environment} from '../../../environments/environment';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import 'rxjs/add/operator/share';
+import {VerifyEmailComponent} from '../../verify-email/verify-email.component';
 
 @Component({
   selector: 'app-event-view',
@@ -74,14 +74,18 @@ export class EventViewComponent implements OnInit, OnDestroy {
   }
 
   onJoin(userId: string, eventId: string) {
-    this.buttonDisabled = true;
-    this.joinSuccessAlert = false;
-    this.dangerAlert = false;
-    this._subscriptions.push(this._eventService.join(userId, eventId).subscribe(() => {
-      this.joinSuccessAlert = true;
-    }, () => {
-      this.dangerAlert = true;
-    }));
+    if (this.currentUser.emailVerified) {
+      this.buttonDisabled = true;
+      this.joinSuccessAlert = false;
+      this.dangerAlert = false;
+      this._subscriptions.push(this._eventService.join(userId, eventId).subscribe(() => {
+        this.joinSuccessAlert = true;
+      }, () => {
+        this.dangerAlert = true;
+      }));
+    } else {
+      this.modalRef = this._modalService.show(VerifyEmailComponent);
+    }
   }
 
   onDeleteJoin(userId: string, eventId: string) {

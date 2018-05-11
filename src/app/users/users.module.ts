@@ -10,7 +10,6 @@ import {CollapseModule} from 'ngx-bootstrap';
 import {ItemCardModule} from '../item-card/item-card.module';
 import {EventCardModule} from '../event-card/event-card.module';
 
-
 @NgModule({
   imports: [
     CommonModule,

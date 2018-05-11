@@ -19,6 +19,7 @@ import {Subscription} from 'rxjs/Subscription';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {ChatListModel} from '../../chat/model/chat-list.model';
 import {OpenChatListService} from '../../shared/open-chat-list.service';
+import {VerifyEmailComponent} from "../../verify-email/verify-email.component";
 
 @Component({
   selector: 'app-profiles',
@@ -156,6 +157,14 @@ export class ProfilesComponent implements OnInit, OnDestroy {
     this.emailModalTitle = `Email ${this.watchedUser.nick} részére`;
     this.recipientsEmail = [this.watchedUser.email];
     this.modalRef = this._modalService.show(template);
+  }
+
+  emailClicked(template: TemplateRef<any>) {
+    if (this.currentUser.emailVerified) {
+      this.showEmailModalWindow(template);
+    } else {
+      this.modalRef = this._modalService.show(VerifyEmailComponent);
+    }
   }
 
   closeModal() {
