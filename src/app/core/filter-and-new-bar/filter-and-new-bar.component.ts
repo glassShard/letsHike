@@ -7,7 +7,7 @@ import {LoginModalComponent} from '../login-modal/login-modal.component';
 import {Subscription} from 'rxjs/Subscription';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {UserModel} from "../../shared/user-model";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {VerifyEmailComponent} from "../../verify-email/verify-email.component";
 
 @Component({
@@ -32,7 +32,8 @@ export class FilterAndNewBarComponent implements OnInit {
   constructor(private renderer: Renderer2,
               private _modalService: BsModalService,
               private _changeDetection: ChangeDetectorRef,
-              private _router: Router) { }
+              private _router: Router,
+              private _route: ActivatedRoute) { }
 
   ngOnInit() {
   }
@@ -69,7 +70,7 @@ export class FilterAndNewBarComponent implements OnInit {
       if (!this.currentUser.emailVerified) {
         this.showVerifyEmailModal();
       } else {
-        this._router.navigate(['/turak/new']);
+        this._router.navigate(['./new'], {relativeTo: this._route});
       }
     } else {
       this.showLoginModal();

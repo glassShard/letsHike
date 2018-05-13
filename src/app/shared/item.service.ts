@@ -38,7 +38,7 @@ export class ItemService {
   getItemById(id: string): Observable<ItemModel> {
     return this._afDb.object(`items/${id}`)
       .flatMap(item => {
-        if (item) {
+        if (item.$exists()) {
           return Observable.combineLatest(
             Observable.of(new ItemModel(item)),
             this._userService.getUserById(item.creatorId),
@@ -49,6 +49,8 @@ export class ItemService {
               };
             }
           );
+        } else {
+          return Observable.of(null);
         }
       });
   }

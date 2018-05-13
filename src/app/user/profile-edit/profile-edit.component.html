@@ -26,23 +26,26 @@
         </div>
       </div>
       <div class="form-group col-md-4">
-      <label for="email">Email:</label>
-      <input type="email"
-             class="form-control"
-             id="email"
-             formControlName="email"
-             placeholder="Email..."
-             [ngClass]="{'is-invalid': disabled && form.get('email').invalid}">
-      <div class="invalid-feedback"
-           *ngIf="form.get('email').hasError('required')">
-        Kérjük, add meg az email címedet
+        <label for="email">Email:</label>
+        <input type="email"
+               class="form-control"
+               id="email"
+               formControlName="email"
+               placeholder="Email..."
+               [ngClass]="{'is-invalid': disabled && form.get('email').invalid}">
+        <div class="invalid-feedback"
+             *ngIf="form.get('email').hasError('required')">
+          Kérjük, add meg az email címedet
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="form.get('email').hasError('email')">
+          Kérjük, valódi email címet ajd meg
+        </div>
+        <small class="form-text text-muted">Kérjük, hogy valós email címet adj meg, erre küldjük a
+          megerősítő linket, az értesítéseket (ha kéred), és a tagok neked szóló üzeneteit. Email
+          címed a tagok számára sem lesz publikus.
+        </small>
       </div>
-      <div class="invalid-feedback"
-           *ngIf="form.get('email').hasError('email')">
-        Kérjük, valódi email címet ajd meg
-      </div>
-      <small class="form-text text-muted">Kérjük, hogy valós email címet adj meg, erre küldjük a megerősítő linket, az értesítéseket (ha kéred), és a tagok neked szóló üzeneteit. Email címed a tagok számára sem lesz publikus.</small>
-    </div>
       <div class="form-group col-md-4">
         <label for="dateOfBirth">Születési dátum:</label>
         <input type="date"
@@ -50,7 +53,8 @@
                id="dateOfBirth"
                formControlName="dateOfBirth">
         <small class="form-text text-muted">Ha kitöltöd, adatlapodon
-          megjelenítjük életkorodat (az adatlap csak a tagok számára látható).</small>
+          megjelenítjük életkorodat (az adatlap csak a tagok számára látható).
+        </small>
       </div>
     </div>
 
@@ -62,7 +66,9 @@
                id="tel"
                formControlName="tel"
                placeholder="Telefonszámod...">
-        <small class="form-text text-muted">Ha kitöltöd, adatlapodon, valamint hirdetés feladása esetén a termék oldalán kattintás után láthatóvá tesszük. Ha nem adod meg, de hirdetést adsz fel, csak a tagok fognak tudni veled kapcsolatba lépni, ezért javasoljuk, hogy hirdetés-feladás esetén mindenképpen töltsd ki!</small>
+        <small class="form-text text-muted">Ha kitöltöd, adatlapodon, valamint hirdetés feladása
+          esetén a termék oldalán láthatóvá tesszük.
+        </small>
       </div>
 
       <div class="form-group col-12 col-sm-6 col-md-4">
@@ -89,16 +95,16 @@
       </div>
       <ng-template #profilePic>
 
-          <div class="imgToUpload col-12 col-sm-6 col-md-4"
-               *ngIf="currentUser?.picUrl">
-            <img [src]="currentUser.picUrl">
-            <button type="button"
-                    class="btn btn-small btn-outline-danger delete"
-                    (click)="clearPicUrl()">
-              <i class="icon-trash"></i>
-            </button>
+        <div class="imgToUpload col-12 col-sm-6 col-md-4"
+             *ngIf="currentUser?.picUrl">
+          <img [src]="currentUser.picUrl">
+          <button type="button"
+                  class="btn btn-small btn-outline-danger delete"
+                  (click)="clearPicUrl()">
+            <i class="icon-trash"></i>
+          </button>
 
-          </div>
+        </div>
 
       </ng-template>
     </div>
@@ -108,16 +114,70 @@
       <p>{{error}}</p>
     </alert>
 
-    <div class="form-group text-right mt-3">
+    <div class="form-group text-right mt-3 mb-0">
       <button class="btn btn-primary"
               type="submit"
               [disabled]="disabled">
         <i class="icon-database"></i> Adatok
-        mentése</button>
+        mentése
+      </button>
       <button class="btn btn-primary"
               type="button"
               (click)="changePassword()">
-        <i class="icon-lock"></i> Jelszó módosítása</button>
+        <i class="icon-lock"></i> Jelszó módosítása
+      </button>
+    </div>
+    <div class="form-group text-right">
+      <button class="btn btn-outline-danger"
+              type="button"
+              (click)="openModal(deleteProfileTemplate)">
+        <i class="icon-trash"></i> Profil törlése
+      </button>
     </div>
   </form>
 </div>
+
+<ng-template #deleteProfileTemplate>
+  <div class="modal-header bg-mylight">
+    <h5 class="modal-title pl-3">Profil törlése</h5>
+
+    <button type="button" class="close" (click)="modalRefDelete.hide()"
+            aria-label="Close">
+      <span aria-hidden="true"><i class="icon-exit"></i></span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group col-12">
+      <p>Jól meggondoltad?</p>
+      <p class="text-danger">Ha törlöd profilodat, az összes általad meghirdetett cucc és túra
+        is az enyészeté lesz. Nem tudunk majd értesíteni, ha számodra érdekes termékek vagy
+        programok kerülnek fel az oldalra, és hírlevelet sem tudunk küldeni.</p>
+    </div>
+
+    <div class="form-group col-12 mt-3 text-right">
+      <button type="button"
+              [disabled]="disabled"
+              (click)="deleteProfile()"
+              class="btn btn-danger mt-1">
+        <i class="icon-trash"></i> Törlöm
+      </button>
+      <button type="button" class="btn btn-secondary mt-1"
+              (click)="modalRefDelete.hide()">
+        <i class="icon-exit"></i> Mégse
+      </button>
+    </div>
+
+    <div class="form-group col-12" *ngIf="errorDel || successDel">
+      <alert type="danger" [dismissible]="true" (onClose)="clearError()"
+             *ngIf="errorDel">
+        <p class="mb-0">{{errorDel}}</p>
+      </alert>
+      <alert type="success" [dismissOnTimeout]="3000" (onClosed)="modalRefDelete.hide()"
+             *ngIf="successDel">
+        <p class="mb-0">{{successDel}}</p>
+      </alert>
+    </div>
+
+  </div>
+
+</ng-template>

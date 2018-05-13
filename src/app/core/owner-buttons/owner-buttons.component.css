@@ -1,0 +1,15 @@
+:host >>> .alert-danger {
+  margin-top: 1rem;
+}
+
+.alert-content-block {
+  display: inline-block;
+}
+
+p {
+  margin-bottom: 0.5rem;
+}
+
+.alert-content-block > button {
+  margin: 0.12rem 0;
+}

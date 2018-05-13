@@ -52,6 +52,12 @@
                          (delete)="onDelete($event.idFromButton)"
                          (edit)="onEdit($event.idFromButton)">
       </app-owner-buttons>
+
+     <div class="col-12" *ngIf="error">
+       <alert *ngIf="error">
+         {{error}}
+       </alert>
+     </div>
     </div>
 
     <div class="row">

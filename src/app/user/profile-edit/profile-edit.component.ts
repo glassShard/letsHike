@@ -1,5 +1,11 @@
 import {
-  ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild
 } from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {UserModel} from '../../shared/user-model';
@@ -12,8 +18,7 @@ import {Observable} from 'rxjs/Observable';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {LoginModalComponent} from '../../core/login-modal/login-modal.component';
 import {ImageService} from '../../shared/image.service';
-import {ChangePasswordComponent} from "../change-password/change-password.component";
-import {VerifyEmailComponent} from "../../verify-email/verify-email.component";
+import {ChangePasswordComponent} from '../change-password/change-password.component';
 
 @Component({
   selector: 'app-profile-edit',
@@ -33,14 +38,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public avatar: any;
   @ViewChild('fileInput') fileInput: ElementRef;
-  private subscription: Subscription;
   public modalRefLogin: BsModalRef;
   public modalRefPassword: BsModalRef;
+  public disabled = false;
+  public error: string;
+  public successDel: string;
+  public errorDel: string;
+  public modalRefDelete: BsModalRef;
   private _saveFailed: boolean;
   private _subscriptions: Subscription[] = [];
   private _loginModalSubscription: Subscription;
-  public disabled = false;
-  public error: string;
 
   constructor(private _userService: UserService,
               private _router: Router,
@@ -49,7 +56,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
               private _fileService: FileService,
               private _modalService: BsModalService,
               private _changeDetection: ChangeDetectorRef,
-              private _imageService: ImageService) {  }
+              private _imageService: ImageService) {
+  }
 
   ngOnDestroy() {
     this._subscriptions.forEach((subscription: Subscription) => {
@@ -76,31 +84,31 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     );
 
     this._subscriptions.push(this._userService.isLoggedIn$
-    .flatMap(isLoggedIn => {
-      if (isLoggedIn) {
-        return this._userService.getCurrentUser();
-      } else {
-        return Observable.of(null);
-      }
-    })
-    .subscribe(user => {
-      if (user) {
-        this.currentUser = user;
-        this.userEmail = user.email;
-        Object.assign(this.userOldDatas, {
-          dateOfBirth: user.dateOfBirth,
-          email: user.email,
-          nick: user.nick,
-          tel: user.tel
-        });
-        this.fillForm();
-      } else {
-        this._router.navigate(['/kezdolap']);
-      }
-    }));
+      .flatMap(isLoggedIn => {
+        if (isLoggedIn) {
+          return this._userService.getCurrentUser();
+        } else {
+          return Observable.of(null);
+        }
+      })
+      .subscribe(user => {
+        if (user) {
+          this.currentUser = user;
+          this.userEmail = user.email;
+          Object.assign(this.userOldDatas, {
+            dateOfBirth: user.dateOfBirth,
+            email: user.email,
+            nick: user.nick,
+            tel: user.tel
+          });
+          this.fillForm();
+        } else {
+          this._router.navigate(['/kezdolap']).then();
+        }
+      }));
   }
 
-  fillForm () {
+  fillForm() {
     if (this.currentUser.id) {
       let date: string = null;
       if (this.currentUser.dateOfBirth) {
@@ -131,16 +139,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
           reader.readAsDataURL(file);
           if (orientation === 8 || orientation === 3 || orientation === 6) {
             reader.onload = (ev) => {
-            this._imageService.resetOrientation(reader.result, orientation)
-              .take(1)
-              .subscribe(newImage => this.avatar = newImage);
+              this._imageService.resetOrientation(reader.result, orientation)
+                .take(1)
+                .subscribe(newImage => this.avatar = newImage);
             };
           } else {
             reader.onload = (ev) => {
               this.avatar = reader.result;
             };
           }
-      });
+        });
       this.form.get('avatar').setValue(file);
     }
   }
@@ -161,7 +169,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       if (this.currentUser.email === this.userOldDatas.email) {
         this.saveChanges();
       } else {
-        this.show();
+        this.show('email');
       }
       // this._router.navigate(['/user']);
     } else {
@@ -191,13 +199,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  private prepareSave(id): FormData {
-    const input = new FormData();
-    input.append('id', id);
-    input.append('avatar', this.form.get('avatar').value);
-    return input;
-  }
-
   doIfSuccess() {
     this._router.navigate(['/user']);
   }
@@ -221,31 +222,50 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
 
   clearError() {
     delete(this.error);
+    delete(this.errorDel);
   }
 
-  show() {
+  show(reason) {
     this._loginModalSubscription = this._modalService.onHide.subscribe(() => {
       console.log(this.modalRefLogin.content.authFailed);
       if (this.modalRefLogin.content.authFailed) {
         this._saveFailed = true;
         this.disabled = false;
-        this.error = 'Az adatokat a hibás autentikáció miatt nem mentettük.' +
-          ' Kérjük, próbáld újra.';
+        if (reason === 'email') {
+          this.error = 'Az adatokat a hibás autentikáció miatt nem mentettük.' +
+            ' Kérjük, próbáld újra.';
+        } else {
+          this.errorDel = 'Az azonosítás nem sikerült, ezért a profilt nem töröltük.' +
+            ' Kérjük, próbáld újra.';
+        }
       } else {
-        this._subscriptions.push(this._userService.changeEmail(this.currentUser.email)
-          .subscribe(() => this.saveChanges(), error2 => {
-            this.error = 'Hiba történt az email mentése során. Kérjük,' +
-              ' próbáld újra.';
-            console.warn(error2);
-          }));
+        if (reason === 'email') {
+          this._subscriptions.push(this._userService.changeEmail(this.currentUser.email)
+            .subscribe(() => this.saveChanges(), error => {
+              this.error = 'Hiba történt az email mentése során. Kérjük,' +
+                ' próbáld újra.';
+              console.warn(error);
+            }));
+        } else {
+          this._subscriptions.push(this._userService.deleteProfile()
+            .subscribe((res) => {
+              console.log(res);
+              this.successDel = 'Profilodat töröltük.';
+            }, error => {
+              this.errorDel = 'Hiba történt a profil törlése során. Kérjük,' +
+                ' próbáld újra.';
+              console.warn(error);
+            }));
+        }
+
       }
       this._loginModalSubscription.unsubscribe();
       return this._changeDetection.markForCheck();
     });
+    const text = reason === 'email' ? 'Az e-mail cím megváltoztatásához' : 'Profilod törléséhez';
     const initialState = {
       modalTitle: 'Belépési adatok',
-      text: 'Az e-mail cím megváltoztatásához kérjük, erősítsd' +
-      ' meg, hogy tényleg Te vagy:',
+      text: `${text} kérjük, erősítsd meg, hogy tényleg Te vagy:`,
       needRememberMe: false,
       needEmail: false,
       closeBtnName: 'Mehet',
@@ -257,6 +277,21 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
 
   changePassword() {
     this.modalRefPassword = this._modalService.show(ChangePasswordComponent);
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRefDelete = this._modalService.show(template);
+  }
+
+  deleteProfile() {
+    this.show('deleteProfile');
+  }
+
+  private prepareSave(id): FormData {
+    const input = new FormData();
+    input.append('id', id);
+    input.append('avatar', this.form.get('avatar').value);
+    return input;
   }
 }
 

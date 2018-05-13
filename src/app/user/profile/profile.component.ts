@@ -186,6 +186,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.disabled = false;
     });
   }
+
+  onEdit(id) {
+    this._router.navigate(['/user/edit']);
+  }
 }
 
 // TODO: profilkép módosítás utáni oldalbetöltéskor nem frissíti a képet

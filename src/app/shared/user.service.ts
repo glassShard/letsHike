@@ -123,6 +123,14 @@ export class UserService {
     return Observable.fromPromise(this._afAuth.auth.sendPasswordResetEmail(email));
   }
 
+  deleteProfile() {
+    return this.currentUserId$
+      .switchMap(userId => Observable.fromPromise(this._afDb.object(`/users/${userId}`).set(null)))
+      .switchMap(res => {
+        return this._afAuth.auth.currentUser.delete();
+      });
+  }
+
   reAuth(password) {
     const user = this._afAuth.auth.currentUser;
     const credential = firebase.auth.EmailAuthProvider.credential(

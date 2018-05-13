@@ -143,7 +143,6 @@ export class EventViewComponent implements OnInit, OnDestroy {
     };
     this.event$ = this._eventService.getEventById(evId, 'event-view 142');
     this._subscriptions.push(this._eventService.getEventById(evId, 'event-view 143').subscribe(ev => {
-      console.log('ev: ', ev);
       this.buttonDisabled = false;
       if (ev === null) {
         handle404();

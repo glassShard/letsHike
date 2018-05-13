@@ -54,7 +54,7 @@ export class EventService {
     return this._afDb.object(`events/${id}`)
       .flatMap(event => {
         console.log('mégegyszer', honnan);
-        if (event) {
+        if (event.$exists()) {
           if (event.guestsIds) {
             event.guestsIds = Object.keys(event.guestsIds);
             return Observable.combineLatest(
@@ -83,6 +83,8 @@ export class EventService {
               }
             );
           }
+        } else {
+          return Observable.of(null);
         }
       });
   }

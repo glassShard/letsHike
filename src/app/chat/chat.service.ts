@@ -19,6 +19,7 @@ export class ChatService {
   }
 
   addMessage(roomId: string, msg: string, friend: ChatListModel): Observable<boolean> {
+    console.log(friend);
     let newMessage: boolean;
     const created = moment().unix();
     return this._userService.getCurrentUser().first()

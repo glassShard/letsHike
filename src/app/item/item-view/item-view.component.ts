@@ -27,6 +27,7 @@ export class ItemViewComponent implements OnInit, OnDestroy {
   public emailModalTitle: string;
   public creatorEmail: string;
   public modalRef: BsModalRef;
+  public error: string;
 
   constructor(private _route: ActivatedRoute,
               private _itemService: ItemService,
@@ -51,9 +52,13 @@ export class ItemViewComponent implements OnInit, OnDestroy {
     const itId = this._route.snapshot.params['id'];
     if (itId) {
       this.item$ = this._itemService.getItemById(itId).share();
-      this._subscriptions.push(this.item$.subscribe(it => this.creatorEmail = it.creator.email));
-    } else {
-      this.item$ = Observable.of(new ItemModel());
+      this._subscriptions.push(this.item$.subscribe(it => {
+        if (it !== null) {
+          this.creatorEmail = it.creator.email;
+        } else {
+          this._router.navigate(['404']);
+        }
+      }));
     }
   }
 
@@ -66,8 +71,10 @@ export class ItemViewComponent implements OnInit, OnDestroy {
   onDelete(itemId) {
     this._itemService.delete(itemId)
       .subscribe(
-        () => this._router.navigate(['/cuccok']),
+        (res) => console.log(res),
+          // this._router.navigate(['/cuccok']),
         (err) => {
+          this.error = 'A törlés során hibák léptek fel. Kérjük, próbáld újra!';
           console.warn(`Problémánk van a tölésnél: ${err}`);
         }
       );

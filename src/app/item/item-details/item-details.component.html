@@ -107,13 +107,13 @@
 
       <alert type="success" dismissOnTimeout="3000"
              *ngIf="success">
-        <p>{{success}}</p>
+        <p class="mb-0">{{success}}</p>
       </alert>
 
       <alert type="danger" [dismissible]="true"
       (onClose)="clearError()"
              *ngIf="error">
-        <p>{{error}}</p>
+        <p class="mb-0">{{error}}</p>
       </alert>
 
       <app-owner-buttons class="col-12 text-right mb-3"

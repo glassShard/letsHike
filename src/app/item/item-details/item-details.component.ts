@@ -79,6 +79,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
         } else {
           this.currentUser = user;
           const itId = this._route.snapshot.params['id'];
+          console.log(itId);
           if (itId) {
             return this._itemService.getItemById(itId)
               .do(res => console.log(res));
