@@ -82,7 +82,7 @@
   </app-swiper>
 
   <app-chat-window *ngIf="currentUser && showChat"
-                   [roomId]="item.id"
+                   [roomId]="'room/' + item.id"
                    [isNewFriend]="false"
                    (closeChatWindow)="closeChat()"
                    [friend]="null"

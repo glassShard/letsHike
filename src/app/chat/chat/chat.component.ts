@@ -141,7 +141,7 @@ export class ChatComponent implements OnInit, OnDestroy {
           return Observable.of(null);
         }
       })
-      .switchMap(() => this._afDb.object(`chat/room/chat_list/${roomId}`).first())
+      .switchMap(() => this._afDb.object(`chat/chat_list/${roomId}`).first())
       .subscribe(room => {
         const isNewFriend = !room.$exists();
         this.openChat({

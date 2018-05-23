@@ -8,6 +8,7 @@ export class EmailService {
   constructor(private _http: HttpClient) { }
 
   sendMail(form: FormData): Observable<any> {
-    return this._http.post('http://turazzunk.hu/sendMail.php', form);
+    return this._http.post('https://turazzunk.hu/sendMail.php', form);
   }
 }
+

@@ -8,13 +8,19 @@ import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class FileService {
-  private _root = 'http://localhost/turazzunk';
-  private _avatarUrl = `${this._root}/avatar.php`;
-  private _imagesUrl = 'http://localhost/turazzunk/uploadImages.php';
-  private _deleteUrl = `${this._root}/deleteImage.php`;
-  private _setCoverUrl = `${this._root}/setCoverImage.php`;
+  private _root: string;
+  private _avatarUrl: string;
+  private _imagesUrl: string;
+  private _deleteUrl: string;
+  private _setCoverUrl: string;
 
-  constructor(private _http: HttpClient) { }
+  constructor(private _http: HttpClient) {
+    this._root = environment.links.root;
+    this._avatarUrl = `${this._root}avatar.php`;
+    this._imagesUrl = `${this._root}uploadImages.php`;
+    this._deleteUrl = `${this._root}deleteImage.php`;
+    this._setCoverUrl = `${this._root}setCoverImage.php`;
+  }
 
   uploadAvatar(id: string, form: FormData) {
     return this._http.post<FileModel>(this._avatarUrl, form)

@@ -18,22 +18,8 @@
       <p class="text-muted">Ha nem szeretnéd email-címedet kiadni, használd
         inkább a Chat funkciókat, melyeket belépés után érsz el.</p>
     </div>
-    <div class="form-group col-12">
-      <alert type="danger"
-             [dismissible]="true"
-             (onClose)="clearError()"
-             *ngIf="error">
-        <p>{{error}}</p>
-      </alert>
-      <alert type="success"
-             [dismissOnTimeout]="3000"
-             (onClosed)="successClosed()"
-             *ngIf="success">
-        <p>{{success}}</p>
-      </alert>
-    </div>
 
-    <form [formGroup]="sendEmail" (ngSubmit)="onSubmit()">
+    <form [formGroup]="sendEmail">
       <div class="form-group col-12">
         <label for="email">Email-címed:</label>
         <input type="email"
@@ -80,5 +66,20 @@
         </button>
       </div>
     </form>
+
+    <div class="form-group col-12">
+      <alert type="danger"
+             [dismissible]="true"
+             (onClose)="clearError()"
+             *ngIf="error">
+        <p>{{error}}</p>
+      </alert>
+      <alert type="success"
+             [dismissOnTimeout]="3000"
+             (onClosed)="successClosed()"
+             *ngIf="success">
+        <p>{{success}}</p>
+      </alert>
+    </div>
   </div>
 

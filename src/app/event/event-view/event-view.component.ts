@@ -74,6 +74,7 @@ export class EventViewComponent implements OnInit, OnDestroy {
   }
 
   onJoin(userId: string, eventId: string) {
+
     if (this.currentUser.emailVerified) {
       this.buttonDisabled = true;
       this.joinSuccessAlert = false;

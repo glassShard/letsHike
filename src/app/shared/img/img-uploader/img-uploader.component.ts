@@ -3,6 +3,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {ImageService} from '../../image.service';
+import 'rxjs/add/operator/take';
 
 @Component({
   selector: 'app-img-uploader',
@@ -66,28 +67,4 @@ export class ImgUploaderComponent implements OnInit {
     this.fileInput.nativeElement.value = '';
     this.images = [];
   }
-
-
-
-
-
-
-  // clearFile(singleImage) {
-  //   let newList;
-  //   this.images = this.images.filter((image, imgIndex) => {
-  //     if (!(image === singleImage)) {
-  //       return true;
-  //     } else {
-  //       newList = Object.values(this.files)
-  //         .filter((file, fileIndex) => !(imgIndex === fileIndex));
-  //       this.formValue.emit({
-  //         images: newList
-  //           .reduce((acc, curr, ind) => Object.assign(acc, {[ind]: curr}), {})
-  //       });
-  //       return false;
-  //     }
-  //   });
-  //   this.fileInput.nativeElement.value = newList;
-  // }
-
 }

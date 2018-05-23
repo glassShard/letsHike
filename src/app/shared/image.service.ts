@@ -12,6 +12,7 @@ export class ImageService {
     const reader = new FileReader();
     reader.onload = (e) => {
       const view = new DataView(reader.result);
+      console.log(view);
       if (view.getUint16(0, false) != 0xFFD8) {
         result.next(-2);
       }

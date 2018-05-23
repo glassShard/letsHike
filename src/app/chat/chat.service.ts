@@ -150,7 +150,7 @@ export class ChatService {
   }
 
   checkRoomAgain(roomId: string): Observable<boolean> {
-    return this._afDb.object(`${ChatService.PATH}/room/chat_list/${roomId}`).first()
+    return this._afDb.object(`${ChatService.PATH}/chat_list/${roomId}`).first()
       .switchMap(room => {
         if (room.$exists()) {
           return Observable.of(false);

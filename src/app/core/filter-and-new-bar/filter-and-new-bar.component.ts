@@ -22,7 +22,7 @@ export class FilterAndNewBarComponent implements OnInit {
   @Output() choosenCategory = new EventEmitter();
   @Output() searchField = new EventEmitter();
   @Input() currentUser: UserModel;
-  private categoryButtonLabel = 'Kategóriák';
+  public categoryButtonLabel = 'Kategóriák';
   public choosenCat = '';
   private _subscriptions: Subscription[] = [];
   public modalRef: BsModalRef;

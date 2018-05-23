@@ -127,7 +127,7 @@
   </app-swiper>
 
   <app-chat-window *ngIf="currentUser && showChat"
-                   [roomId]="event.id"
+                   [roomId]="'room/' + event.id"
                    [title]="'Chat'"
                    [closeable]="true"
                    [floating]="true"
@@ -135,10 +135,6 @@
                    [friend]="null"
                    (closeChatWindow)="closeChat()">
   </app-chat-window>
-
-  <ng-template #loading>
-    <app-loading-spinner></app-loading-spinner>
-  </ng-template>
 
   <ng-template #emailModal>
     <app-email [emailModalTitle]="emailModalTitle"
@@ -150,6 +146,11 @@
   </ng-template>
 
 </ng-container>
+
+<ng-template #loading>
+  <app-loading-spinner></app-loading-spinner>
+</ng-template>
+
 
 
 

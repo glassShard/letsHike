@@ -75,7 +75,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked,
   }
 
   ngOnInit() {
-    this.chatMessage$ = this._chatService.getRoomMessages(`room/${this.roomId}`);
+    this.chatMessage$ = this._chatService.getRoomMessages(`${this.roomId}`);
     this.chatMessage$.first().delay(300).subscribe(messages => {
         if (this.isNewFriend === true) {
           if (messages.length > 0) {
@@ -111,7 +111,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked,
       newFriendObs = Observable.of(null);
     }
     newFriendObs
-      .switchMap(() => this._chatService.addMessage(`room/${this.roomId}`, message, this.friend))
+      .switchMap(() => this._chatService.addMessage(`${this.roomId}`, message, this.friend))
       .subscribe(res => {
         if (res) {
           this.resetForm = true;
@@ -130,6 +130,3 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewChecked,
     this.closeChatWindow.emit();
   }
 }
-
-// TODO: cloud functionnal törölni az archivált vagy törölt eventek és
-// itemek chatszobáját.

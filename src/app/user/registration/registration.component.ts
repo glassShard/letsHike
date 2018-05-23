@@ -24,6 +24,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   public avatar: any;
   @ViewChild('fileInput') fileInput: ElementRef;
   private _subscription: Subscription;
+  public error: string;
 
   constructor(private _userService: UserService,
               private _router: Router,
@@ -88,6 +89,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   onSubmit() {
     let setButtonSubscription = new Subscription();
     this.submitted = true;
+    this.clearError();
     if (this.form.valid) {
 
       let userId = '';
@@ -111,8 +113,17 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       } else {
         stream = this._userService.register(this.user, password);
       }
-      stream.subscribe(data => console.log(data),
-        err => console.warn(err));
+      stream.subscribe(data => {
+          console.log(data);
+        }, err => {
+        console.warn(err);
+        if (err.code === 'auth/email-already-in-use') {
+          this.error = 'Ezzel az email címmel már van regisztrált felhasználó.';
+        } else {
+          this.error = 'Hiba történt a regisztráció során. Kérjük, próbáld újra!';
+        }
+        this.submitted = false;
+      });
     } else {
       setButtonSubscription = this.form.statusChanges
         .subscribe(res => this.submitted = (res !== 'VALID'));
@@ -130,5 +141,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.form.get('avatar').setValue(null);
     this.fileInput.nativeElement.value = '';
     this.avatar = null;
+  }
+
+  clearError() {
+    delete(this.error);
   }
 }

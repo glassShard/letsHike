@@ -19,6 +19,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {LoginModalComponent} from '../../core/login-modal/login-modal.component';
 import {ImageService} from '../../shared/image.service';
 import {ChangePasswordComponent} from '../change-password/change-password.component';
+import 'rxjs/add/operator/take';
 
 @Component({
   selector: 'app-profile-edit',

@@ -66,6 +66,9 @@ export class EmailComponent implements OnInit {
           } else {
             this.success = res.response;
           }
+        }, err => {
+          this.error = 'Hiba történt az email küldése közben. Kérjük, próbáld újra!';
+          console.log(err);
         });
     } else {
       setButton = this.sendEmail.statusChanges

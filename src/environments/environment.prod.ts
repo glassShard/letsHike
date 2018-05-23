@@ -10,5 +10,9 @@ export const environment = {
     projectId: 'turazzunk-2400c',
     storageBucket: 'turazzunk-2400c.appspot.com',
     messagingSenderId: '638528513500'
+  },
+  links: {
+    root: 'https://turazzunk.hu/',
+    home: 'turazzunk.hu'
   }
 };
