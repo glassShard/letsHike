@@ -7,7 +7,7 @@ import {FileService} from '../../file.service';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/do';
 import {ImgUploaderComponent} from '../img-uploader/img-uploader.component';
-import {environment} from "../../../../environments/environment";
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-img',
@@ -91,13 +91,14 @@ export class ImgComponent implements OnInit {
       }
     }
     if (this._stream) {
-      this._stream.subscribe((response) => {
-        if (response['error']) {
-          this.doIfFailed('Hiba a képek feltöltésénél. Kérjük próbáld újra.');
-        } else {
-          this.doIfSuccess();
-          // this._router.navigate(['/cuccok']);
-        }
+      this._stream.subscribe(() => {
+        this.doIfSuccess();
+        // if (response['error']) {
+        //   this.doIfFailed('Hiba a képek feltöltésénél. Kérjük próbáld újra.');
+        // } else {
+        //   this.doIfSuccess();
+        //   // this._router.navigate(['/cuccok']);
+        // }
       }, error => {
         console.warn(error);
         this.doIfFailed('Hiba az adatok mentésekor. Kérjük, próbáld újra.');

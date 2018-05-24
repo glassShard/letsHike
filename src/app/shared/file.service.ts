@@ -5,6 +5,8 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/throw';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs/Observable';
+import {AngularFireDatabase} from 'angularfire2/database';
+import 'rxjs/add/operator/switchMap';
 
 @Injectable()
 export class FileService {
@@ -14,7 +16,8 @@ export class FileService {
   private _deleteUrl: string;
   private _setCoverUrl: string;
 
-  constructor(private _http: HttpClient) {
+  constructor(private _http: HttpClient,
+              private _afDb: AngularFireDatabase) {
     this._root = environment.links.root;
     this._avatarUrl = `${this._root}avatar.php`;
     this._imagesUrl = `${this._root}uploadImages.php`;
@@ -24,12 +27,12 @@ export class FileService {
 
   uploadAvatar(id: string, form: FormData) {
     return this._http.post<FileModel>(this._avatarUrl, form)
-      .flatMap(response => {
+      .switchMap(response => {
         if (response.url) {
           console.log(response.url);
-          return this._http.patch(`${environment.firebase.baseUrl}/users/${id}.json`, {'picUrl': response.url});
+          return Observable.fromPromise(this._afDb.object(`users/${id}`).update({'picUrl': response.url}));
         } else {
-          return Observable.of(response.error);
+          return Observable.throw(new Error(response.error));
         }
       });
   }
@@ -43,7 +46,7 @@ export class FileService {
             payload.picUrl = response.coverImg;
           }
           payload.images = oldImages ? `${oldImages},${response.url.join()}` : response.url.join();
-          return this._http.patch(`${environment.firebase.baseUrl}/${whereTo}/${id}.json`, payload);
+          return Observable.fromPromise(this._afDb.object(`/${whereTo}/${id}`).update(payload));
         } else {
           return Observable.throw(new Error(response.error));
         }
@@ -53,7 +56,7 @@ export class FileService {
   deleteImage(id: string, whereTo: string, imgUrl: string, urls: string) {
     const input = new FormData();
     input.append('url', imgUrl);
-    return this._http.patch(`${environment.firebase.baseUrl}/${whereTo}/${id}.json`, {'images': urls})
+    return Observable.fromPromise(this._afDb.object(`/${whereTo}/${id}`).update({'images': urls}))
       .flatMap(() => this._http.post(this._deleteUrl, input));
   }
 
@@ -65,7 +68,7 @@ export class FileService {
     return this._http.post<FileModel>(this._setCoverUrl, input)
       .flatMap(response => {
         if (response.coverImg) {
-          return this._http.patch(`${environment.firebase.baseUrl}/${whereTo}/${id}.json`, {'picUrl': response.coverImg});
+          return Observable.fromPromise(this._afDb.object(`/${whereTo}/${id}`).update({'picUrl': response.coverImg}));
         } else {
           return Observable.throw(new Error(response.error));
         }
