@@ -33,6 +33,7 @@ export class UserService {
           this.currentUserId$.next(user.uid);
           this.getUserById(user.uid).subscribe(remoteUser => {
             Object.assign(remoteUser, {'emailVerified': user.emailVerified});
+            Object.assign(remoteUser, {'email': user.email});
             console.log(remoteUser);
             this._user$.next(remoteUser);
             this.isLoggedIn$.next(true);

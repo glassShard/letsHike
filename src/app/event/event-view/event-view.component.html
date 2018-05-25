@@ -87,11 +87,11 @@
           <i class="icon-mail-1"></i> Levél a hirdetőnek
         </button>
         <button class="btn btn-small btn-primary mb-1"
-                *ngIf="currentUser && currentUser.id === event.creatorId && guestsEmail.length > 0"
+                *ngIf="currentUser && currentUser.id === event.creatorId && guestsIds.length > 0"
                 (click)="showEmailModalWindow('guests', emailModal)"
                 title="Levél a jelentkezőknek">
           <i class="icon-mail-1"></i> Levél a jelentkezőknek
-          ({{guestsEmail.length}})
+          ({{guestsIds.length}})
         </button>
       </div>
 
@@ -139,7 +139,7 @@
   <ng-template #emailModal>
     <app-email [emailModalTitle]="emailModalTitle"
                [currentEmail]="currentUser ? currentUser.email : ''"
-               [recipientsEmail]="recipientsEmail"
+               [recipientsId]="recipientsId"
                [subject]="event.title"
                (closeModal)="closeModal()">
     </app-email>

@@ -23,9 +23,9 @@ export class ItemViewComponent implements OnInit, OnDestroy {
   public showImageSwiper: boolean;
   private _subscriptions: Subscription[] = [];
   public showChat = false;
-  public recipientsEmail: string[] = [];
+  public recipientsId: string[] = [];
   public emailModalTitle: string;
-  public creatorEmail: string;
+  public creatorId: string;
   public modalRef: BsModalRef;
   public error: string;
 
@@ -54,7 +54,7 @@ export class ItemViewComponent implements OnInit, OnDestroy {
       this.item$ = this._itemService.getItemById(itId).share();
       this._subscriptions.push(this.item$.subscribe(it => {
         if (it !== null) {
-          this.creatorEmail = it.creator.email;
+          this.creatorId = it.creatorId;
         } else {
           this._router.navigate(['404']);
         }
@@ -95,7 +95,7 @@ export class ItemViewComponent implements OnInit, OnDestroy {
 
   showEmailModalWindow(template: TemplateRef<any>) {
     this.emailModalTitle = 'Email a hirdetőnek';
-    this.recipientsEmail = [this.creatorEmail];
+    this.recipientsId = [this.creatorId];
     this.modalRef = this._modalService.show(template);
   }
 

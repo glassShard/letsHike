@@ -13,7 +13,7 @@ import {EmailService} from '../../shared/email.service';
 })
 export class EmailComponent implements OnInit {
   @Input() emailModalTitle: string;
-  @Input() recipientsEmail: string[];
+  @Input() recipientsId: string[];
   @Input() currentEmail: string;
   @Input() showEmailModal: boolean;
   @Input() subject: string;
@@ -50,7 +50,7 @@ export class EmailComponent implements OnInit {
     this.submitted = true;
     if (this.sendEmail.valid) {
       setButton.unsubscribe();
-      const recipients = this.recipientsEmail.join();
+      const recipients = this.recipientsId.join();
       console.log(recipients);
       console.log(this.sendEmail.get('message').value);
       console.log(this.sendEmail.get('email').value);

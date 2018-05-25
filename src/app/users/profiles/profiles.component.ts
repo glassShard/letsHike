@@ -19,7 +19,7 @@ import {Subscription} from 'rxjs/Subscription';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {ChatListModel} from '../../chat/model/chat-list.model';
 import {OpenChatListService} from '../../shared/open-chat-list.service';
-import {VerifyEmailComponent} from "../../verify-email/verify-email.component";
+import {VerifyEmailComponent} from '../../verify-email/verify-email.component';
 
 @Component({
   selector: 'app-profiles',
@@ -42,7 +42,7 @@ export class ProfilesComponent implements OnInit, OnDestroy {
   public isCollapsed3 = true;
   public favEvents: string[] = [];
   private _subscriptions: Subscription[] = [];
-  public recipientsEmail: string[] = [];
+  public recipientsId: string[] = [];
   public emailModalTitle: string;
   public modalRef: BsModalRef;
 
@@ -155,7 +155,7 @@ export class ProfilesComponent implements OnInit, OnDestroy {
 
   showEmailModalWindow(template: TemplateRef<any>) {
     this.emailModalTitle = `Email ${this.watchedUser.nick} részére`;
-    this.recipientsEmail = [this.watchedUser.email];
+    this.recipientsId = [this.watchedUser.id];
     this.modalRef = this._modalService.show(template);
   }
 

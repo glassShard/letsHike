@@ -35,10 +35,10 @@ export class EventViewComponent implements OnInit, OnDestroy {
   public showImageSwiper: boolean;
   public showChat = false;
   public modalRef: BsModalRef;
-  public recipientsEmail: string[] = [];
+  public recipientsId: string[] = [];
   public emailModalTitle: string;
-  public creatorEmail: string;
-  public guestsEmail: string[];
+  public creatorId: string;
+  public guestsIds: string[];
   private _subscriptions: Subscription[] = [];
 
   constructor(private _route: ActivatedRoute,
@@ -126,10 +126,10 @@ export class EventViewComponent implements OnInit, OnDestroy {
   showEmailModalWindow(param: string, template: TemplateRef<any>) {
     if (param === 'creator') {
       this.emailModalTitle = 'Email a hirdetőnek';
-      this.recipientsEmail = [this.creatorEmail];
+      this.recipientsId = [this.creatorId];
     } else {
       this.emailModalTitle = 'Levél a jelentkezőknek';
-      this.recipientsEmail = this.guestsEmail;
+      this.recipientsId = this.guestsIds;
     }
     this.modalRef = this._modalService.show(template);
   }
@@ -154,8 +154,8 @@ export class EventViewComponent implements OnInit, OnDestroy {
         if (!ev.guestsIds) {
           this.isGuest = false;
         }
-        this.creatorEmail = ev.creator.email;
-        this.guestsEmail = ev.guests ? ev.guests.map(guest => guest.email) : [];
+        this.creatorId = ev.creatorId;
+        this.guestsIds = ev.guestsIds ? ev.guestsIds : [];
       }
     }, () => {
       handle404();

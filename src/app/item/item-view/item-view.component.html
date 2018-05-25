@@ -92,7 +92,7 @@
   <ng-template #emailModal>
     <app-email [emailModalTitle]="emailModalTitle"
                [currentEmail]="currentUser ? currentUser.email : ''"
-               [recipientsEmail]="recipientsEmail"
+               [recipientsId]="recipientsId"
                [subject]="item.title"
                (closeModal)="closeModal()">
     </app-email>

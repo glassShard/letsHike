@@ -180,6 +180,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   }
 
   saveChanges() {
+    delete this.currentUser.email;
     if (this.avatar) {
       this._subscriptions.push(this._userService.save(this.currentUser)
         .flatMap(() => {
@@ -209,6 +210,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     this._saveFailed = true;
     console.warn(err);
     this.error = 'Hiba az adatok mentése során. Kérjük, próbáld újra.';
+    this.currentUser.email = this.userOldDatas.email;
   }
 
   clearFile() {
