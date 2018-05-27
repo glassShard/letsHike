@@ -7,25 +7,32 @@
                         [currentUser]="currentUser$ | async"
 ></app-filter-and-new-bar>
 
-<ng-container
-  *ngIf="eventCategories && (eventsGrouppedBy2$ | async)?.length; else loading">
-  <div class="container">
-    <div class="row"
-         *ngFor="let evg of eventsGrouppedBy2$ | async">
-      <div class="col-lg-6 card-deck-container" *ngFor="let ev of evg">
-        <div class="card-deck card-deck-item-list">
-          <app-event-card class="card card-max-width"
-                          *ngFor="let e of ev"
-                          [tura]="e"
-                          [currentUserId]="(currentUser$ | async) === null ? null : (currentUser$ | async).id"
-                          (addSeen)="addSeen($event.id)"
-                          [categories]="eventCategories"></app-event-card>
+<ng-container *ngIf="eventCategories && eventsGrouppedBy2$; else loading">
+  <ng-container
+    *ngIf="(eventsGrouppedBy2$ | async)?.length; else nothingToShow">
+    <div class="container">
+      <div class="row"
+           *ngFor="let evg of eventsGrouppedBy2$ | async">
+        <div class="col-lg-6 card-deck-container" *ngFor="let ev of evg">
+          <div class="card-deck card-deck-item-list">
+            <app-event-card class="card card-max-width"
+                            *ngFor="let e of ev"
+                            [tura]="e"
+                            [currentUserId]="(currentUser$ | async) === null ? null : (currentUser$ | async).id"
+                            (addSeen)="addSeen($event.id)"
+                            [categories]="eventCategories"></app-event-card>
 
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </ng-container>
 </ng-container>
+
+
+<ng-template #nothingToShow>
+  <app-nothing-to-show [message]="'Nincs ilyen túra.'"></app-nothing-to-show>
+</ng-template>
 
 <ng-template #loading>
   <app-loading-spinner></app-loading-spinner>

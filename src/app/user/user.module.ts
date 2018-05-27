@@ -11,6 +11,7 @@ import 'moment/locale/hu';
 import {MomentModule} from 'angular2-moment';
 import {EventCardModule} from '../event-card/event-card.module';
 import {ItemCardModule} from '../item-card/item-card.module';
+import {CollapsibleModule} from '../shared/collapsible/collapsible.module';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import {ItemCardModule} from '../item-card/item-card.module';
     MomentModule,
     EventCardModule,
     ItemCardModule,
+    CollapsibleModule,
     CollapseModule
   ],
   declarations: [

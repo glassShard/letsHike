@@ -73,109 +73,130 @@
 
       </div>
 
-      <div id="accordion2" class="acc-content mt-3">
-        <div class="card">
-          <div class="card-header bg-mylight"
-               id="heading2"
-               data-toggle="collapse"
-               data-target="#collapse2"
-               aria-expanded="true"
-               aria-controls="collapse2"
-               (click)="isCollapsed2 = !isCollapsed2">
-            <h4>
-              Hirdetett túrái
-              <span *ngIf="watchedUserEventsGrouppedBy2$"> ({{eventsNum}})</span>
-            </h4>
-          </div>
+      <!--<div id="accordion2" class="acc-content mt-3">-->
+        <!--<div class="card">-->
+          <!--<div class="card-header bg-mylight"-->
+               <!--id="heading2"-->
+               <!--data-toggle="collapse"-->
+               <!--data-target="#collapse2"-->
+               <!--aria-expanded="true"-->
+               <!--aria-controls="collapse2"-->
+               <!--(click)="isCollapsed2 = !isCollapsed2">-->
+            <!--<h4>-->
+              <!--Hirdetett túrái-->
+              <!--<span *ngIf="watchedUserEventsGrouppedBy2$"> ({{eventsNum}})</span>-->
+            <!--</h4>-->
+          <!--</div>-->
 
-          <div id="collapse2"
-               class="collapse coll"
-               #el2
-               aria-labelledby="heading2"
-               data-parent="#accordion2"
-               [collapse]="isCollapsed2"
-               (collapsed)="setHeight(el2, 0)"
-               (expanded)="setHeight(el2, 0); setHeight(el2, el2.scrollHeight)">
-            <div class="card-body">
-              <ng-container
-                *ngIf="(watchedUserEventsGrouppedBy2$ | async); else loading">
-                <ng-container
-                  *ngIf="(watchedUserEventsGrouppedBy2$ | async)?.length; else emptyEvents">
-                  <div class="row"
-                       *ngFor="let evg of watchedUserEventsGrouppedBy2$ | async">
-                    <div class="col-lg-6 card-deck-container"
-                         *ngFor="let ev of evg">
-                      <div class="card-deck card-deck-item-list">
-                        <ng-container *ngIf="eventCategories">
-                          <app-event-card class="card card-max-width"
-                                          *ngFor="let e of ev"
-                                          [tura]="e"
-                                          [currentUserId]="currentUser.id"
-                                          (addSeen)="addSeen($event.id)"
-                                          [categories]="eventCategories">
-                          </app-event-card>
-                        </ng-container>
-                      </div>
-                    </div>
-                  </div>
-                </ng-container>
+          <!--<div id="collapse2"-->
+               <!--class="collapse coll"-->
+               <!--#el2-->
+               <!--aria-labelledby="heading2"-->
+               <!--data-parent="#accordion2"-->
+               <!--[collapse]="isCollapsed2"-->
+               <!--(collapsed)="setHeight(el2, 0)"-->
+               <!--(expanded)="setHeight(el2, 0); setHeight(el2, el2.scrollHeight)">-->
+            <!--<div class="card-body">-->
+              <!--<ng-container-->
+                <!--*ngIf="(watchedUserEventsGrouppedBy2$ | async); else loading">-->
+                <!--<ng-container-->
+                  <!--*ngIf="(watchedUserEventsGrouppedBy2$ | async)?.length; else emptyEvents">-->
+                  <!--<div class="row"-->
+                       <!--*ngFor="let evg of watchedUserEventsGrouppedBy2$ | async">-->
+                    <!--<div class="col-lg-6 card-deck-container"-->
+                         <!--*ngFor="let ev of evg">-->
+                      <!--<div class="card-deck card-deck-item-list">-->
+                        <!--<ng-container *ngIf="eventCategories">-->
+                          <!--<app-event-card class="card card-max-width"-->
+                                          <!--*ngFor="let e of ev"-->
+                                          <!--[tura]="e"-->
+                                          <!--[currentUserId]="currentUser.id"-->
+                                          <!--(addSeen)="addSeen($event.id)"-->
+                                          <!--[categories]="eventCategories">-->
+                          <!--</app-event-card>-->
+                        <!--</ng-container>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                <!--</ng-container>-->
 
-              </ng-container>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="accordion3" class="acc-content mt-3">
-        <div class="card">
-          <div class="card-header bg-mylight"
-               id="heading3"
-               data-toggle="collapse"
-               data-target="#collapse3"
-               aria-expanded="true"
-               aria-controls="collapse3"
-               (click)="isCollapsed3 = !isCollapsed3">
-            <h4>
-              Hirdetett cuccai
-              <span *ngIf="watchedUserItemsGrouppedBy2$"> ({{itemsNum}})</span>
-            </h4>
-          </div>
+              <!--</ng-container>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div id="accordion3" class="acc-content mt-3">-->
+        <!--<div class="card">-->
+          <!--<div class="card-header bg-mylight"-->
+               <!--id="heading3"-->
+               <!--data-toggle="collapse"-->
+               <!--data-target="#collapse3"-->
+               <!--aria-expanded="true"-->
+               <!--aria-controls="collapse3"-->
+               <!--(click)="isCollapsed3 = !isCollapsed3">-->
+            <!--<h4>-->
+              <!--Hirdetett cuccai-->
+              <!--<span *ngIf="watchedUserItemsGrouppedBy2$"> ({{itemsNum}})</span>-->
+            <!--</h4>-->
+          <!--</div>-->
 
-          <div id="collapse3"
-               class="collapse coll"
-               #el3
-               aria-labelledby="heading3"
-               data-parent="#accordion3"
-               [collapse]="isCollapsed3"
-               (collapsed)="setHeight(el3, 0)"
-               (expanded)="setHeight(el3, 0); setHeight(el3, el3.scrollHeight)">
-            <div class="card-body">
-              <ng-container
-                *ngIf="(watchedUserItemsGrouppedBy2$ | async); else loading">
-                <ng-container
-                  *ngIf="(watchedUserItemsGrouppedBy2$ | async)?.length; else emptyItems">
-                  <div class="row"
-                       *ngFor="let itg of watchedUserItemsGrouppedBy2$ | async">
-                    <div class="col-lg-6 card-deck-container"
-                         *ngFor="let it of itg">
-                      <div class="card-deck card-deck-item-list">
-                        <ng-container *ngIf="itemCategories">
-                          <app-item-card
-                            class="card card-max-width"
-                            *ngFor="let i of it"
-                            [cucc]="i"
-                            [currentUserId]="currentUserId"
-                            [categories]="itemCategories">
-                          </app-item-card>
-                        </ng-container>
-                      </div>
-                    </div>
-                  </div>
-                </ng-container>
-              </ng-container>
-            </div>
-          </div>
-        </div>
-      </div>
+          <!--<div id="collapse3"-->
+               <!--class="collapse coll"-->
+               <!--#el3-->
+               <!--aria-labelledby="heading3"-->
+               <!--data-parent="#accordion3"-->
+               <!--[collapse]="isCollapsed3"-->
+               <!--(collapsed)="setHeight(el3, 0)"-->
+               <!--(expanded)="setHeight(el3, 0); setHeight(el3, el3.scrollHeight)">-->
+            <!--<div class="card-body">-->
+              <!--<ng-container-->
+                <!--*ngIf="(watchedUserItemsGrouppedBy2$ | async); else loading">-->
+                <!--<ng-container-->
+                  <!--*ngIf="(watchedUserItemsGrouppedBy2$ | async)?.length; else emptyItems">-->
+                  <!--<div class="row"-->
+                       <!--*ngFor="let itg of watchedUserItemsGrouppedBy2$ | async">-->
+                    <!--<div class="col-lg-6 card-deck-container"-->
+                         <!--*ngFor="let it of itg">-->
+                      <!--<div class="card-deck card-deck-item-list">-->
+                        <!--<ng-container *ngIf="itemCategories">-->
+                          <!--<app-item-card-->
+                            <!--class="card card-max-width"-->
+                            <!--*ngFor="let i of it"-->
+                            <!--[cucc]="i"-->
+                            <!--[currentUserId]="currentUserId"-->
+                            <!--[categories]="itemCategories">-->
+                          <!--</app-item-card>-->
+                        <!--</ng-container>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                <!--</ng-container>-->
+              <!--</ng-container>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+
+      <app-collapsible *ngIf="watchedUserEventsGrouppedBy2$ && eventCategories"
+                       (addSeen)="addSeen($event.id)"
+                       [elements$]="watchedUserEventsGrouppedBy2$"
+                       [currentUserId]="currentUser.id"
+                       [categories]="eventCategories"
+                       [elem]="'event'"
+                       [idNum]="3"
+                       [header]="'Hirdetett túrái'"
+                       [message]="'Nincsenek túrák.'"
+                       [num]="eventsNum"></app-collapsible>
+
+      <app-collapsible *ngIf="watchedUserItemsGrouppedBy2$ && itemCategories"
+                       [elements$]="watchedUserItemsGrouppedBy2$"
+                       [currentUserId]="currentUser.id"
+                       [categories]="itemCategories"
+                       [elem]="'item'"
+                       [idNum]="4"
+                       [header]="'Hirdetett cuccai'"
+                       [message]="'Nincsenek cuccok.'"
+                       [num]="itemsNum"></app-collapsible>
 
     </div>
   </ng-container>

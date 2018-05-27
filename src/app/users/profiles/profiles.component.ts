@@ -1,7 +1,4 @@
-import {
-  Component, OnDestroy, OnInit, Renderer2,
-  TemplateRef
-} from '@angular/core';
+import {Component, OnDestroy, OnInit, Renderer2, TemplateRef} from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {UserModel} from '../../shared/user-model';
 import 'rxjs/add/operator/filter';
@@ -37,14 +34,12 @@ export class ProfilesComponent implements OnInit, OnDestroy {
   public eventsNum: number;
   public itemsNum: number;
   public currentUser: UserModel;
-  private watchedUser: UserModel;
-  public isCollapsed2 = true;
-  public isCollapsed3 = true;
   public favEvents: string[] = [];
-  private _subscriptions: Subscription[] = [];
   public recipientsId: string[] = [];
   public emailModalTitle: string;
   public modalRef: BsModalRef;
+  private watchedUser: UserModel;
+  private _subscriptions: Subscription[] = [];
 
   constructor(private _userService: UserService,
               private _route: ActivatedRoute,
@@ -53,7 +48,8 @@ export class ProfilesComponent implements OnInit, OnDestroy {
               private _categoryService: CategoryService,
               private _renderer: Renderer2,
               private _modalService: BsModalService,
-              private _openChatListService: OpenChatListService) {}
+              private _openChatListService: OpenChatListService) {
+  }
 
   ngOnDestroy() {
     this.unsubscribe(this._subscriptions);
@@ -148,7 +144,7 @@ export class ProfilesComponent implements OnInit, OnDestroy {
   addSeen(eventId: string): void {
     const subscription = this._eventService.getEventByIdOnce(eventId)
       .switchMap(ev => {
-        const seen = ev.seen ? ++ ev.seen : 1;
+        const seen = ev.seen ? ++ev.seen : 1;
         return this._eventService.addSeen(ev.id, seen);
       }).subscribe(() => subscription.unsubscribe());
   }
@@ -185,4 +181,3 @@ export class ProfilesComponent implements OnInit, OnDestroy {
   }
 }
 
-// TODO: a hirdetett túrákat és cuccokat kiszervezni, és betenni ugyanazt a saját profilba is.

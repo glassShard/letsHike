@@ -26,9 +26,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public eventCategories;
   public itemCategories;
   public currentUserId: string;
-  public isCollapsed1 = true;
-  public isCollapsed2 = true;
-  public isCollapsed3 = true;
   public isCollapsed4 = true;
   public isCollapsed5 = true;
   public favItems: {};
@@ -37,6 +34,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public error = false;
   public info = false;
   public disabled = false;
+  public joinedEventsNum: number;
+  public myEventsNum: number;
+  public myItemsNum: number;
   private allEvents: Observable<EventModel[]>;
   private _subscriptions: Subscription[] = [];
 
@@ -74,11 +74,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
       if (param === 'joined' || param === 'myEvents') {
         if (param === 'joined') {
           filtered = this.allEvents
-            .map(events => events.filter(event => event.guestsIds && event.guestsIds.hasOwnProperty(this.currentUserId)));
+            .map(events => events.filter(event => event.guestsIds && event.guestsIds.hasOwnProperty(this.currentUserId)))
+            .do(data => this.joinedEventsNum = data.length);
         }
         if (param === 'myEvents') {
           filtered = this.allEvents
-            .map(events => events.filter(event => event.creatorId === this.currentUserId));
+            .map(events => events.filter(event => event.creatorId === this.currentUserId))
+            .do(data => this.myEventsNum = data.length);
         }
         sorted = filtered
           .flatMap(rawEvent => {
@@ -93,6 +95,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       } else if (param === 'myItems') {
         sorted = this._itemService.getAllItems()
           .map(events => events.filter(event => event.creatorId === this.currentUserId))
+          .do(data => this.myItemsNum = data.length)
           .flatMap(rawItems => {
             return Observable.of(
               rawItems.sort((a, b) => {

@@ -1,0 +1,61 @@
+<div id="{{'accordion'+idNum}}" class="acc-content mt-3">
+  <div class="card">
+    <div class="card-header bg-mylight"
+         id="{{'heading'+idNum}}"
+         data-toggle="collapse"
+         aria-expanded="true"
+         aria-controls="collapse"
+         (click)="isCollapsed = !isCollapsed">
+      <h4>
+        {{header}}
+        <span *ngIf="elements$"> ({{num}})</span>
+      </h4>
+    </div>
+
+    <div id="{{'collapse'+idNum}}"
+         class="collapse coll"
+         #el
+         aria-labelledby="heading"
+         [collapse]="isCollapsed"
+         (collapsed)="setHeight(el, 0)"
+         (expanded)="setHeight(el, 0); setHeight(el, el.scrollHeight)">
+      <div class="card-body">
+        <ng-container
+          *ngIf="(elements$ | async)?.length; else nothingToShow">
+          <div class="row"
+               *ngFor="let elg of elements$ | async">
+            <div class="col-lg-6 card-deck-container"
+                 *ngFor="let el of elg">
+              <div class="card-deck card-deck-item-list">
+                <ng-container *ngIf="categories">
+                  <ng-container *ngIf="elem === 'event'; else itemElem">
+                    <app-event-card class="card card-max-width"
+                                    *ngFor="let e of el"
+                                    [tura]="e"
+                                    [currentUserId]="currentUserId"
+                                    (addSeen)="seen($event.id)"
+                                    [categories]="categories">
+                    </app-event-card>
+                  </ng-container>
+                  <ng-template #itemElem>
+                    <app-item-card class="card card-max-width"
+                                    *ngFor="let e of el"
+                                    [cucc]="e"
+                                    [currentUserId]="currentUserId"
+                                    [categories]="categories">
+                    </app-item-card>
+                  </ng-template>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #nothingToShow>
+  <app-nothing-to-show [message]="message"></app-nothing-to-show>
+</ng-template>
