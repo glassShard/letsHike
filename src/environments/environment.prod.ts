@@ -14,5 +14,16 @@ export const environment = {
   links: {
     root: 'https://turazzunk.hu/',
     home: 'turazzunk.hu'
+  },
+  quillToolbar: {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ script: 'sub' }, { script: 'super' }],
+      [{ indent: '-1' }, { indent: '+1' }],
+      [{ header: [3, 4, 5, false] }],
+      ['clean'],
+      ['link']
+    ]
   }
 };

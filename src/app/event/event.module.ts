@@ -9,11 +9,12 @@ import {CoreModule} from '../core/core.module';
 import {EventCardModule} from '../event-card/event-card.module';
 import {MomentModule} from 'angular2-moment';
 import 'moment/locale/hu';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AlertModule} from 'ngx-bootstrap';
 import {ImgModule} from '../shared/img/img/img.module';
 import {ImageSwiperModule} from '../shared/swiper/image-swiper.module';
 import {ChatModule} from '../chat/chat.module';
+import {QuillModule} from "ngx-quill";
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import {ChatModule} from '../chat/chat.module';
     AlertModule,
     ImgModule,
     ImageSwiperModule,
-    ChatModule
+    ChatModule,
+    QuillModule
   ],
   declarations: [
     EventComponent,

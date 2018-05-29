@@ -33,6 +33,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   public oldCoverImg = '';
   public uploadedImages: any[] = [];
   private _root = environment.links.root;
+  public quillModules = environment.quillToolbar;
 
   constructor(private _route: ActivatedRoute,
               private _itemService: ItemService,
@@ -139,9 +140,8 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     delete(this.success);
     this.submitted = true;
     if (this.form.valid) {
-      console.log(this.item.images === undefined);
+      setButtonSubscription.unsubscribe();
       Object.assign(this.item, this.form.value);
-      console.log(this.form.value);
       this._subscriptions.push(this._itemService.save(this.item)
         .subscribe(
           (response: ItemModel) => {

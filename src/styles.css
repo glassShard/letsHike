@@ -215,6 +215,19 @@ footer {
   right: 10px;
 }
 
+.ql-toolbar.ql-snow,
+.ql-container.ql-snow {
+  border: none;
+}
+
+.ql-toolbar.ql-snow {
+  border-bottom: 1px solid #ced4da;
+}
+
+.ql-container.ql-snow {
+  font-size: 1rem;
+}
+
 .imagesPreviewContainer {
   background-color: #fbfbfb;
 }

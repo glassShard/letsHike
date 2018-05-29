@@ -15,6 +15,7 @@ import {PointReplacerModule} from '../shared/point-replacer.module';
 import {ImgModule} from '../shared/img/img/img.module';
 import {ImageSwiperModule} from '../shared/swiper/image-swiper.module';
 import {ChatModule} from '../chat/chat.module';
+import {QuillModule} from 'ngx-quill';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import {ChatModule} from '../chat/chat.module';
     PointReplacerModule,
     ImgModule,
     ImageSwiperModule,
-    ChatModule
+    ChatModule,
+    QuillModule
   ],
   declarations: [
     ItemComponent,

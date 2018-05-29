@@ -59,15 +59,14 @@
 
       <div class="form-group">
         <label for="description">Leírás:</label>
-        <textarea type="text"
-                  formControlName="description"
-                  class="form-control"
-                  id="description"
-                  placeholder="Ide hosszabb szöveget is írhatsz, mely a terméklapon a rövid leírás folytatásaként jelenik majd meg...">
-
-        </textarea>
+        <quill-editor id="description"
+                      class="form-control p-0"
+                      formControlName="description"
+                      [modules]="quillModules"
+                      placeholder="Ide hosszabb szöveget is írhatsz, mely a terméklapon a rövid leírás folytatásaként jelenik meg..."
+                      [ngClass]="{'is-invalid': submitted && form.get('description').invalid}">
+        </quill-editor>
       </div>
-
       <div class="form-group" id="categories">
         <dl class="mydl">Válassz kategóriát:</dl>
         <div class="row">

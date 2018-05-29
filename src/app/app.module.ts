@@ -33,6 +33,7 @@ import {VerifyEmailComponent} from './verify-email/verify-email.component';
 import {ChangePasswordComponent} from './user/change-password/change-password.component';
 import {VerifyEmailModule} from './verify-email/verify-email.module';
 import {ChangePasswordModule} from './user/change-password/change-password.module';
+import {QuillModule} from 'ngx-quill';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import {ChangePasswordModule} from './user/change-password/change-password.modul
     AngularFireAuthModule,
     ChatModule,
     VerifyEmailModule,
-    ChangePasswordModule
+    ChangePasswordModule,
+    QuillModule
   ],
   providers: [
     EventService,

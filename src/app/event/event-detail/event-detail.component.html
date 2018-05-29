@@ -101,12 +101,14 @@
       </div>
       <div class="form-group">
         <label for="description">Leírás:</label>
-        <textarea type="text"
-                  class="form-control"
-                  id="description"
-                  formControlName="description"
-                  placeholder="Itt add meg a túra részleteit..."
-                  [ngClass]="{'is-invalid': submitted && eventForm.get('description').invalid}"></textarea>
+        <quill-editor id="description"
+                      class="form-control p-0"
+                      formControlName="description"
+                      [modules]="quillModules"
+                      placeholder="Itt add meg a túra részleteit..."
+                      [ngClass]="{'is-invalid': submitted && eventForm.get('description').invalid}"
+                      >
+        </quill-editor>
         <div class="invalid-feedback"
              *ngIf="submitted && eventForm.get('description').hasError('required')">
           Adj meg leírást a túrához

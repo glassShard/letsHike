@@ -32,6 +32,8 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   public oldCoverImg = '';
   public uploadedImages: any[] = [];
   private _root = environment.links.root;
+  public quillModules = environment.quillToolbar;
+
 
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,
@@ -160,11 +162,9 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       Object.assign(this.event, this.eventForm.value);
       const date = new Date(this.eventForm.get('date').value).getTime() / 1000;
       Object.assign(this.event, {date: date});
-      console.log(this.event);
       this._subscriptions.push(this._eventService.save(this.event)
         .subscribe(
           (response: EventModel) => {
-            console.log(response);
             this.event.id = response.id;
             this._imgComponent.saveImages(this.event.id);
             // this._router.navigate(['/turak']);
