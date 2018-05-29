@@ -103,9 +103,9 @@ export class EventDetailComponent implements OnInit, OnDestroy {
         console.log(event);
         if (event === null) {
           if (this.currentUser) {
-            this._router.navigate(['404']);
+            this._router.navigate(['404']).then();
           } else {
-            this._router.navigate(['/turak']);
+            this._router.navigate(['/turak']).then();
           }
         } else {
           this.event = event;
@@ -122,9 +122,9 @@ export class EventDetailComponent implements OnInit, OnDestroy {
             fillForm();
           } else {
             if (this.currentUser.emailVerified) {
-              this._router.navigate(['/turak/new']);
+              this._router.navigate(['/turak/new']).then();
             } else {
-              this._router.navigate(['/turak']);
+              this._router.navigate(['/turak']).then();
             }
           }
         }
@@ -169,8 +169,11 @@ export class EventDetailComponent implements OnInit, OnDestroy {
             this._imgComponent.saveImages(this.event.id);
             // this._router.navigate(['/turak']);
           },
-          (error => this.error = 'Hiba az adatok mentése közben. Kérjük,' +
-          ' próbáld újra.')
+          (error => {
+            this.error = 'Hiba az adatok mentése közben. Kérjük,' +
+              ' próbáld újra.';
+            this.submitted = false;
+          })
         )
       );
     } else {

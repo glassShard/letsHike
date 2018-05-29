@@ -91,9 +91,9 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
       }).subscribe((item: ItemModel) => {
         if (item === null) {
           if (this.currentUser) {
-            this._router.navigate(['404']);
+            this._router.navigate(['404']).then();
           } else {
-            this._router.navigate(['/cuccok']);
+            this._router.navigate(['/cuccok']).then();
           }
         } else {
           this.item = item;
@@ -110,9 +110,9 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
             fillForm();
           } else {
             if (this.currentUser.emailVerified) {
-              this._router.navigate(['/cuccok/new']);
+              this._router.navigate(['/cuccok/new']).then();
             } else {
-              this._router.navigate(['/cuccok']);
+              this._router.navigate(['/cuccok']).then();
             }
           }
         }
@@ -148,8 +148,11 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
             this.item.id = response.id;
             this._imgComponent.saveImages(this.item.id);
           },
-          (error => this.error = 'Hiba az adatok mentése közben. Kérjük,' +
-            ' próbáld újra.')
+          (error => {
+            this.error = 'Hiba az adatok mentése közben. Kérjük,' +
+              ' próbáld újra.';
+            this.submitted = false;
+          })
         )
       );
     } else {
