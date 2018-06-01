@@ -1,4 +1,4 @@
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, Title} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {AppComponent} from './app.component';
@@ -8,12 +8,10 @@ import {ButtonsModule} from 'ngx-bootstrap/buttons';
 import {EventService} from './shared/event.service';
 import {ItemService} from './shared/item.service';
 import {UserService} from './shared/user.service';
-import {AccordionModule, AlertModule, ModalModule} from 'ngx-bootstrap';
+import {AlertModule, ModalModule} from 'ngx-bootstrap';
 import {LoggedInGuard} from './shared/logged-in.guard';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CategoryService} from './shared/category.service';
 import {HttpClientModule} from '@angular/common/http';
-import {MomentModule} from 'angular2-moment';
 import 'moment/locale/hu';
 import {environment} from '../environments/environment';
 import * as firebase from 'firebase';
@@ -33,7 +31,8 @@ import {VerifyEmailComponent} from './verify-email/verify-email.component';
 import {ChangePasswordComponent} from './user/change-password/change-password.component';
 import {VerifyEmailModule} from './verify-email/verify-email.module';
 import {ChangePasswordModule} from './user/change-password/change-password.module';
-import {QuillModule} from 'ngx-quill';
+import {SEOServiceService} from './shared/seoservice.service';
+import {WindowRef} from './shared/windowRef';
 
 @NgModule({
   declarations: [
@@ -46,21 +45,16 @@ import {QuillModule} from 'ngx-quill';
     CollapseModule.forRoot(),
     AlertModule.forRoot(),
     ModalModule.forRoot(),
-    AccordionModule.forRoot(),
-    ReactiveFormsModule,
     BrowserModule,
-    FormsModule,
     AppRoutingModule,
     HttpClientModule,
-    MomentModule,
     CoreModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     ChatModule,
     VerifyEmailModule,
-    ChangePasswordModule,
-    QuillModule
+    ChangePasswordModule
   ],
   providers: [
     EventService,
@@ -72,7 +66,10 @@ import {QuillModule} from 'ngx-quill';
     ImageService,
     EmailService,
     ChatService,
-    OpenChatListService
+    OpenChatListService,
+    SEOServiceService,
+    Title,
+    WindowRef
   ],
   entryComponents: [
     LoginModalComponent,

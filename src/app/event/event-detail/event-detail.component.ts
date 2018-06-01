@@ -13,6 +13,7 @@ import 'rxjs/add/operator/mergeMap';
 import {Subscription} from 'rxjs/Subscription';
 import {ImgComponent} from '../../shared/img/img/img.component';
 import {environment} from '../../../environments/environment';
+import {SEOServiceService} from "../../shared/seoservice.service";
 
 @Component({
   selector: 'app-event-detail',
@@ -41,7 +42,8 @@ export class EventDetailComponent implements OnInit, OnDestroy {
               private _categoryService: CategoryService,
               private _location: Location,
               private _userService: UserService,
-              private _fb: FormBuilder) {}
+              private _fb: FormBuilder,
+              private _seoService: SEOServiceService) {}
 
   ngOnDestroy() {
     this._subscriptions.forEach((subscription: Subscription) => {
@@ -50,6 +52,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._seoService.noIndex();
     this.eventForm = this._fb.group(
       {
         title: ['', Validators.compose([
@@ -94,7 +97,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           this.currentUser = user;
           const evId = this._route.snapshot.params['id'];
           if (evId) {
-            return this._eventService.getEventById(evId, 'event-detail 95');
+            return this._eventService.getEventById(evId);
           } else {
             return Observable.of(new EventModel());
           }
@@ -214,6 +217,10 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     if (event.type === 'error') {
       this.error = event.value;
     }
+  }
+
+  goToView() {
+    this._router.navigate([`/turak/view/${this.event.id}`]);
   }
 }
 

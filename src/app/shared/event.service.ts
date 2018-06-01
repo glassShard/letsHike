@@ -46,14 +46,13 @@ export class EventService {
   }
 
   getEventByIdOnce(id: string): Observable<EventModel> {
-    return this.getEventById(id, 'event-service 49').first();
+    return this.getEventById(id).first();
   }
 
-  getEventById(id: string, honnan: string): Observable<EventModel> {
+  getEventById(id: string): Observable<EventModel> {
 
     return this._afDb.object(`events/${id}`)
       .flatMap(event => {
-        console.log('mégegyszer', honnan);
         if (event.$exists()) {
           if (event.guestsIds) {
             event.guestsIds = Object.keys(event.guestsIds);

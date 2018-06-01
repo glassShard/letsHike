@@ -13,7 +13,9 @@ export const environment = {
   },
   links: {
     root: 'https://turazzunk.hu/',
-    home: 'turazzunk.hu'
+    home: 'turazzunk.hu',
+    noImageEvents: 'https://turazzunk/img/placeholders/noImageEvents.jpg',
+    noImageItems: 'https://turazzunk/img/placeholders/noImageItems.jpg'
   },
   quillToolbar: {
     toolbar: [

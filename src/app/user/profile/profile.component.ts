@@ -12,6 +12,7 @@ import {CategoryService} from '../../shared/category.service';
 import {ItemService} from '../../shared/item.service';
 import {Subscription} from 'rxjs/Subscription';
 import {Router} from '@angular/router';
+import {SEOServiceService} from "../../shared/seoservice.service";
 
 @Component({
   selector: 'app-profile',
@@ -45,7 +46,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
               private _itemService: ItemService,
               private _categoryService: CategoryService,
               private _renderer: Renderer2,
-              private _router: Router) {
+              private _router: Router,
+              private _seoService: SEOServiceService) {
   }
 
   ngOnDestroy(): void {
@@ -55,6 +57,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._seoService.noIndex();
     this._subscriptions.push(this._userService.isLoggedIn$
       .subscribe(isLoggedIn => {
         if (!isLoggedIn) {

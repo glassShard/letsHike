@@ -1,6 +1,10 @@
 <form class="input-group" [formGroup]="form" (ngSubmit)="sendMessage()">
-  <input type="text" name="chat-message" formControlName="chat-message"
-         class="form-control" placeholder="Üzenet..."
+  <input type="text"
+         name="chat-message"
+         formControlName="chat-message"
+         class="form-control"
+         placeholder="Üzenet..."
+         autocomplete="off"
          [ngClass]="{'is-invalid': invalidChatMessageInput}"
          #chatMessageInput>
   <span class="input-group-btn">

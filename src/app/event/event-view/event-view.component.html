@@ -1,6 +1,13 @@
 <ng-container *ngIf="event$ | async as event; else loading">
   <div class="container title-and-search">
-    <h1 class="display-4">{{event.title}}</h1>
+    <div class="titleBar">
+      <div class="smallCat inline">
+        <img class="smallCat" src="{{smallPic}}">
+      </div>
+      <div class="space inline"></div>
+      <h1 class="display-4 inline">{{event.title}}</h1>
+    </div>
+
   </div>
 
   <div class="container">
@@ -9,6 +16,7 @@
       <div class="col-md-4">
         <h3>{{event.category}}</h3>
         <hr/>
+
         <h4>Feltöltötte: {{event.creator.nick}}</h4>
         <h4>Tel: {{event.creator.tel}}</h4>
         <br/>
@@ -16,6 +24,9 @@
           'LL'}}</h5>
         <h5>({{event.date | amFromUnix | amTimeAgo}})</h5>
         <h5>Időtartam: {{event.days}} nap</h5>
+        <br />
+        <h5>Helyszín:</h5>
+        <p>{{event.country}} / {{event.region}}</p>
         <p>
           <small>Közzétéve: {{event.dateOfPublish | amFromUnix | amDateFormat:
             'LL'}}
@@ -86,12 +97,17 @@
                 title="Levél a hirdetőnek">
           <i class="icon-mail-1"></i> Levél a hirdetőnek
         </button>
+
         <button class="btn btn-small btn-primary mb-1"
                 *ngIf="currentUser && currentUser.id === event.creatorId && guestsIds.length > 0"
                 (click)="showEmailModalWindow('guests', emailModal)"
                 title="Levél a jelentkezőknek">
           <i class="icon-mail-1"></i> Levél a jelentkezőknek
           ({{guestsIds.length}})
+        </button>
+        <button class="btn btn-primary mb-1"
+                (click)="fbShare()">
+          <i class="icon-facebook-rect"></i> Megosztás
         </button>
       </div>
 

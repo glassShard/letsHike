@@ -236,6 +236,29 @@ footer {
   cursor: pointer;
 }
 
+.titleBar {
+  display: flex;
+  align-items: flex-start;
+}
+
+.smallCat {
+  height: 72.5px;
+  width: 72.5px;
+}
+
+.space {
+  width: 30px;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.smallCat img {
+  width: auto;
+  height: 100%;
+}
+
 .coll {
   display: block !important;
   overflow: hidden !important;

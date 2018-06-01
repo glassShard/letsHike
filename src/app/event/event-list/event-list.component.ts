@@ -67,7 +67,9 @@ export class EventListComponent implements OnInit, OnDestroy {
               return events;
             } else {
               return events.filter(event => {
-                return (event.title.toLowerCase().indexOf(filteredText.toLowerCase()) > -1);
+                return (event.title.toLowerCase().indexOf(filteredText.toLowerCase()) > -1 ||
+                  event.country.toLowerCase().indexOf(filteredText.toLowerCase()) > -1 ||
+                  event.region.toLowerCase().indexOf(filteredText.toLowerCase()) > -1);
               });
             }
           });

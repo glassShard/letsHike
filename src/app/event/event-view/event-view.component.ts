@@ -15,6 +15,10 @@ import {environment} from '../../../environments/environment';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import 'rxjs/add/operator/share';
 import {VerifyEmailComponent} from '../../verify-email/verify-email.component';
+import {SEOServiceService} from '../../shared/seoservice.service';
+import {WindowRef} from '../../shared/windowRef';
+import {CategoryService} from '../../shared/category.service';
+import 'rxjs/add/operator/switchMap';
 
 @Component({
   selector: 'app-event-view',
@@ -39,13 +43,17 @@ export class EventViewComponent implements OnInit, OnDestroy {
   public emailModalTitle: string;
   public creatorId: string;
   public guestsIds: string[];
+  public smallPic: string;
   private _subscriptions: Subscription[] = [];
 
   constructor(private _route: ActivatedRoute,
               private _eventService: EventService,
               private _router: Router,
               private _userService: UserService,
-              private _modalService: BsModalService) {
+              private _modalService: BsModalService,
+              private _seoService: SEOServiceService,
+              private _windowRef: WindowRef,
+              private _categoryService: CategoryService) {
   }
 
   ngOnInit() {
@@ -142,23 +150,41 @@ export class EventViewComponent implements OnInit, OnDestroy {
     const handle404 = () => {
       this._router.navigate(['404']);
     };
-    this.event$ = this._eventService.getEventById(evId, 'event-view 142');
-    this._subscriptions.push(this._eventService.getEventById(evId, 'event-view 143').subscribe(ev => {
-      this.buttonDisabled = false;
-      if (ev === null) {
+    this.event$ = this._eventService.getEventById(evId);
+    let categories;
+    this._subscriptions.push(this._categoryService.getEventCategories()
+      .switchMap(cats => {
+        categories = cats;
+        return this._eventService.getEventById(evId);
+      }).subscribe(ev => {
+        const cat = categories.filter(categ => categ.category === ev.category);
+
+        this.smallPic = cat[0].smallPic;
+        console.log(this.smallPic);
+        this.buttonDisabled = false;
+        if (ev === null) {
+          handle404();
+        } else {
+          const evm = new EventModel(ev);
+          if (this.currentUser && ev.guestsIds) {
+            this.isGuest = ev.guestsIds.filter(id => id === this.currentUser.id).length > 0;
+          }
+          if (!ev.guestsIds) {
+            this.isGuest = false;
+          }
+          this.creatorId = ev.creatorId;
+          this.guestsIds = ev.guestsIds ? ev.guestsIds : [];
+          this._seoService.setTitle(evm.title);
+          this._seoService.setMeta(evm);
+        }
+      }, () => {
         handle404();
-      } else {
-        if (this.currentUser && ev.guestsIds) {
-          this.isGuest = ev.guestsIds.filter(id => id === this.currentUser.id).length > 0;
-        }
-        if (!ev.guestsIds) {
-          this.isGuest = false;
-        }
-        this.creatorId = ev.creatorId;
-        this.guestsIds = ev.guestsIds ? ev.guestsIds : [];
-      }
-    }, () => {
-      handle404();
-    }));
+      })
+    );
+  }
+
+  fbShare() {
+    const evId = this._route.snapshot.params['id'];
+    this._windowRef.nativeWindow.open(`https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fturazzunk.hu%2Fturak%2Fview%2F${evId}&amp;src=sdkpreparse`);
   }
 }

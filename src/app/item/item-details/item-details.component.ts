@@ -14,6 +14,7 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/concat';
 import {ImgComponent} from '../../shared/img/img/img.component';
 import {environment} from '../../../environments/environment';
+import {SEOServiceService} from "../../shared/seoservice.service";
 
 @Component({
   selector: 'app-item-details',
@@ -41,7 +42,8 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
               private _categoryService: CategoryService,
               private _userService: UserService,
               private _fileService: FileService,
-              private _fb: FormBuilder) {}
+              private _fb: FormBuilder,
+              private _seoService: SEOServiceService) {}
 
   ngOnDestroy() {
     this._subscriptions.forEach((subscription: Subscription) => {
@@ -50,6 +52,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._seoService.noIndex();
     this.form = this._fb.group(
       {
         title: ['', Validators.required],
@@ -193,5 +196,9 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     if (event.type === 'error') {
       this.error = event.value;
     }
+  }
+
+  goToView() {
+    this._router.navigate([`/cuccok/view/${this.item.id}`]);
   }
 }

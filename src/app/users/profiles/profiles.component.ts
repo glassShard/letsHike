@@ -17,6 +17,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {ChatListModel} from '../../chat/model/chat-list.model';
 import {OpenChatListService} from '../../shared/open-chat-list.service';
 import {VerifyEmailComponent} from '../../verify-email/verify-email.component';
+import {SEOServiceService} from "../../shared/seoservice.service";
 
 @Component({
   selector: 'app-profiles',
@@ -46,6 +47,7 @@ export class ProfilesComponent implements OnInit, OnDestroy {
               private _eventService: EventService,
               private _itemService: ItemService,
               private _categoryService: CategoryService,
+              private _seoService: SEOServiceService,
               private _renderer: Renderer2,
               private _modalService: BsModalService,
               private _openChatListService: OpenChatListService) {
@@ -56,6 +58,7 @@ export class ProfilesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._seoService.noIndex();
     const userId = this._route.snapshot.params['id'];
     this.watchedUser$ = this._userService.getUserById(userId).share();
 

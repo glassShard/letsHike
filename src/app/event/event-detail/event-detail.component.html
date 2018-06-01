@@ -152,6 +152,7 @@
       </app-img>
 
       <alert type="success" dismissOnTimeout="3000"
+             (onClosed)="goToView()"
              *ngIf="success">
         <p>{{success}}</p>
       </alert>

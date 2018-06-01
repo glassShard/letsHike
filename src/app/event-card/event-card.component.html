@@ -1,11 +1,14 @@
-<img class="card-img-top bg-mylight" [src]="tura.picUrl"
-     *ngIf="tura.picUrl; else withoutPicUrl"
-     alt="Card image cap">
-<ng-template #withoutPicUrl>
-  <img class="card-img-top bg-mylight"
-             [src]="dafaultPic"
-     alt="Card image cap">
-</ng-template>
+<a [routerLink]="['/turak/view', tura.id]">
+  <img class="card-img-top bg-mylight" [src]="tura.picUrl"
+       *ngIf="tura.picUrl; else withoutPicUrl"
+       alt="Card image cap">
+  <ng-template #withoutPicUrl>
+    <img class="card-img-top bg-mylight"
+         [src]="dafaultPic"
+         alt="Card image cap">
+  </ng-template>
+</a>
+
 <div class="card-body">
   <h5 class="card-title">{{tura.title}}</h5>
   <p class="mb-1">{{tura.country}}</p>

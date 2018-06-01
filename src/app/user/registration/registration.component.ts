@@ -11,6 +11,7 @@ import {FileService} from '../../shared/file.service';
 import {Subscription} from 'rxjs/Subscription';
 import {PasswordMatchValidator} from '../password.match.validator';
 import {Observable} from 'rxjs/Observable';
+import {SEOServiceService} from "../../shared/seoservice.service";
 
 @Component({
   selector: 'app-registration',
@@ -29,6 +30,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   constructor(private _userService: UserService,
               private _router: Router,
               private _fb: FormBuilder,
+              private _seoService: SEOServiceService,
               private _fileService: FileService) {
     this._subscription = this._userService.isLoggedIn$.subscribe(isLoggedIn => {
       if (isLoggedIn) {
@@ -42,6 +44,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._seoService.noIndex();
     const passwordPattern = '^[a-zA-Z0-9áéíóöőúüűÁÉÍÓÖŐÚÜŰ]*$';
     this.form = this._fb.group(
       {

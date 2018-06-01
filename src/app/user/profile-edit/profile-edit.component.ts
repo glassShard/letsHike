@@ -20,6 +20,7 @@ import {LoginModalComponent} from '../../core/login-modal/login-modal.component'
 import {ImageService} from '../../shared/image.service';
 import {ChangePasswordComponent} from '../change-password/change-password.component';
 import 'rxjs/add/operator/take';
+import {SEOServiceService} from "../../shared/seoservice.service";
 
 @Component({
   selector: 'app-profile-edit',
@@ -57,7 +58,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
               private _fileService: FileService,
               private _modalService: BsModalService,
               private _changeDetection: ChangeDetectorRef,
-              private _imageService: ImageService) {
+              private _imageService: ImageService,
+              private _seoService: SEOServiceService) {
   }
 
   ngOnDestroy() {
@@ -70,6 +72,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._seoService.noIndex();
     this.form = this._fb.group(
       {
         nick: ['', Validators.compose([

@@ -1,22 +1,29 @@
 <ng-container *ngIf="item$ | async as item; else loading">
   <div class="container title-and-search">
-    <h1 class="display-4">{{item.title}}</h1>
+    <div class="titleBar">
+      <div class="smallCat inline">
+        <img class="smallCat" src="{{smallPic}}">
+      </div>
+      <div class="space inline"></div>
+      <h1 class="display-4 inline">{{item.title}}</h1>
+    </div>
   </div>
+
 
   <div class="container">
     <div class="row">
 
       <div class="col-md-4">
         <h2>Ár: {{item.price | number | pointReplacer}} Ft</h2>
-        <hr />
+        <hr/>
         <h4>{{item.category}}</h4>
         <h4 class="pt-2">Feltöltötte: {{item.creator.nick}}</h4>
-        <br />
+        <br/>
         <h5 class="pt-2">Tel: {{item.creator.tel}}</h5>
         <h5 class="pt-2">Közzétéve: {{item.dateOfPublish | amFromUnix |
           amDateFormat:
           'LL'}}</h5>
-        <br />
+        <br/>
 
       </div>
 
@@ -28,20 +35,24 @@
       </div>
     </div>
 
-   <div class="row">
-    <div class="col-12 text-right">
+    <div class="row">
+      <div class="col-12 text-right">
         <button *ngIf="currentUser"
-                class="btn btn-small btn-primary"
+                class="btn btn-primary mb-1"
                 (click)="showChat = !showChat"
                 title="Chat ablak kinyitása"
                 [disabled]="showChat">
           <i class="icon-comment"></i> Chat
         </button>
-        <button class="btn btn-small btn-primary"
+        <button class="btn btn-primary mb-1"
                 *ngIf="!currentUser || (currentUser && currentUser.id !== item.creatorId)"
                 (click)="showEmailModalWindow(emailModal)"
                 title="Levél a hirdetőnek">
           <i class="icon-mail-1"></i> Levél a hirdetőnek
+        </button>
+        <button class="btn btn-primary mb-1"
+                (click)="fbShare()">
+          <i class="icon-facebook-rect"></i> Megosztás
         </button>
       </div>
 
@@ -53,11 +64,11 @@
                          (edit)="onEdit($event.idFromButton)">
       </app-owner-buttons>
 
-     <div class="col-12" *ngIf="error">
-       <alert *ngIf="error">
-         {{error}}
-       </alert>
-     </div>
+      <div class="col-12" *ngIf="error">
+        <alert *ngIf="error">
+          {{error}}
+        </alert>
+      </div>
     </div>
 
     <div class="row">

@@ -13,7 +13,9 @@ export const environment = {
   },
   links: {
     root: 'http://localhost/turazzunk/',
-    home: 'localhost:4200'
+    home: 'localhost:4200',
+    noImageEvents: 'localhost/turazzunk/img/placeholders/noImageEvents.jpg',
+    noImageItems: 'localhost/turazzunk/img/placeholders/noImageItems.jpg'
   },
   quillToolbar: {
     toolbar: [

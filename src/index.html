@@ -2,16 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Turazzunk</title>
+  <title>Turazzunk!</title>
   <base href="/">
-
+  <meta name="author" content="Baranyi Éva">
+  <meta name="copyright" content="Baranyi Éva +36306478394">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="assets/fontello/css/ikonok.css">
   <link href="https://cdn.quilljs.com/1.2.2/quill.snow.css" rel="stylesheet">
   <link href="https://cdn.quilljs.com/1.2.2/quill.bubble.css" rel="stylesheet">
+  <script>window.prerenderReady = false;</script>
 </head>
 <body>
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = 'https://connect.facebook.net/hu_HU/sdk.js#xfbml=1&version=v3.0';
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
   <app-root></app-root>
 </body>
 </html>

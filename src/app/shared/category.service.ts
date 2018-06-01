@@ -8,12 +8,14 @@ export class CategoryService {
   private _itemCategories: {
     category: string,
     picUrl: string,
-    users?: string[]
+    users?: string[],
+    smallPic?: string;
   }[];
   private _eventCategories: {
     category: string,
     picUrl: string,
-    users?: string[]
+    users?: string[],
+    smallPic?: string;
   }[];
 
   constructor(private _http: HttpClient) {}

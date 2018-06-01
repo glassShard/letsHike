@@ -22,7 +22,7 @@
   <div class="mt-1"
        *ngIf="!showAlert">
     <button *ngIf="!isOnEdit"
-            class="btn btn-small btn-success"
+            class="btn btn-success"
             title="Módosít..."
             (click)="onEdit(model.id)">
       <i class="icon-pencil"></i> Módosítás
@@ -35,7 +35,7 @@
       <i class="icon-database"></i> Mentés
     </button>
     <button type="button"
-            class="btn btn-small btn-danger" *ngIf="model.id"
+            class="btn btn-danger" *ngIf="model.id"
             (click)="showAlert = true"
             title="Hirdetés törlése...">
       <i class="icon-trash"></i> Törlés
