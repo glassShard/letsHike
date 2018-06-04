@@ -11,7 +11,7 @@ import {FileService} from '../../shared/file.service';
 import {Subscription} from 'rxjs/Subscription';
 import {PasswordMatchValidator} from '../password.match.validator';
 import {Observable} from 'rxjs/Observable';
-import {SEOServiceService} from "../../shared/seoservice.service";
+import {SEOServiceService} from '../../shared/seoservice.service';
 
 @Component({
   selector: 'app-registration',

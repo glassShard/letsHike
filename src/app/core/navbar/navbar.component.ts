@@ -39,6 +39,7 @@ export class NavbarComponent implements OnInit {
   logout(event) {
     event.preventDefault();
     this.userService.logout();
+    this.isCollapsed = true;
   }
 
   showLoginModal(event) {
@@ -58,12 +59,14 @@ export class NavbarComponent implements OnInit {
     };
     this.modalRef = this._modalService.show(LoginModalComponent);
     Object.assign(this.modalRef.content, initialState);
+    this.isCollapsed = true;
   }
 
   showChatList(event) {
     event.preventDefault();
     event.stopPropagation();
     this._openChatListService.setOpenChatList(true);
+    this.isCollapsed = true;
   }
 
   unsubscribe() {

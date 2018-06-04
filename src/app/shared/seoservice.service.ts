@@ -20,7 +20,6 @@ export class SEOServiceService {
   addSeoData(): void {
     this._router.events.filter((event: any) => event instanceof NavigationEnd).subscribe(() => {
       let root = this._router.routerState.snapshot.root;
-      console.log(this._router.routerState.snapshot.url);
       while (root) {
         if (root.children && root.children.length) {
           root = root.children[0];
@@ -36,7 +35,6 @@ export class SEOServiceService {
           const urls = ['/kezdolap', '/cuccok', '/turak', '/tobbiek'];
           if (urls.indexOf(this._router.routerState.snapshot.url) > -1) {
             this._windowRef.nativeWindow.prerenderReady = true;
-            console.log('prerenderReady true');
           }
           return;
         } else {
@@ -104,7 +102,6 @@ export class SEOServiceService {
       this._metaService.updateTag(elem);
     });
     this._windowRef.nativeWindow.prerenderReady = true;
-    console.log('prerenderReady true');
   }
 
   noRobots(): void {
@@ -115,6 +112,5 @@ export class SEOServiceService {
     this.removeTags();
     this.noRobots();
     this._windowRef.nativeWindow.prerenderReady = true;
-    console.log('prerenderReady true');
   }
 }

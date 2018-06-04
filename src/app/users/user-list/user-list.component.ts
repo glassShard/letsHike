@@ -35,7 +35,6 @@ export class UserListComponent implements OnInit, OnDestroy {
               private _router: Router,
               private _modalService: BsModalService,
               private _changeDetection: ChangeDetectorRef) {
-
   }
 
   ngOnInit() {
@@ -44,7 +43,24 @@ export class UserListComponent implements OnInit, OnDestroy {
 
     this._categoryService.getEventCategories().subscribe(res => this.eventCategories = res);
 
-    this.users$ = this._userService.getAllUsers();
+    this.users$ = this._userService.getAllUsers()
+      .flatMap((users: UserModel[]) => {
+        return Observable.of(
+          users.sort((a, b) => a.nick.localeCompare(b.nick))
+        );
+      })
+      .switchMap(users => {
+        return this.stringFromSearch$
+          .map(filteredText => {
+            if (filteredText === null) {
+              return users;
+            } else {
+              return users.filter(user => {
+                return (user.nick.toLowerCase().indexOf(filteredText.toLowerCase()) > -1);
+              });
+            }
+          });
+      });
   }
 
   ngOnDestroy() {
@@ -87,7 +103,5 @@ export class UserListComponent implements OnInit, OnDestroy {
   unsubscribe(subscriptions: Subscription[]) {
     subscriptions.forEach(subscription => subscription.unsubscribe());
   }
-
-
 }
 

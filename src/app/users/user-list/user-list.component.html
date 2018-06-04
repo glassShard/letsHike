@@ -8,12 +8,13 @@
 
 <div class="container" id="users" *ngIf="users$ | async as users; else loading">
   <div class="row category-collection">
-    <div class="col-sm-6 col-md-3 col-lg-2" *ngFor="let user of users">
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let user of users">
       <div class="card users text-center">
         <div class="img-holder mb-3 mt-4">
-          <img class="card-img-top user-card bg-mylight"
+          <img class="card-img-top user-card bg-mylight link"
                *ngIf="user.picUrl; else defaultPic"
                [src]="user.picUrl"
+               (click)="profileClicked(user.id)"
                alt="Profilkép">
           <ng-template #defaultPic>
             <img class="card-img-top bg-mylight"

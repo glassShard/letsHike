@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {BsModalRef} from 'ngx-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PasswordMatchValidator} from '../password.match.validator';
 import {Subscription} from 'rxjs/Subscription';
-import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'app-change-password',

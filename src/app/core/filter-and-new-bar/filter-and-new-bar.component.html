@@ -1,7 +1,7 @@
 <div class="container title-and-search">
   <h1 class="display-4">{{title}}</h1>
   <div class="row ">
-    <div class="col-sm-3">
+    <div class="col-sm-3 cats" *ngIf="title != 'Többiek'">
       <button class="btn btn-primary btn-block mt-2" type="button"
               (click)="categoryButtonClick()"
               data-toggle="collapse"
@@ -9,7 +9,7 @@
               aria-controls="categories">{{categoryButtonLabel}}
       </button>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6 search">
       <div class="input-group mt-2">
         <input type="text"
                class="form-control"
@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-3 new" *ngIf="title != 'Többiek'">
       <button class="btn btn-success btn-block mt-2" type="button"
               (click)="newButtonClicked($event)">{{newButton}}
       </button>
@@ -36,7 +36,7 @@
      (expanded)="setHeight(el, 0); setHeight(el, el.scrollHeight)"
      class="container collapse coll" id="categories" #el>
   <div class="row category-collection">
-    <div class="col-sm-6 col-md-3 col-lg-2"
+    <div class="col-3 col-sm-3 col-md-2"
          *ngFor="let category of categories">
       <div class="card categories text-center"
            (click)="onCategoryClick(category.category)"

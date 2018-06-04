@@ -10,14 +10,14 @@ import {EventModel} from '../../shared/event-model';
 import {EventService} from '../../shared/event.service';
 import {CategoryService} from '../../shared/category.service';
 import {ItemService} from '../../shared/item.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/share';
 import {Subscription} from 'rxjs/Subscription';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {ChatListModel} from '../../chat/model/chat-list.model';
 import {OpenChatListService} from '../../shared/open-chat-list.service';
 import {VerifyEmailComponent} from '../../verify-email/verify-email.component';
-import {SEOServiceService} from "../../shared/seoservice.service";
+import {SEOServiceService} from '../../shared/seoservice.service';
 
 @Component({
   selector: 'app-profiles',
@@ -44,6 +44,7 @@ export class ProfilesComponent implements OnInit, OnDestroy {
 
   constructor(private _userService: UserService,
               private _route: ActivatedRoute,
+              private _router: Router,
               private _eventService: EventService,
               private _itemService: ItemService,
               private _categoryService: CategoryService,
@@ -67,6 +68,7 @@ export class ProfilesComponent implements OnInit, OnDestroy {
         if (isLoggedIn) {
           return this._userService.getCurrentUser();
         } else {
+          this._router.navigate(['/tobbiek']);
           return Observable.of(null);
         }
       })
@@ -75,6 +77,7 @@ export class ProfilesComponent implements OnInit, OnDestroy {
         return this.watchedUser$;
       })
       .subscribe(user => {
+        console.log(user);
         this.watchedUser = user;
         this.favEvents = user.favEvents ? Object.keys(user.favEvents) : ['Nincs' +
         ' kitöltve'];

@@ -20,7 +20,7 @@ import {LoginModalComponent} from '../../core/login-modal/login-modal.component'
 import {ImageService} from '../../shared/image.service';
 import {ChangePasswordComponent} from '../change-password/change-password.component';
 import 'rxjs/add/operator/take';
-import {SEOServiceService} from "../../shared/seoservice.service";
+import {SEOServiceService} from '../../shared/seoservice.service';
 
 @Component({
   selector: 'app-profile-edit',
@@ -134,8 +134,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   onFileChange(event) {
     if (event.srcElement.files.length > 0) {
       const file = event.srcElement.files[0];
-      console.log(event.srcElement.files);
-      console.log(file);
       this._imageService.getOrientation(file)
         .take(1)
         .subscribe(orientation => {
@@ -233,7 +231,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
 
   show(reason) {
     this._loginModalSubscription = this._modalService.onHide.subscribe(() => {
-      console.log(this.modalRefLogin.content.authFailed);
       if (this.modalRefLogin.content.authFailed) {
         this._saveFailed = true;
         this.disabled = false;
@@ -255,7 +252,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         } else {
           this._subscriptions.push(this._userService.deleteProfile()
             .subscribe((res) => {
-              console.log(res);
               this.successDel = 'Profilodat töröltük.';
             }, error => {
               this.errorDel = 'Hiba történt a profil törlése során. Kérjük,' +

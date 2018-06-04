@@ -1,5 +1,5 @@
 <a [routerLink]="['/cuccok/view', cucc.id]">
-  <img class="card-img-top bg-mylight" [src]="cucc.picUrl"
+  <img class="card-img-top bg-mylight link" [src]="cucc.picUrl"
        *ngIf="cucc.picUrl; else withoutPicUrl"
        alt="Card image cap">
   <ng-template #withoutPicUrl>
@@ -12,9 +12,9 @@
 <div class="card-body">
   <h5 class="card-title">{{cucc.title}}</h5>
   <h3 class="card-title">{{cucc.price | number | pointReplacer}} Ft</h3>
-  <p class="card-text">{{cucc.shortDescription}}</p>
-  <p><small>Közzétéve: {{cucc.dateOfPublish | amFromUnix |
-    amDateFormat: 'LL'}}</small></p>
+  <p class="card-item-sd">{{cucc.shortDescription}}</p>
+  <p><small><em>Hirdetve: {{cucc.dateOfPublish | amFromUnix |
+    amDateFormat: 'LL'}}</em></small></p>
   <a [routerLink]="['/cuccok/view', cucc.id]"
      class="btn btn-lg btn-primary mt-1">
     Részletek</a>

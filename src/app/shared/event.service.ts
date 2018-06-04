@@ -103,8 +103,7 @@ export class EventService {
         Object.assign(param, {guestsIds: convertedGuestsIds});
       }
       return Observable.fromPromise(this._afDb.object(`/events/${param.id}`).update(param))
-        .flatMap(() => Observable.of(param))
-        .do(res => console.log(res));
+        .flatMap(() => Observable.of(param));
     } else { // create ag
       Object.assign(param, {dateOfPublish: Math.floor(Date.now() / 1000)});
       return Observable.fromPromise(this._afDb.list('events').push(param))

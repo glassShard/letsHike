@@ -4,6 +4,8 @@ import {EventCardComponent} from './event-card.component';
 import {MomentModule} from 'angular2-moment';
 import 'moment/locale/hu';
 import {RouterModule} from '@angular/router';
+import {GrowingModule} from "../directives/growing/growing.module";
+import {GrowingDirective} from "../directives/growing/growing.directive";
 
 @NgModule({
   imports: [

@@ -8,6 +8,8 @@
       <h1 class="display-4 inline">{{event.title}}</h1>
     </div>
 
+    <div class="line"></div>
+
   </div>
 
   <div class="container">
@@ -17,7 +19,8 @@
         <h3>{{event.category}}</h3>
         <hr/>
 
-        <h4>Feltöltötte: {{event.creator.nick}}</h4>
+        <h4>Feltöltötte:
+          <a (click)="goToCreator($event)" href="#">{{event.creator.nick}}</a></h4>
         <h4>Tel: {{event.creator.tel}}</h4>
         <br/>
         <h5>Túra indul: {{event.date | amFromUnix | amDateFormat:

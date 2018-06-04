@@ -29,7 +29,6 @@ export class FileService {
     return this._http.post<FileModel>(this._avatarUrl, form)
       .switchMap(response => {
         if (response.url) {
-          console.log(response.url);
           return Observable.fromPromise(this._afDb.object(`users/${id}`).update({'picUrl': response.url}));
         } else {
           return Observable.throw(new Error(response.error));

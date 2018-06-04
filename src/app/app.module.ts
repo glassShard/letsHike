@@ -33,11 +33,13 @@ import {VerifyEmailModule} from './verify-email/verify-email.module';
 import {ChangePasswordModule} from './user/change-password/change-password.module';
 import {SEOServiceService} from './shared/seoservice.service';
 import {WindowRef} from './shared/windowRef';
+import {GrowingDirective} from './directives/growing/growing.directive';
+import {GrowingModule} from "./directives/growing/growing.module";
 
 @NgModule({
   declarations: [
     AppComponent,
-    ...AppRoutingModule.routableComponents,
+    ...AppRoutingModule.routableComponents
   ],
   imports: [
     BsDropdownModule.forRoot(),
@@ -54,7 +56,8 @@ import {WindowRef} from './shared/windowRef';
     AngularFireAuthModule,
     ChatModule,
     VerifyEmailModule,
-    ChangePasswordModule
+    ChangePasswordModule,
+    GrowingModule
   ],
   providers: [
     EventService,

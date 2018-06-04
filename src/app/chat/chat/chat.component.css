@@ -6,6 +6,7 @@
   flex-direction: row;
   width: auto;
   height: auto;
+  z-index: 5;
 }
 
 @media (max-width: 576px) {

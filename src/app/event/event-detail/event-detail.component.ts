@@ -83,14 +83,12 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     this._subscriptions.push(this._userService.isLoggedIn$
       .flatMap((isLoggedIn: boolean) => {
         if (isLoggedIn) {
-          console.log(isLoggedIn);
           return this._userService.getCurrentUser();
         } else {
           return Observable.of(null);
         }
       })
       .flatMap((user: UserModel) => {
-        console.log(user);
         if (user === null) {
           return Observable.of(null);
         } else {
@@ -103,7 +101,6 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           }
         }
       }).subscribe((event: EventModel) => {
-        console.log(event);
         if (event === null) {
           if (this.currentUser) {
             this._router.navigate(['404']).then();
@@ -170,7 +167,6 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           (response: EventModel) => {
             this.event.id = response.id;
             this._imgComponent.saveImages(this.event.id);
-            // this._router.navigate(['/turak']);
           },
           (error => {
             this.error = 'Hiba az adatok mentése közben. Kérjük,' +

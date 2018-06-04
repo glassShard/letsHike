@@ -12,7 +12,7 @@ import {CategoryService} from '../../shared/category.service';
 import {ItemService} from '../../shared/item.service';
 import {Subscription} from 'rxjs/Subscription';
 import {Router} from '@angular/router';
-import {SEOServiceService} from "../../shared/seoservice.service";
+import {SEOServiceService} from '../../shared/seoservice.service';
 
 @Component({
   selector: 'app-profile',
@@ -177,7 +177,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   onCategoryClick(whereFrom, what, checked) {
-    console.log(what, checked);
     this._userService.saveCategory(whereFrom, what, checked);
   }
 

@@ -1,5 +1,5 @@
 <a [routerLink]="['/turak/view', tura.id]">
-  <img class="card-img-top bg-mylight" [src]="tura.picUrl"
+  <img class="card-img-top bg-mylight link" [src]="tura.picUrl"
        *ngIf="tura.picUrl; else withoutPicUrl"
        alt="Card image cap">
   <ng-template #withoutPicUrl>
@@ -11,12 +11,13 @@
 
 <div class="card-body">
   <h5 class="card-title">{{tura.title}}</h5>
-  <p class="mb-1">{{tura.country}}</p>
+  <p class="mb-1">{{tura.country}} <small><em>({{tura.region}})</em></small></p>
   <h5 class="card-title">{{tura.days}} nap</h5>
-  <p class="mb-0">Indulás: {{tura.date | amFromUnix | amDateFormat:
-    'LL'}}</p>
-  <p><small> ({{tura.date | amFromUnix |
-    amTimeAgo}})</small></p>
+  <p class="mb-0">Indulás:</p>
+  <h5>{{tura.date | amFromUnix | amDateFormat:
+    'LL'}}</h5>
+  <p><small><em> ({{tura.date | amFromUnix |
+    amTimeAgo}})</em></small></p>
 
   <button class="btn btn-lg btn-primary mb-1"
           (click)="onViewClick()"

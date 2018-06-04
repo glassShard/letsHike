@@ -60,8 +60,7 @@ export class ItemService {
     delete item.creator;
     if (item.id) { // udpate ag
       return Observable.fromPromise(this._afDb.object(`/items/${item.id}`).update(item))
-        .flatMap(() => Observable.of(item))
-        .do(res => console.log(res));
+        .flatMap(() => Observable.of(item));
     } else { // create ag
       Object.assign(item, {dateOfPublish: Math.floor(Date.now() / 1000)});
       return Observable.fromPromise(this._afDb.list('items').push(item))

@@ -27,14 +27,12 @@ export class UserService {
               private _afDb: AngularFireDatabase) {
     this._afAuth.authState.subscribe(
       user => {
-        console.log(user);
         if (user != null) {
           this.currentUserId = user.uid;
           this.currentUserId$.next(user.uid);
           this.getUserById(user.uid).subscribe(remoteUser => {
             Object.assign(remoteUser, {'emailVerified': user.emailVerified});
             Object.assign(remoteUser, {'email': user.email});
-            console.log(remoteUser);
             this._user$.next(remoteUser);
             this.isLoggedIn$.next(true);
           });
@@ -138,7 +136,6 @@ export class UserService {
       user.email,
       password
     );
-    console.log(credential);
     return Observable.fromPromise(this._afAuth.auth.currentUser.reauthenticateWithCredential(credential));
   }
 

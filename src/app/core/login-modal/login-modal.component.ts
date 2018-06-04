@@ -42,7 +42,7 @@ export class LoginModalComponent implements OnInit {
   login(email: string, password: string) {
     this.disabled = true;
     this._userService.login(email, password).subscribe((res) => {
-      console.log(res);
+      console.log('ok');
       this.modalRef.hide();
     }, err => {
       this.disabled = false;

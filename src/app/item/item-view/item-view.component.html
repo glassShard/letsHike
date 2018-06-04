@@ -7,6 +7,9 @@
       <div class="space inline"></div>
       <h1 class="display-4 inline">{{item.title}}</h1>
     </div>
+
+    <div class="line"></div>
+
   </div>
 
 
@@ -17,7 +20,9 @@
         <h2>Ár: {{item.price | number | pointReplacer}} Ft</h2>
         <hr/>
         <h4>{{item.category}}</h4>
-        <h4 class="pt-2">Feltöltötte: {{item.creator.nick}}</h4>
+        <h4 class="pt-2">Feltöltötte: <a (click)="goToCreator($event)"
+                                         href="#">{{item.creator
+          .nick}}</a></h4>
         <br/>
         <h5 class="pt-2">Tel: {{item.creator.tel}}</h5>
         <h5 class="pt-2">Közzétéve: {{item.dateOfPublish | amFromUnix |
