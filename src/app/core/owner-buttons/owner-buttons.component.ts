@@ -16,6 +16,7 @@ export class OwnerButtonsComponent {
   @Output() delete = new EventEmitter();
   @Output() edit = new EventEmitter();
   @Output() save = new EventEmitter();
+  @Output() toView = new EventEmitter();
   public showAlert = false;
 
   onDelete(idFromButton) {
@@ -28,5 +29,9 @@ export class OwnerButtonsComponent {
 
   onSave() {
     this.save.emit();
+  }
+
+  onToView() {
+    this.toView.emit();
   }
 }

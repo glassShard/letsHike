@@ -12,3 +12,9 @@
                  [oldCoverImg]="oldCoverImg"
                  [coverFromSaved]="coverFromSaved">
 </app-img-preview>
+
+<div class="mb-4" *ngIf="progress">
+  <progressbar [value]="progress" type="warning">
+    <i>{{progress}}%</i>
+  </progressbar>
+</div>

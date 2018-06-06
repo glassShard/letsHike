@@ -295,5 +295,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     input.append('avatar', this.form.get('avatar').value);
     return input;
   }
+
+  chooseImageFired() {
+    this.fileInput.nativeElement.click();
+  }
 }
 

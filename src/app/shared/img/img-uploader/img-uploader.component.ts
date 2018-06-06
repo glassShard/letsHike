@@ -25,14 +25,18 @@ export class ImgUploaderComponent implements OnInit {
   }
 
   onFileChange(event) {
-    this.images = [];
     if (event.srcElement.files.length > 0) {
       console.log(event.srcElement.files);
       this.files = event.srcElement.files;
+      console.log('img uploader images: ', this.files);
+      console.log(Object.values(this.files));
+      this.formValue.emit({images: this.files});
       Object.values(this.files).map((file, index) => {
         this._imageService.getOrientation(file)
           .take(1)
           .subscribe(orientation => {
+            console.log(file.name, index);
+            console.log(orientation); // eddig jó
             const reader = new FileReader();
             reader.readAsDataURL(file);
             if (orientation === 8 || orientation === 3 || orientation === 6) {
@@ -48,7 +52,6 @@ export class ImgUploaderComponent implements OnInit {
             }
           });
       });
-      this.formValue.emit({images: this.files});
     }
   }
 
@@ -66,5 +69,10 @@ export class ImgUploaderComponent implements OnInit {
   clearForm() {
     this.fileInput.nativeElement.value = '';
     this.images = [];
+  }
+
+  addFilesFired() {
+    this.clearForm();
+    this.fileInput.nativeElement.click();
   }
 }

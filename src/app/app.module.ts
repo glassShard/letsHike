@@ -8,7 +8,7 @@ import {ButtonsModule} from 'ngx-bootstrap/buttons';
 import {EventService} from './shared/event.service';
 import {ItemService} from './shared/item.service';
 import {UserService} from './shared/user.service';
-import {AlertModule, ModalModule} from 'ngx-bootstrap';
+import {AlertModule, ModalModule, ProgressbarModule} from 'ngx-bootstrap';
 import {LoggedInGuard} from './shared/logged-in.guard';
 import {CategoryService} from './shared/category.service';
 import {HttpClientModule} from '@angular/common/http';
@@ -33,8 +33,6 @@ import {VerifyEmailModule} from './verify-email/verify-email.module';
 import {ChangePasswordModule} from './user/change-password/change-password.module';
 import {SEOServiceService} from './shared/seoservice.service';
 import {WindowRef} from './shared/windowRef';
-import {GrowingDirective} from './directives/growing/growing.directive';
-import {GrowingModule} from "./directives/growing/growing.module";
 
 @NgModule({
   declarations: [
@@ -47,6 +45,7 @@ import {GrowingModule} from "./directives/growing/growing.module";
     CollapseModule.forRoot(),
     AlertModule.forRoot(),
     ModalModule.forRoot(),
+    ProgressbarModule.forRoot(),
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -56,8 +55,7 @@ import {GrowingModule} from "./directives/growing/growing.module";
     AngularFireAuthModule,
     ChatModule,
     VerifyEmailModule,
-    ChangePasswordModule,
-    GrowingModule
+    ChangePasswordModule
   ],
   providers: [
     EventService,

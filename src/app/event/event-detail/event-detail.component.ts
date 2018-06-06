@@ -13,7 +13,7 @@ import 'rxjs/add/operator/mergeMap';
 import {Subscription} from 'rxjs/Subscription';
 import {ImgComponent} from '../../shared/img/img/img.component';
 import {environment} from '../../../environments/environment';
-import {SEOServiceService} from "../../shared/seoservice.service";
+import {SEOServiceService} from '../../shared/seoservice.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -215,8 +215,14 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  goToView() {
+  onToView() {
     this._router.navigate([`/turak/view/${this.event.id}`]);
+  }
+
+  ifNew() {
+    if (!this._route.snapshot.params['id']) {
+      this._router.navigate([`/turak/${this.event.id}`]);
+    }
   }
 }
 

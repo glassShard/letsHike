@@ -21,11 +21,10 @@
 
         <h4>Feltöltötte:
           <a (click)="goToCreator($event)" href="#">{{event.creator.nick}}</a></h4>
-        <h4>Tel: {{event.creator.tel}}</h4>
-        <br/>
-        <h5>Túra indul: {{event.date | amFromUnix | amDateFormat:
+        <h4 class="mb-4">Tel: {{event.creator.tel}}</h4>
+        <h5 class="mb-0">Túra indul: {{event.date | amFromUnix | amDateFormat:
           'LL'}}</h5>
-        <h5>({{event.date | amFromUnix | amTimeAgo}})</h5>
+        <small class="mb-2"><em>({{event.date | amFromUnix | amTimeAgo}})</em></small>
         <h5>Időtartam: {{event.days}} nap</h5>
         <br />
         <h5>Helyszín:</h5>
@@ -102,7 +101,7 @@
         </button>
 
         <button class="btn btn-small btn-primary mb-1"
-                *ngIf="currentUser && currentUser.id === event.creatorId && guestsIds.length > 0"
+                *ngIf="currentUser && currentUser.id === event.creatorId && guestsIds > 0"
                 (click)="showEmailModalWindow('guests', emailModal)"
                 title="Levél a jelentkezőknek">
           <i class="icon-mail-1"></i> Levél a jelentkezőknek

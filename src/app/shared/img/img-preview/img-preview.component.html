@@ -1,5 +1,6 @@
 <div class="imgSetToUpload col-12 mb-3"
      *ngIf="uploadedImages">
+  <p>Feltöltött képek:</p>
   <ng-container
     *ngFor="let uploadedImg of uploadedImages">
     <div class="imgContainer mb-1">
@@ -7,7 +8,7 @@
            (click)="markAsCover(uploadedImg)"
            [ngClass]="{'imgChecked': marked && coverFromSaved && uploadedImg === marked}">
       <button type="button"
-              class="btn btn-small btn-outline-danger delete"
+              class="btn btn-small btn-outline-danger delete mb-0"
               (click)="onDeleteImage(uploadedImg)">
         <i class="icon-trash"></i>
       </button>

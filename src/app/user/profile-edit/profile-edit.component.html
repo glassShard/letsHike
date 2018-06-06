@@ -8,7 +8,8 @@
   <form [formGroup]="form"
         (ngSubmit)="onSubmit()">
     <div class="form-row">
-      <div class="form-group col-md-4">
+      <div class="form-group col-sm-6 left">
+
         <label for="nick">Felhasználónév:</label>
         <input type="text"
                class="form-control"
@@ -24,8 +25,7 @@
              *ngIf="form.get('nick').hasError('maxLength')">
           A felhasználónév maximális hossza 15 karakter
         </div>
-      </div>
-      <div class="form-group col-md-4">
+
         <label for="email">Email:</label>
         <input type="email"
                class="form-control"
@@ -45,64 +45,69 @@
           megerősítő linket, az értesítéseket (ha kéred), és a tagok neked szóló üzeneteit. Email
           címed a tagok számára sem lesz publikus.
         </small>
-      </div>
-      <div class="form-group col-md-4">
+
         <label for="dateOfBirth">Születési dátum:</label>
         <input type="date"
                class="form-control"
                id="dateOfBirth"
                formControlName="dateOfBirth">
-        <small class="form-text text-muted">Ha kitöltöd, adatlapodon
-          megjelenítjük életkorodat (az adatlap csak a tagok számára látható).
+        <small class="form-text text-muted">Adatlapodon megjelenítjük. Az adatlap csak a tagok
+          számára látható.
         </small>
-      </div>
-    </div>
 
-    <div class="form-row mb-3">
-      <div class="form-group col-md-4">
         <label for="tel">Telefonszám:</label>
         <input type="text"
                class="form-control"
                id="tel"
                formControlName="tel"
                placeholder="Telefonszámod...">
-        <small class="form-text text-muted">Ha kitöltöd, adatlapodon, valamint hirdetés feladása
-          esetén a termék oldalán láthatóvá tesszük.
+        <small class="form-text text-muted">Adatlapodon, valamint hirdetés feladása
+          esetén a termék oldalán megjelenítjük.
         </small>
+
       </div>
 
-      <div class="form-group col-12 col-sm-6 col-md-4">
-        <label for="avatar">Profilkép:</label>
+      <div class="form-group col-sm-6 right">
+        <label for="avatar">Profilkép feltöltése:</label>
         <input type="file"
-               class="form-control"
+               class="form-control hidden"
                id="avatar"
                (change)="onFileChange($event)"
                #fileInput>
-        <small class="form-text text-muted">
-          Itt töltheted fel, vagy cserélheted profilképedet. (A feltöltött
-          képet négyzet alakúra vágjuk.)
-        </small>
-      </div>
-      <div class="imgToUpload col-12 col-sm-6 col-md-4"
-           *ngIf="avatar; else profilePic">
-        <img [src]="avatar">
-        <button type="button"
-                class="btn btn-small btn-outline-danger delete"
-                (click)="clearFile()">
-          <i class="icon-trash"></i>
-        </button>
+          <button type="button" class="btn btn-success btn-block" (click)="chooseImageFired()">
+            <i class="icon-photo"></i> Válaszd ki a képet...</button>
 
+        <small class="form-text text-muted">
+          A feltöltött képet négyzet alakúra vágjuk.
+        </small>
+        <br />
+
+        <div class="avatar-box" *ngIf="avatar; else profilePic">
+          <p>Feltöltendő kép</p>
+          <div class="imgToUpload">
+
+            <img [src]="avatar">
+            <button type="button"
+                    class="btn btn-small btn-danger deleteProfileImage mb-0"
+                    (click)="clearFile()">
+              <i class="icon-trash"></i>
+            </button>
+
+          </div>
+        </div>
       </div>
       <ng-template #profilePic>
-
-        <div class="imgToUpload col-12 col-sm-6 col-md-4"
-             *ngIf="currentUser?.picUrl">
-          <img [src]="currentUser.picUrl">
-          <button type="button"
-                  class="btn btn-small btn-outline-danger delete"
-                  (click)="clearPicUrl()">
-            <i class="icon-trash"></i>
-          </button>
+          <div class="avatar-box">
+            <p>Jelenlegi profilkép</p>
+            <div class="imgToUpload"
+                 *ngIf="currentUser?.picUrl">
+              <img [src]="currentUser.picUrl" class="currentImage">
+              <button type="button"
+                      class="btn btn-small btn-danger deleteProfileImage mb-0"
+                      (click)="clearPicUrl()">
+                <i class="icon-trash"></i>
+              </button>
+            </div>
 
         </div>
 

@@ -35,6 +35,7 @@ export class ImgComponent implements OnInit {
   public errorCoverImg = 'Hiba a borítókép beállításánál. Kérjük,' +
     ' próbáld újra';
   private _root = environment.links.root;
+  public progress: number;
 
   constructor(private _fileService: FileService) { }
 
@@ -49,11 +50,18 @@ export class ImgComponent implements OnInit {
   filesChange(images) {
     this._imagesToUpload = images;
     this.formValue.emit({images: images});
+    console.log('img comp images: ', images);
   }
 
   saveImages(id) {
     console.log(id);
     if (this._imagesToUpload) {
+      this._fileService.startStatus();
+      this.progress = 0;
+      this._fileService.progress.subscribe(progress => {
+        this.progress = progress;
+      });
+
       const formModel = this.prepareSave(id);
       if (Object.values(this._imagesToUpload)
           .map((curr) => curr['size'])
@@ -92,19 +100,13 @@ export class ImgComponent implements OnInit {
     }
     if (this._stream) {
       this._stream.subscribe(() => {
+        this.progress = null;
         this.doIfSuccess();
-        // if (response['error']) {
-        //   this.doIfFailed('Hiba a képek feltöltésénél. Kérjük próbáld újra.');
-        // } else {
-        //   this.doIfSuccess();
-        //   // this._router.navigate(['/cuccok']);
-        // }
       }, error => {
         console.warn(error);
+        this.progress = null;
         this.doIfFailed('Hiba az adatok mentésekor. Kérjük, próbáld újra.');
       });
-    } else {
-      this.doIfSuccess();
     }
   }
 
@@ -145,7 +147,6 @@ export class ImgComponent implements OnInit {
   clearFileFromForm() {
     this._imagesToUpload = null;
     this._imgUploaderComponent.clearForm();
-
   }
 
   deleteImage(imgUrl) {
@@ -156,9 +157,6 @@ export class ImgComponent implements OnInit {
     this.imagesString = this.uploadedImages
       .map(img => img.replace(this._root, ''))
       .join();
-    // this.form.patchValue({
-    //   images: this.item.images
-    // });
     const urlToDelete = imgUrl.replace(this._root, '');
     this._fileService.deleteImage(this.id, this.whereTo, urlToDelete, this.imagesString)
       .subscribe();

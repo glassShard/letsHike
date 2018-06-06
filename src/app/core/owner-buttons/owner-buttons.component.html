@@ -35,6 +35,12 @@
       <i class="icon-database"></i> Mentés
     </button>
     <button type="button"
+            *ngIf="isOnEdit && model.id"
+            (click)="onToView()"
+            class="btn btn-primary">
+      <i class="icon-eye"></i> Nézetre
+    </button>
+    <button type="button"
             class="btn btn-danger" *ngIf="model.id"
             (click)="showAlert = true"
             title="Hirdetés törlése...">

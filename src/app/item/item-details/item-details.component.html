@@ -105,7 +105,7 @@
       </app-img>
 
       <alert type="success" dismissOnTimeout="3000"
-             (onClosed)="goToView()"
+             (onClosed)="ifNew()"
              *ngIf="success">
         <p class="mb-0">{{success}}</p>
       </alert>
@@ -122,7 +122,8 @@
                          [model]="item"
                          [isOnEdit]="true"
                          (delete)="onDelete($event.idFromButton)"
-                         (save)="onSubmit()">
+                         (save)="onSubmit()"
+                         (toView)="onToView()">
       </app-owner-buttons>
     </form>
 

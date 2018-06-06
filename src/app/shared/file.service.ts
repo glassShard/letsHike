@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpEventType, HttpRequest, HttpResponse} from '@angular/common/http';
 import {FileModel} from './file-model';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/throw';
@@ -7,6 +7,7 @@ import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs/Observable';
 import {AngularFireDatabase} from 'angularfire2/database';
 import 'rxjs/add/operator/switchMap';
+import {Subject} from 'rxjs/Subject';
 
 @Injectable()
 export class FileService {
@@ -15,9 +16,11 @@ export class FileService {
   private _imagesUrl: string;
   private _deleteUrl: string;
   private _setCoverUrl: string;
+  public progress: Subject<number>;
 
   constructor(private _http: HttpClient,
               private _afDb: AngularFireDatabase) {
+
     this._root = environment.links.root;
     this._avatarUrl = `${this._root}avatar.php`;
     this._imagesUrl = `${this._root}uploadImages.php`;
@@ -36,20 +39,56 @@ export class FileService {
       });
   }
 
+  startStatus() {
+    this.progress = new Subject<number>();
+  }
+
   uploadImages(id: string, form: FormData, whereTo: string, oldImages: string) {
-    return this._http.post<FileModel>(this._imagesUrl, form)
-      .flatMap(response => {
-        const payload: {picUrl?: string, images: string} = {'images': ''};
-        if (response.url) {
-          if (response.coverImg) {
-            payload.picUrl = response.coverImg;
-          }
-          payload.images = oldImages ? `${oldImages},${response.url.join()}` : response.url.join();
-          return Observable.fromPromise(this._afDb.object(`/${whereTo}/${id}`).update(payload));
-        } else {
-          return Observable.throw(new Error(response.error));
+      const req = new HttpRequest('POST', this._imagesUrl, form, {
+      reportProgress: true
+    });
+
+    return this._http.request(req)
+      .skip(1)
+      .map(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          const percentDone = Math.round(100 * event.loaded / event.total);
+          this.progress.next(percentDone);
         }
-      });
+        return event;
+      })
+      .filter(event => event.type === HttpEventType.Response)
+      .switchMap(event => {
+        if (event instanceof HttpResponse) {
+          this.progress.complete();
+          const payload: {picUrl?: string, images: string} = {'images': ''};
+          if (event.body['url']) {
+            if (event.body['coverImg']) {
+              payload.picUrl = event.body['coverImg'];
+            }
+            payload.images = oldImages ? `${oldImages},${event.body['url'].join()}` : event.body['url'].join();
+            return Observable.fromPromise(this._afDb.object(`/${whereTo}/${id}`).update(payload));
+          } else {
+            return Observable.throw(new Error(event.body['error']));
+          }
+        } else {
+          return Observable.of(null);
+        }
+    });
+
+    // return this._http.post<FileModel>(this._imagesUrl, form)
+    //   .flatMap(response => {
+    //     const payload: {picUrl?: string, images: string} = {'images': ''};
+    //     if (response.url) {
+    //       if (response.coverImg) {
+    //         payload.picUrl = response.coverImg;
+    //       }
+    //       payload.images = oldImages ? `${oldImages},${response.url.join()}` : response.url.join();
+    //       return Observable.fromPromise(this._afDb.object(`/${whereTo}/${id}`).update(payload));
+    //     } else {
+    //       return Observable.throw(new Error(response.error));
+    //     }
+    //   });
   }
 
   deleteImage(id: string, whereTo: string, imgUrl: string, urls: string) {
@@ -72,5 +111,39 @@ export class FileService {
           return Observable.throw(new Error(response.error));
         }
       });
+  }
+
+  public upload(files: Set<File>): {[key: string]: Observable<number>} {
+    const status = {};
+
+    files.forEach(file => {
+      const formData: FormData = new FormData();
+      formData.append('file', file, file.name);
+
+      const req = new HttpRequest('POST', this._imagesUrl, formData, {
+        reportProgress: true
+      });
+
+      const progress = new Subject<number>();
+
+      this._http.request(req).subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+
+          const percentDone = Math.round(100 * event.loaded / event.total);
+
+          progress.next(percentDone);
+        } else if (event instanceof HttpResponse) {
+
+          progress.complete();
+        }
+      });
+
+      // Save every progress-observable in a map of all observables
+      status[file.name] = {
+        progress: progress.asObservable()
+      };
+    });
+
+    return status;
   }
 }

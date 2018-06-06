@@ -14,7 +14,7 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/concat';
 import {ImgComponent} from '../../shared/img/img/img.component';
 import {environment} from '../../../environments/environment';
-import {SEOServiceService} from "../../shared/seoservice.service";
+import {SEOServiceService} from '../../shared/seoservice.service';
 
 @Component({
   selector: 'app-item-details',
@@ -164,6 +164,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
 
   filesChange(images) {
     this.form.get('imagesToUpload').setValue(images);
+    console.log('item Details images: ', images);
   }
 
   onDelete(itemId: string) {
@@ -171,7 +172,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
       .subscribe(
         () => this._router.navigate(['/cuccok']),
         (err) => {
-          console.warn(`Problémánk van a tölésnél: ${err}`);
+          console.warn(`Hiba a tölésnél: ${err}`);
         }
       );
   }
@@ -196,7 +197,13 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  goToView() {
+  onToView() {
     this._router.navigate([`/cuccok/view/${this.item.id}`]);
+  }
+
+  ifNew() {
+    if (!this._route.snapshot.params['id']) {
+      this._router.navigate([`/cuccok/${this.item.id}`]);
+    }
   }
 }
