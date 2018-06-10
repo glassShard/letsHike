@@ -5,11 +5,17 @@
 <div class="imgSetToUpload col-12"
      *ngIf="images.length > 0">
   <ng-container *ngFor="let singleImage of images">
-    <div class="imgContainer mb-1">
-      <img [src]="singleImage"
-           (click)="markFile(singleImage)"
-           [ngClass]="{'imgChecked': marked && !coverFromSaved && singleImage === marked[0]}">
+    <div class="imgContainer loaderContainer mb-1" *ngIf="singleImage === 1; else imageReady">
+      <app-loading-spinner [loaderWidth]="30" [loaderHeight]="30"
+                           [border]="1" [margin]="0"></app-loading-spinner>
     </div>
+    <ng-template #imageReady>
+      <div class="imgContainer mb-1" >
+        <img [src]="singleImage"
+             (click)="markFile(singleImage)"
+             [ngClass]="{'imgChecked': marked && !coverFromSaved && singleImage === marked[0]}">
+      </div>
+    </ng-template>
   </ng-container>
   <br />
 </div>

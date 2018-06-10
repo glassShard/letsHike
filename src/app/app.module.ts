@@ -33,6 +33,7 @@ import {VerifyEmailModule} from './verify-email/verify-email.module';
 import {ChangePasswordModule} from './user/change-password/change-password.module';
 import {SEOServiceService} from './shared/seoservice.service';
 import {WindowRef} from './shared/windowRef';
+import {ThumbContainerModule} from './shared/img/thumb-container/thumb-container.module';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import {WindowRef} from './shared/windowRef';
     AngularFireAuthModule,
     ChatModule,
     VerifyEmailModule,
-    ChangePasswordModule
+    ChangePasswordModule,
+    ThumbContainerModule
   ],
   providers: [
     EventService,

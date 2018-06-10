@@ -4,11 +4,13 @@ import {ImgComponent} from './img.component';
 import {ImgUploaderComponent} from '../img-uploader/img-uploader.component';
 import {ImgPreviewComponent} from '../img-preview/img-preview.component';
 import {ProgressbarModule} from 'ngx-bootstrap';
+import {CoreModule} from '../../../core/core.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    ProgressbarModule
+    ProgressbarModule,
+    CoreModule
   ],
   declarations: [
     ImgComponent,

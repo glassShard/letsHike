@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { EventRoutingModule } from './event-routing.module';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {EventRoutingModule} from './event-routing.module';
 import {EventComponent} from './event.component';
 import {EventListComponent} from './event-list/event-list.component';
 import {EventDetailComponent} from './event-detail/event-detail.component';
@@ -9,12 +9,13 @@ import {CoreModule} from '../core/core.module';
 import {EventCardModule} from '../event-card/event-card.module';
 import {MomentModule} from 'angular2-moment';
 import 'moment/locale/hu';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ReactiveFormsModule} from '@angular/forms';
 import {AlertModule} from 'ngx-bootstrap';
 import {ImgModule} from '../shared/img/img/img.module';
 import {ImageSwiperModule} from '../shared/swiper/image-swiper.module';
 import {ChatModule} from '../chat/chat.module';
-import {QuillModule} from "ngx-quill";
+import {QuillModule} from 'ngx-quill';
+import {ThumbContainerModule} from '../shared/img/thumb-container/thumb-container.module';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import {QuillModule} from "ngx-quill";
     ImgModule,
     ImageSwiperModule,
     ChatModule,
-    QuillModule
+    QuillModule,
+    ThumbContainerModule
   ],
   declarations: [
     EventComponent,
@@ -36,8 +38,7 @@ import {QuillModule} from "ngx-quill";
     EventDetailComponent,
     EventViewComponent,
   ],
-  exports: [
-
-  ]
+  exports: []
 })
-export class EventModule { }
+export class EventModule {
+}

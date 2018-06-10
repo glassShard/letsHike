@@ -94,7 +94,7 @@ export class ItemViewComponent implements OnInit, OnDestroy {
         (res) => console.log(res),
         (err) => {
           this.error = 'A törlés során hibák léptek fel. Kérjük, próbáld újra!';
-          console.warn(`Problémánk van a tölésnél: ${err}`);
+          console.warn(`Hiba a tölésnél: ${err}`);
         }
       );
   }
@@ -124,7 +124,8 @@ export class ItemViewComponent implements OnInit, OnDestroy {
 
   fbShare() {
     const itId = this._route.snapshot.params['id'];
-    this._windowRef.nativeWindow.open(`https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fturazzunk.hu%2Fcuccok%2Fview%2F${itId}&amp;src=sdkpreparse`);
+    this._windowRef.nativeWindow
+      .open(`https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fturazzunk.hu%2Fcuccok%2Fview%2F${itId}&amp;src=sdkpreparse`);
   }
 
   goToCreator(e) {

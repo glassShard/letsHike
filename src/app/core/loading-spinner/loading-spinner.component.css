@@ -1,12 +1,10 @@
 .loader {
-  border: 3px solid #f3f3f3;
+  border-color: #f3f3f3;
+  border-style: solid;
+  border-top-color: rgb(19, 68, 204);
   border-radius: 50%;
-  border-top: 3px solid rgb(19, 68, 204);
-  width: 120px;
-  height: 120px;
   -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;
-  margin: 50px auto;
 }
 
 /* Safari */

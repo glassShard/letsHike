@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col-12">
+    <div class="imagesPreviewContainer mt-2" #container>
+      <img *ngFor="let image of model.images.split(','); let i = index"
+           src="{{root}}{{image}}"
+           (load)="onLoad()"
+           (error)="onError($event)"
+           title="{{model.title}}"
+           alt="{{model.title}}"
+           (click)="clicked(i)"
+           height="120">
+    </div>
+  </div>
+</div>

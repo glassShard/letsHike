@@ -16,6 +16,7 @@ import {ImgModule} from '../shared/img/img/img.module';
 import {ImageSwiperModule} from '../shared/swiper/image-swiper.module';
 import {ChatModule} from '../chat/chat.module';
 import {QuillModule} from 'ngx-quill';
+import {ThumbContainerModule} from '../shared/img/thumb-container/thumb-container.module';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import {QuillModule} from 'ngx-quill';
     ImgModule,
     ImageSwiperModule,
     ChatModule,
-    QuillModule
+    QuillModule,
+    ThumbContainerModule
   ],
   declarations: [
     ItemComponent,

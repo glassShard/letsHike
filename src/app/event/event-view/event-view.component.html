@@ -123,18 +123,22 @@
 
     </div>
 
-    <div class="row">
-      <div class="col-12">
-        <div class="imagesPreviewContainer mt-2" *ngIf="event.images">
-          <img *ngFor="let image of event.images.split(','); let i = index"
-               src="{{root}}{{image}}"
-               title="{{event.title}}"
-               alt="{{event.title}}"
-               (click)="clicked(i)"
-               height="120">
-        </div>
-      </div>
-    </div>
+    <app-thumb-container *ngIf="event.images"
+                         [model]="event"
+                         (imgClicked)="clicked($event.index)"></app-thumb-container>
+
+    <!--<div class="row">-->
+      <!--<div class="col-12">-->
+        <!--<div class="imagesPreviewContainer mt-2" *ngIf="event.images">-->
+          <!--<img *ngFor="let image of event.images.split(','); let i = index"-->
+               <!--src="{{root}}{{image}}"-->
+               <!--title="{{event.title}}"-->
+               <!--alt="{{event.title}}"-->
+               <!--(click)="clicked(i)"-->
+               <!--height="120">-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
   </div>
 
   <app-swiper class="fixedSwiper"

@@ -219,10 +219,16 @@ footer {
   padding-top: 0;
 }
 
-.imgContainer{
+.imgContainer {
   height: 110px;
-  display: inline-block;
   position: relative;
+  display: inline-flex;
+}
+
+.loaderContainer {
+  justify-content: center;
+  width: 80px;
+  padding-top: 40px;
 }
 
 .imgContainer img {
@@ -333,6 +339,10 @@ footer {
   z-index: 10;
   text-shadow: 0 0 10px black;
   cursor: pointer;
+  -webkit-transition: all 0.1s;
+  -moz-transition: all 0.1s;
+  -ms-transition: all 0.1s;
+  -o-transition: all 0.1s;
   transition: all .5s;
 }
 
