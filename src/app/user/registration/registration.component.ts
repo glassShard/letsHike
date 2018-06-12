@@ -94,23 +94,22 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.submitted = true;
     this.clearError();
     if (this.form.valid) {
-
-      let userId = '';
+      setButtonSubscription.unsubscribe();
       const password = this.form.get('password').value;
 
-      this.user.nick = this.form.get('nick').value;
-      this.user.email = this.form.get('email').value;
-      this.user.tel = this.form.get('tel').value;
+      this.user.nick = this.form.get('nick').value.trim();
+      this.user.email = this.form.get('email').value.trim();
+      this.user.tel = this.form.get('tel').value.trim();
       this.user.dateOfBirth = !(this.form.get('dateOfBirth').value === null)
         ? new Date(this.form.get('dateOfBirth').value).getTime() / 1000 : null;
-      this.user.tel = this.form.get('tel').value;
       let stream: Observable<any>;
       if (this.avatar) {
         stream = this._userService.register(this.user, password)
           .flatMap(user => {
-            const formModel = this.prepareSave(user.id);
-            userId = user.id;
-            return this._fileService.uploadAvatar(userId, formModel);
+            console.log(user);
+            const formModel = this.prepareSave(user.uid);
+            console.log(user.uid, formModel);
+            return this._fileService.uploadAvatar(user.uid, formModel);
           });
 
       } else {
@@ -148,5 +147,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   clearError() {
     delete(this.error);
+  }
+
+  chooseImageFired() {
+    this.fileInput.nativeElement.click();
   }
 }

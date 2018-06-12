@@ -36,6 +36,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     email: '',
     nick: '',
     tel: '',
+    emailVerified: false
   };
   public form: FormGroup;
   public avatar: any;
@@ -103,7 +104,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
             dateOfBirth: user.dateOfBirth,
             email: user.email,
             nick: user.nick,
-            tel: user.tel
+            tel: user.tel,
+            emailVerified: user.emailVerified
           });
           this.fillForm();
         } else {
@@ -160,13 +162,14 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     this.disabled = true;
     delete(this.error);
     if (this.form.valid) {
-
-      this.currentUser.nick = this.form.get('nick').value;
-      this.currentUser.email = this.form.get('email').value;
-      this.currentUser.tel = this.form.get('tel').value;
+      setButtonSubscription.unsubscribe();
+      this.currentUser.nick = this.form.get('nick').value.trim();
+      this.currentUser.email = this.form.get('email').value.trim();
+      this.currentUser.tel = this.form.get('tel').value.trim();
       this.currentUser.dateOfBirth = !(this.form.get('dateOfBirth').value === null)
         ? new Date(this.form.get('dateOfBirth').value).getTime() / 1000 : null;
-      delete this.currentUser.emailVerified;
+      delete this.currentUser.emailVerified; // megnézni, hogy ez nem törli-e ki az eredeti
+      // adatból is ezt
 
       if (this.currentUser.email === this.userOldDatas.email) {
         this.saveChanges();
@@ -181,7 +184,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   }
 
   saveChanges() {
-    delete this.currentUser.email;
+    delete this.currentUser.email; // meg ennél is ugyanaz van ref. típus?
     if (this.avatar) {
       this._subscriptions.push(this._userService.save(this.currentUser)
         .flatMap(() => {
@@ -203,6 +206,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   }
 
   doIfSuccess() {
+    this.currentUser.email = this.userOldDatas.email;
+    this.currentUser.emailVerified = this.userOldDatas.emailVerified;
     this._router.navigate(['/user']);
   }
 
@@ -212,6 +217,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     console.warn(err);
     this.error = 'Hiba az adatok mentése során. Kérjük, próbáld újra.';
     this.currentUser.email = this.userOldDatas.email;
+    this.currentUser.emailVerified = this.userOldDatas.emailVerified;
   }
 
   clearFile() {

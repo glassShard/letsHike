@@ -51,7 +51,7 @@
           <input type="text"
                  class="form-control"
                  id="country"
-                 placeholder="Melyik országban lesz? max. 25 karakter..."
+                 placeholder="Hol lesz? max. 25 karakter..."
                  maxlength="25"
                  formControlName="country"
                  [ngClass]="{'is-invalid': submitted && eventForm.get('country').invalid}">
@@ -63,10 +63,6 @@
                *ngIf="eventForm.get('country').hasError('maxLength')">A mező
             hossza maximum 25 karakter lehet
           </div>
-          <small class="form-text text-muted">Ha nem fér ki a felsorolás, írj
-            pl.
-            "Több ország"-ot.
-          </small>
         </div>
         <div class="form-group col-md-6 col-lg-4">
           <label for="region">Közelebbi helyszín:</label>
@@ -105,6 +101,7 @@
                       class="form-control p-0"
                       formControlName="description"
                       [modules]="quillModules"
+                      [style]="{height: '100px'}"
                       placeholder="Itt add meg a túra részleteit..."
                       [ngClass]="{'is-invalid': submitted && eventForm.get('description').invalid}"
                       >

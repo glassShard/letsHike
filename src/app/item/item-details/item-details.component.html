@@ -63,6 +63,7 @@
                       class="form-control p-0"
                       formControlName="description"
                       [modules]="quillModules"
+                      [style]="{height: '100px'}"
                       placeholder="Ide hosszabb szöveget is írhatsz, mely a terméklapon a rövid leírás folytatásaként jelenik meg..."
                       [ngClass]="{'is-invalid': submitted && form.get('description').invalid}">
         </quill-editor>

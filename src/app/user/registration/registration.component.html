@@ -8,8 +8,8 @@
   <form [formGroup]="form"
         (ngSubmit)="onSubmit()">
     <div class="form-row">
-      <div class="form-group col-md-4">
-        <label for="nick">Felhasználónév:</label>
+      <div class="form-group col-sm-6 left">
+        <label for="nick"  class="mb-0">Felhasználónév:</label>
         <input type="text"
                class="form-control"
                id="nick"
@@ -24,9 +24,45 @@
              *ngIf="form.get('nick').hasError('maxLength')">
           A felhasználónév maximális hossza 15 karakter
         </div>
+
+        <label for="email" class="mt-2 mb-0">Email:</label>
+        <input type="email"
+               class="form-control"
+               id="email"
+               formControlName="email"
+               placeholder="Email..."
+               [ngClass]="{'is-invalid': submitted && form.get('email').invalid}">
+        <div class="invalid-feedback"
+             *ngIf="form.get('email').hasError('required')">
+          Kérjük, add meg az email címedet
+        </div>
+        <div class="invalid-feedback"
+             *ngIf="form.get('email').hasError('email')">
+          Kérjük, valódi email címet ajd meg
+        </div>
+        <small class="form-text text-muted">Email címed a tagok számára sem lesz publikus.</small>
+
+        <label for="dateOfBirth" class="mt-2 mb-0">Születési dátum:</label>
+        <input type="date"
+               class="form-control"
+               id="dateOfBirth"
+               formControlName="dateOfBirth">
+        <small class="form-text text-muted">Adatlapodon megjelenítjük. Az adatlap csak a tagok
+          számára látható.</small>
+
+        <label for="tel" class="mt-2 mb-0">Telefonszám:</label>
+        <input type="text"
+               class="form-control"
+               id="tel"
+               formControlName="tel"
+               placeholder="Telefonszámod...">
+        <small class="form-text text-muted">Adatlapodon, valamint hirdetés feladása
+          esetén a termék oldalán megjelenítjük.</small>
       </div>
-      <div class="form-group col-md-4">
-        <label for="password">Jelszó:</label>
+
+      <div class="form-group col-12 col-sm-6 right">
+
+        <label for="password" class="mb-0">Jelszó:</label>
         <input type="password"
                class="form-control"
                id="password"
@@ -45,9 +81,8 @@
              *ngIf="form.get('password').hasError('pattern')">
           A "Jelszó" csak kis- és nagybetűket, valamint számokat tartalmazhat.
         </div>
-      </div>
-      <div class="form-group col-md-4">
-        <label for="passwordAgain">Jelszó újra:</label>
+
+        <label for="passwordAgain" class="mt-2 mb-0">Jelszó újra:</label>
         <input type="password"
                class="form-control"
                id="passwordAgain"
@@ -70,68 +105,33 @@
              *ngIf="form.get('passwordAgain').hasError('validatePasswordMatch')">
           A két jelszó nem egyezik.
         </div>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <label for="email">Email:</label>
-        <input type="email"
-               class="form-control"
-               id="email"
-               formControlName="email"
-               placeholder="Email..."
-               [ngClass]="{'is-invalid': submitted && form.get('email').invalid}">
-        <div class="invalid-feedback"
-             *ngIf="form.get('email').hasError('required')">
-          Kérjük, add meg az email címedet
-        </div>
-        <div class="invalid-feedback"
-             *ngIf="form.get('email').hasError('email')">
-          Kérjük, valódi email címet ajd meg
-        </div>
-        <small class="form-text text-muted">Kérjük, hogy valós email címet adj meg, erre küldjük a megerősítő linket, az értesítéseket (ha kéred), és a tagok neked szóló üzeneteit. Email címed a tagok számára sem lesz publikus.</small>
-      </div>
-      <div class="form-group col-md-4">
-        <label for="dateOfBirth">Születési dátum:</label>
-        <input type="date"
-               class="form-control"
-               id="dateOfBirth"
-               formControlName="dateOfBirth">
-        <small class="form-text text-muted">Ha kitöltöd, adatlapodon
-          megjelenítjük életkorodat (az adatlap csak a tagok számára látható).</small>
-      </div>
-      <div class="form-group col-md-4">
-        <label for="tel">Telefonszám:</label>
-        <input type="text"
-               class="form-control"
-               id="tel"
-               formControlName="tel"
-               placeholder="Telefonszámod...">
-        <small class="form-text text-muted">Ha kitöltöd, adatlapodon, valamint hirdetés feladása
-          esetén a termék, illetve túra oldalán láthatóvá tesszük.</small>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-12 col-sm-6 col-md-4">
-        <label for="avatar">Profilkép:</label>
+        <label for="avatar" class="mt-2 mb-0">Profilkép feltöltése:</label>
         <input type="file"
-               class="form-control"
+               class="form-control hidden"
                id="avatar"
                (change)="onFileChange($event)"
                #fileInput>
+        <button type="button" class="btn btn-success btn-block mt-0" (click)="chooseImageFired()">
+          <i class="icon-photo"></i> Válaszd ki a képet...</button>
+
         <small class="form-text text-muted">
-          Itt tölthetsz fel profilképet. (A feltöltött képet négyzet alakúra
-          vágjuk.)
+          A feltöltött képet négyzet alakúra vágjuk.
         </small>
-      </div>
-      <div class="imgToUpload col-12 col-sm-6 col-md-4"
-           *ngIf="avatar">
-        <img [src]="avatar">
-        <button type="button"
-                class="btn btn-small btn-outline-danger delete"
-                (click)="clearFile()">
-          <i class="icon-trash"></i>
-        </button>
+        <br />
+
+        <div class="avatar-box" *ngIf="avatar">
+          <p>Feltöltendő kép</p>
+          <div class="imgToUpload">
+
+            <img [src]="avatar">
+            <button type="button"
+                    class="btn btn-small btn-danger deleteProfileImage mb-0"
+                    (click)="clearFile()">
+              <i class="icon-trash"></i>
+            </button>
+
+          </div>
+        </div>
 
       </div>
     </div>

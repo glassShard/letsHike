@@ -32,8 +32,6 @@ export class ImgComponent implements OnInit {
   public errorTooBigPost = 'A feltölteni kívánt fájlok maximális mérete 32MB' +
     ' lehet. A te képeid összesített mérete ezt meghaladja. Kérjük,' +
     ' tartsd be a limitet.';
-  public errorCoverImg = 'Hiba a borítókép beállításánál. Kérjük,' +
-    ' próbáld újra';
   private _root = environment.links.root;
   public progress: number;
 
@@ -96,6 +94,8 @@ export class ImgComponent implements OnInit {
           id,
           this.whereTo,
           this._coverImg.replace(this._root, ''));
+      } else {
+        this.doIfSuccess();
       }
     }
     if (this._stream) {

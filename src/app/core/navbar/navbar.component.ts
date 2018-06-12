@@ -1,14 +1,12 @@
 import {
-  ChangeDetectorRef, Component, EventEmitter, OnInit,
-  Output
-} from '@angular/core';
+  ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {CategoryService} from '../../shared/category.service';
 import {LoginModalComponent} from '../login-modal/login-modal.component';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {Subscription} from 'rxjs/Subscription';
-import {OpenChatListService} from "../../shared/open-chat-list.service";
-import {Observable} from "rxjs/Observable";
+import {OpenChatListService} from '../../shared/open-chat-list.service';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-navbar',

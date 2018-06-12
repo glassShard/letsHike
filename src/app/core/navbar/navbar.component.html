@@ -15,22 +15,36 @@
        id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="nav-link" routerLink="/kezdolap" routerLinkActive="active">Kezdőlap
+        <a class="nav-link"
+           routerLink="/kezdolap"
+           routerLinkActive="active"
+           (click)="isCollapsed = !isCollapsed">Kezdőlap
           <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/cuccok" routerLinkActive="active">Cuccok</a>
+        <a class="nav-link"
+           routerLink="/cuccok"
+           routerLinkActive="active"
+           (click)="isCollapsed = !isCollapsed">Cuccok</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/turak" routerLinkActive="active">Túrák</a>
+        <a class="nav-link"
+           routerLink="/turak"
+           routerLinkActive="active"
+           (click)="isCollapsed = !isCollapsed">Túrák</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/tobbiek" routerLinkActive="active">Többiek</a>
+        <a class="nav-link"
+           routerLink="/tobbiek"
+           routerLinkActive="active"
+           (click)="isCollapsed = !isCollapsed">Többiek</a>
       </li>
       <ng-container
         *ngIf="!(userService.isLoggedIn$ | async); else loggedInBlock">
         <li class="nav-item">
-          <a class="nav-link" href="#" (click)="showLoginModal($event)"
+          <a class="nav-link"
+             href="#"
+             (click)="showLoginModal($event); isCollapsed = !isCollapsed"
              routerLinkActive="active">Belépés</a>
         </li>
         <li class="nav-item">

@@ -55,7 +55,9 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     this._seoService.noIndex();
     this.form = this._fb.group(
       {
-        title: ['', Validators.required],
+        title: ['', Validators.compose([
+          Validators.required,
+          Validators.maxLength(25)])],
         price: [null, Validators.compose([
           Validators.required,
           priceValidator])
@@ -142,6 +144,14 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     this.submitted = true;
     if (this.form.valid) {
       setButtonSubscription.unsubscribe();
+      for (const prop in this.form.value) {
+        if (this.form.value.hasOwnProperty(prop) &&
+          this.form.value[prop] !== null &&
+          typeof(this.form.value[prop]) === 'string') {
+          this.form.value[prop] = this.form.value[prop].trim();
+          this.form.patchValue({[prop]: this.form.value[prop]});
+        }
+      }
       Object.assign(this.item, this.form.value);
       this._subscriptions.push(this._itemService.save(this.item)
         .subscribe(
@@ -173,9 +183,10 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
         () => this._router.navigate(['/cuccok']),
         (err) => {
           console.warn(`Hiba a tölésnél: ${err}`);
-        }
-      );
+        });
   }
+
+
 
   onCategoryClick(item) {
     this.form.patchValue({
@@ -198,12 +209,12 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   }
 
   onToView() {
-    this._router.navigate([`/cuccok/view/${this.item.id}`]);
+    this._router.navigate([`/cuccok/view/${this.item.id}`]).then();
   }
 
   ifNew() {
     if (!this._route.snapshot.params['id']) {
-      this._router.navigate([`/cuccok/${this.item.id}`]);
+      this._router.navigate([`/cuccok/${this.item.id}`]).then();
     }
   }
 }

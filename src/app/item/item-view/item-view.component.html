@@ -9,9 +9,7 @@
     </div>
 
     <div class="line"></div>
-
   </div>
-
 
   <div class="container">
     <div class="row">
@@ -26,10 +24,8 @@
         <br/>
         <h5 class="pt-2">Tel: {{item.creator.tel}}</h5>
         <h5 class="pt-2">Közzétéve: {{item.dateOfPublish | amFromUnix |
-          amDateFormat:
-          'LL'}}</h5>
+          amDateFormat: 'LL'}}</h5>
         <br/>
-
       </div>
 
       <div class="col-md-8">
@@ -79,22 +75,6 @@
     <app-thumb-container *ngIf="item.images"
                          [model]="item"
                          (imgClicked)="clicked($event.index)"></app-thumb-container>
-
-
-
-
-    <!--<div class="row">-->
-      <!--<div class="col-12">-->
-        <!--<div class="imagesPreviewContainer mt-2" *ngIf="item.images">-->
-          <!--<img *ngFor="let image of item.images.split(','); let i = index"-->
-               <!--src="{{root}}{{image}}"-->
-               <!--title="{{item.title}}"-->
-               <!--alt="{{item.title}}"-->
-               <!--(click)="clicked(i)"-->
-               <!--height="120">-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
   </div>
 
   <app-swiper class="fixedSwiper"

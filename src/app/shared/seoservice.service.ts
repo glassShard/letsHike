@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import {Title, Meta, MetaDefinition} from '@angular/platform-browser';
-import {Router, NavigationEnd, ActivatedRoute} from '@angular/router';
+import {Injectable} from '@angular/core';
+import {Title, Meta} from '@angular/platform-browser';
+import {Router, NavigationEnd} from '@angular/router';
 import {ItemModel} from './item-model';
 import {EventModel} from './event-model';
 import {environment} from '../../environments/environment';
@@ -24,7 +24,7 @@ export class SEOServiceService {
         if (root.children && root.children.length) {
           root = root.children[0];
         } else if (root.data && root.data['title']) {
-          this._titleService.setTitle(root.data['title'] + ' | Turazzunk!');
+          this._titleService.setTitle(root.data['title'] + ' | Túrázzunk!');
           this.removeTags();
           const tags = root.data['metatags'];
           for (const tag of Object.keys(tags)) { // tag: name, property

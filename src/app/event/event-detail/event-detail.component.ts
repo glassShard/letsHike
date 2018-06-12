@@ -159,6 +159,14 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     this.submitted = true;
     if (this.eventForm.valid) {
       setButtonSubscription.unsubscribe();
+      for (const prop in this.eventForm.value) {
+        if (this.eventForm.value.hasOwnProperty(prop) &&
+          this.eventForm.value[prop] !== null &&
+          typeof(this.eventForm.value[prop]) === 'string') {
+          this.eventForm.value[prop] = this.eventForm.value[prop].trim();
+          this.eventForm.patchValue({[prop]: this.eventForm.value[prop]});
+        }
+      }
       Object.assign(this.event, this.eventForm.value);
       const date = new Date(this.eventForm.get('date').value).getTime() / 1000;
       Object.assign(this.event, {date: date});
@@ -166,11 +174,13 @@ export class EventDetailComponent implements OnInit, OnDestroy {
         .subscribe(
           (response: EventModel) => {
             this.event.id = response.id;
+            console.log(response);
             this._imgComponent.saveImages(this.event.id);
           },
           (error => {
             this.error = 'Hiba az adatok mentése közben. Kérjük,' +
               ' próbáld újra.';
+            console.warn(error);
             this.submitted = false;
           })
         )
@@ -184,9 +194,9 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   onDelete(eventId) {
     this._eventService.delete(eventId)
       .subscribe(
-        () => this._router.navigate(['/turak']),
+        () => this._router.navigate(['/turak']).then(),
         (err) => {
-          console.warn(`Problémánk van a tölésnél: ${err}`);
+          console.warn(`Hiba a tölésnél: ${err}`);
         }
       );
   }
@@ -216,13 +226,12 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   }
 
   onToView() {
-    this._router.navigate([`/turak/view/${this.event.id}`]);
+    this._router.navigate([`/turak/view/${this.event.id}`]).then();
   }
 
   ifNew() {
     if (!this._route.snapshot.params['id']) {
-      this._router.navigate([`/turak/${this.event.id}`]);
+      this._router.navigate([`/turak/${this.event.id}`]).then();
     }
   }
 }
-
