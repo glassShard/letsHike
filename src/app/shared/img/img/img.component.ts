@@ -1,5 +1,5 @@
 import {
-  Component, ElementRef, EventEmitter, Input, OnInit, Output,
+  Component, EventEmitter, Input, OnInit, Output,
   ViewChild
 } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
@@ -52,7 +52,6 @@ export class ImgComponent implements OnInit {
   }
 
   saveImages(id) {
-    console.log(id);
     if (this._imagesToUpload) {
       this._fileService.startStatus();
       this.progress = 0;

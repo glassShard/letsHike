@@ -1,3 +1,17 @@
+@font-face {
+  font-family: 'KGSCSketch';
+  src: url('assets/fonts/kg/KGSecondChancesSketch.ttf'); /* IE9 Compat Modes */
+}
+
+@font-face {
+  font-family: 'KGSCSolid';
+  src: url('assets/fonts/kg/KGSecondChancesSolid.ttf');
+}
+
+.navbar-light .navbar-brand {
+  color: #212529a3;
+}
+
 body {
   font-size: 1.1em;
 }
@@ -351,7 +365,6 @@ footer {
   cursor: pointer;
   -webkit-transition: all 0.1s;
   -moz-transition: all 0.1s;
-  -ms-transition: all 0.1s;
   -o-transition: all 0.1s;
   transition: all .5s;
 }
@@ -363,7 +376,6 @@ footer {
 .btn, .link {
   -webkit-transition: all 0.1s;
   -moz-transition: all 0.1s;
-  -ms-transition: all 0.1s;
   -o-transition: all 0.1s;
   transition: all 0.1s;
 }
@@ -426,7 +438,6 @@ img.link:hover {
   color: rgb(19, 68, 204);
   -webkit-transition: color 0.5s;
   -moz-transition: color 0.5s;
-  -ms-transition: color 0.5s;
   -o-transition: color 0.5s;
   transition: color 0.5s;
 }

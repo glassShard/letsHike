@@ -1,14 +1,21 @@
 <div class="container">
-  <a class="navbar-brand" href="#"></a>
+  <a class="navbar-brand" href="#">
+    <div *ngIf="!bigLogo">
+      <img src="../assets/vector/logo.svg"
+            width="30" height="30"
+            class="d-inline-block align-top mr-2" alt="túrázzunk.hu logo">
+      <span class="solid">túrázzunk<span class="sketch">.hu</span></span>
+    </div>
+  </a>
   <button class="navbar-toggler sign-container" type="button"
           (click)="isCollapsed = !isCollapsed" data-toggle="collapse"
           data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false"
           aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
-    <div class="sign" *ngIf="newMessagesLength$ | async as length">
+    <span class="sign" *ngIf="newMessagesLength$ | async as length">
       <span class="sign-text">{{length}}</span>
-    </div>
+    </span>
   </button>
 
   <div [collapse]="isCollapsed" class="collapse navbar-collapse"

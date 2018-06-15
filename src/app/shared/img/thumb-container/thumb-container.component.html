@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-12">
     <div class="imagesPreviewContainer mt-2" #container>
-      <img *ngFor="let image of model.images.split(','); let i = index"
+      <img *ngFor="let image of images; let i = index"
            src="{{root}}{{image}}"
            (load)="onLoad()"
            (error)="onError($event)"

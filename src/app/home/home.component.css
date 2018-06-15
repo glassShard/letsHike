@@ -1,1 +1,29 @@
+.logo {
+  height: 100px;
+  width: 100px;
+}
 
+.logo img {
+  width: 100%;
+  height: 100%;
+}
+
+h1 {
+  font-family: 'KGSCSolid', -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";;
+}
+
+.logo-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sketch {
+  font-family: 'KGSCSketch', -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+}
+
+@media (max-width: 575px) {
+  .logo-main {
+    display: none;
+  }
+}

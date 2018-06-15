@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, HostBinding, Input, OnInit, Output} from '@angular/core';
 import {SwiperConfigInterface} from 'ngx-swiper-wrapper';
 import {environment} from '../../../../environments/environment';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -23,19 +23,24 @@ export class SwiperComponent implements OnInit {
   @Input() images: string;
   @Input() swiperIndex: number;
   @Output() hideImageSwiper = new EventEmitter();
+  @HostBinding('style.opacity') opacity: number;
   public root = environment.links.root;
   public swiperImages: any[] = [];
 
   constructor(private _sanitizer: DomSanitizer) { }
 
   ngOnInit() {
+
     this.swiperConfig.initialSlide = this.swiperIndex;
     this.swiperImages = this.images.split(',')
       .map(image => this._sanitizer.bypassSecurityTrustStyle(`url(${this.root}${image})`));
+    setTimeout(() => this.opacity = 1, 0);
   }
 
   hideSwiper() {
-    this.hideImageSwiper.emit();
+    this.opacity = 0;
+    setTimeout(() => this.hideImageSwiper.emit(), 500);
+
   }
 
 }

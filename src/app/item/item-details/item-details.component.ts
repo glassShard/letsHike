@@ -162,6 +162,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
           (error => {
             this.error = 'Hiba az adatok mentése közben. Kérjük,' +
               ' próbáld újra.';
+            console.warn(error);
             this.submitted = false;
           })
         )

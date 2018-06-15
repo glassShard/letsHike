@@ -22,3 +22,15 @@
   margin: 0;
   padding: 0;
 }
+
+.sketch {
+  font-family: 'KGSCSketch', -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";;
+}
+
+.solid {
+  font-family: 'KGSCSolid', -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";;
+}
+
+.hidden {
+  opacity: 0;
+}

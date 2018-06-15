@@ -1,12 +1,21 @@
 <div class="img-bg">
 
-  <app-navbar class="navbar navbar-expand-lg navbar-dark navbar-home"></app-navbar>
+  <app-navbar class="navbar navbar-expand-lg navbar-dark navbar-home"
+              [bigLogo]="bigLogo"></app-navbar>
 
   <div class="jumbotron jumbotron-fluid my-jumbotron">
     <div class="container">
-      <h1 class="display-4">Túrázzunk!</h1>
-      <p class="lead">Sziklát, hegyet mászol? Sí-, vagy gyalogtúrázol? Keress, vagy adj el felszereléseket, találj partnereket, ossz meg te is programokat!</p>
-      <p class="lead hidesm">Oldalunk folyamatosan új funkciókkal bővül, nézz vissza máskor is!</p>
+      <div class="logo-main hidesm" #logo>
+        <div class="logo inline mb-4 mr-4">
+          <img src="../assets/vector/logo.svg">
+        </div>
+        <h1 class="display-4 inline">túrázzunk<span class="sketch">.hu</span></h1>
+      </div>
+      <p class="lead text-center">Sziklát, hegyet mászol? Sí-, vagy gyalogtúrázol? Keress, vagy adj el
+        felszereléseket, találj partnereket, ossz meg te is programokat!</p>
+      <p class="lead text-center hidesm">Oldalunk folyamatosan új funkciókkal bővül, nézz vissza
+        máskor
+        is!</p>
     </div>
   </div>
 </div>

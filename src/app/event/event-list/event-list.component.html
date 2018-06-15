@@ -7,12 +7,12 @@
                         [currentUser]="currentUser$ | async"
 ></app-filter-and-new-bar>
 
-<ng-container *ngIf="eventCategories && eventsGrouppedBy2$; else loading">
+<ng-container *ngIf="eventCategories && eventsGrouppedBy2$ | async as eventsGrouppedBy2; else loading">
   <ng-container
-    *ngIf="(eventsGrouppedBy2$ | async)?.length; else nothingToShow">
+    *ngIf="(eventsGrouppedBy2)?.length; else nothingToShow">
     <div class="container">
       <div class="row"
-           *ngFor="let evg of eventsGrouppedBy2$ | async">
+           *ngFor="let evg of eventsGrouppedBy2">
         <div class="col-lg-6 card-deck-container" *ngFor="let ev of evg">
           <div class="card-deck card-deck-item-list">
             <app-event-card class="card card-max-width"

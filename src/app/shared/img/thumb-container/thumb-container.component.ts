@@ -3,7 +3,7 @@ import {
   ElementRef,
   EventEmitter,
   HostListener,
-  Input, OnDestroy,
+  Input, OnDestroy, OnInit,
   Output,
   ViewChild
 } from '@angular/core';
@@ -19,8 +19,9 @@ import {Subscription} from 'rxjs/Subscription';
   templateUrl: './thumb-container.component.html',
   styleUrls: ['./thumb-container.component.css']
 })
-export class ThumbContainerComponent implements OnDestroy {
+export class ThumbContainerComponent implements OnInit, OnDestroy {
   @Input() model: EventModel | ItemModel;
+  public images: string[] = [];
   @Output() imgClicked = new EventEmitter();
   public root = environment.links.root;
   @ViewChild('container') thumbContainer: ElementRef;
@@ -34,6 +35,15 @@ export class ThumbContainerComponent implements OnDestroy {
         this._detectOnLoadSubscription.unsubscribe();
         this.renderImages(1);
       }
+    });
+  }
+
+  ngOnInit() {
+    this.model.images.split(',').map(path => {
+      const pathArray = path.split('/');
+      const fileName = pathArray.pop();
+      path = pathArray.join('/') + `/thumbs/${fileName}`;
+      this.images.push(`${path}`);
     });
   }
 

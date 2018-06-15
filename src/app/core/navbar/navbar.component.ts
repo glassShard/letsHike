@@ -1,5 +1,6 @@
 import {
-  ChangeDetectorRef, Component, OnInit} from '@angular/core';
+  ChangeDetectorRef, Component, Input, OnInit
+} from '@angular/core';
 import {UserService} from '../../shared/user.service';
 import {CategoryService} from '../../shared/category.service';
 import {LoginModalComponent} from '../login-modal/login-modal.component';
@@ -20,6 +21,7 @@ export class NavbarComponent implements OnInit {
   public modalRef: BsModalRef;
   public isCollapsed = true;
   public newMessagesLength$: Observable<number>;
+  @Input() bigLogo = false;
 
   constructor(public userService: UserService,
               private _categoryService: CategoryService,
